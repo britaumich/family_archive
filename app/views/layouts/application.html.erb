@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title>FamilyArchive</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -7,10 +7,18 @@
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
   </head>
 
   <body>
-    <%= yield %>
+    <%= render partial: "layouts/navbar" %>
+    <main class="container mx-auto px-4 px-sm-8 pb-5">
+      <div id="flash">
+        <%= render "layouts/flash" %>
+      </div>
+      <div>
+        <%= yield %>
+      </div>
+    </main>
   </body>
 </html>

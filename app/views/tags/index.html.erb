@@ -1,16 +1,26 @@
-<p style="color: green"><%= notice %></p>
+<div class="container-fluid">
+  <h1>Tag List</h1>
+  <div id="search bar">
+    <%= form_with url: tags_path, method: :get, local: true,
+    data: { 
+          controller: "autosubmit", 
+          autosubmit_target: "form",
+          turbo_frame: "tags_list"
+        } do |form| %>
+      <%= form.label :search, "Search Tag by Name:", style: "display: block"%>
+      <div class="d-flex flex-row justify-content-start align-items-center gap-3">
+      <%= form.text_field :search, value: params[:search], placeholder: "Name", class: "w-50", data: { action: "input->autosubmit#search" } %>
+      <a class="link_to" data-action="autosubmit#clearFilters">
+        Clear Filters
+      </a>
+      </div>
+    <% end %>
+  </div>
 
-<% content_for :title, "Tags" %>
-
-<h1>Tags</h1>
-
-<div id="tags">
-  <% @tags.each do |tag| %>
-    <%= render tag %>
-    <p>
-      <%= link_to "Show this tag", tag %>
-    </p>
-  <% end %>
+  <div>
+    <%= render "form", tag: @tag %>
+  </div>
+  <div class="mt-2">
+    <%= render "listing" %>
+  </div>
 </div>
-
-<%= link_to "New tag", new_tag_path %>

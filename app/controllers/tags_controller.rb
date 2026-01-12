@@ -3,6 +3,7 @@ class TagsController < ApplicationController
 
   # GET /tags or /tags.json
   def index
+    @tag = Tag.new
     @tags = Tag.all
   end
 
