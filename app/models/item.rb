@@ -13,5 +13,8 @@ class Item < ApplicationRecord
 
   has_one_attached :file
 
-  enum :item_type, [:photo, :video, :text], prefix: true
+  enum :item_type, [:photo, :video, :document], prefix: true
+
+  validates :file, presence: true
+  validates :item_type, presence: true
 end

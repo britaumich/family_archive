@@ -1,1 +1,88 @@
-Show items
+<div class="container-fluid">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Family Archive</h1>
+    <%= link_to "Upload Files", upload_files_page_path, class: "btn btn-um-blue" %>
+  </div>
+
+  <% if @items.any? %>
+    <!-- Filter by tags -->
+    <div class="mb-4">
+      <h5>Filter by Tags:</h5>
+      <div class="d-flex flex-wrap gap-2">
+        <%= link_to "All", items_path, 
+            class: "btn btn-sm #{'btn-secondary' if params[:tag].blank?} #{'btn-outline-secondary' if params[:tag].present?}" %>
+        <% @tags.each do |tag| %>
+          <%= link_to tag.name, items_path(tag: tag.id), 
+              class: "btn btn-sm #{'btn-primary' if params[:tag] == tag.id.to_s} #{'btn-outline-primary' if params[:tag] != tag.id.to_s}" %>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Items Grid -->
+    <div class="row g-4">
+      <% @items.each do |item| %>
+        <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+          <div class="card h-100 shadow-sm">
+            <% if item.file.attached? %>
+              <% if item.file.content_type.start_with?('image/') %>
+                <%= link_to item_path(item), class: "text-decoration-none" do %>
+                  <%= image_tag item.file, 
+                      class: "card-img-top", 
+                      style: "height: 250px; object-fit: cover;",
+                      alt: "Item #{item.id}" %>
+                <% end %>
+              <% elsif item.file.content_type.start_with?('video/') %>
+                <video class="card-img-top" style="height: 250px; object-fit: cover;" controls>
+                  <%= content_tag :source, "", src: url_for(item.file), type: item.file.content_type %>
+                  Your browser does not support the video tag.
+                </video>
+              <% else %>
+                <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 250px;">
+                  <i class="bi bi-file-text fs-1 text-muted"></i>
+                </div>
+              <% end %>
+            <% else %>
+              <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 250px;">
+                <i class="bi bi-image fs-1 text-muted"></i>
+                <span class="text-muted">No file attached</span>
+              </div>
+            <% end %>
+            
+            <div class="card-body d-flex flex-column">
+              <div class="mb-2">
+                <small class="text-muted">Type: <%= item.item_type.humanize %></small>
+              </div>
+              
+              <div class="mb-2">
+                <small class="text-muted">Uploaded: <%= item.created_at.strftime("%B %d, %Y at %I:%M %p") %></small>
+              </div>
+              
+              <!-- Tags -->
+              <% if item.tags.any? %>
+                <div class="mb-2">
+                  <h6 class="mb-1">Tags:</h6>
+                  <div class="d-flex flex-wrap gap-1">
+                    <% item.tags.each do |tag| %>
+                      <span class="badge bg-secondary"><%= tag.name %></span>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+              
+              <div class="mt-auto">
+                <%= link_to "View Details", item_path(item), class: "btn btn-primary btn-sm" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="text-center py-5">
+      <i class="bi bi-images fs-1 text-muted mb-3"></i>
+      <h3 class="text-muted">No items yet</h3>
+      <p class="text-muted">Start building your family archive by uploading some photos, videos, or documents.</p>
+      <%= link_to "Upload Your First File", upload_files_page_path, class: "btn btn-um-blue btn-lg" %>
+    </div>
+  <% end %>
+</div>
