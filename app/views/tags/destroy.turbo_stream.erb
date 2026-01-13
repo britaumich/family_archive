@@ -1,0 +1,9 @@
+<%= render_flash_stream %>
+
+<%= turbo_stream.update "new_tag" do %>
+  <%= render "form", tag: @tag %>
+<% end %>
+
+<%= turbo_stream.update "tags" do %>
+  <%= render "listing" %>
+<% end %>

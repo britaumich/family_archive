@@ -24,14 +24,12 @@ class TagsController < ApplicationController
   def create
     @tag = Tag.new(tag_params)
 
-    respond_to do |format|
-      if @tag.save
-        format.html { redirect_to @tag, notice: "Tag was successfully created." }
-        format.json { render :show, status: :created, location: @tag }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @tag.errors, status: :unprocessable_entity }
-      end
+    if @tag.save 
+      flash.now[:notice] = "Tag was successfully created."
+      @tag = Tag.new
+      @tags = Tag.all.order(:name)
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -50,11 +48,13 @@ class TagsController < ApplicationController
 
   # DELETE /tags/1 or /tags/1.json
   def destroy
-    @tag.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to tags_path, notice: "Tag was successfully destroyed.", status: :see_other }
-      format.json { head :no_content }
+    if @tag.destroy
+      @tags = Tag.all.order(:name)
+      @tag = Tag.new
+      flash.now[:notice] = "Tag was successfully deleted."
+    else
+      @tags = Tag.all.order(:name)
+      flash.now[:notice] = "Error deleting tag."
     end
   end
 
