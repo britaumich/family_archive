@@ -4,20 +4,54 @@
     <%= link_to "Upload Files", upload_files_page_path, class: "btn btn-um-blue" %>
   </div>
 
-  <% if @items.any? %>
+  <% if @items.any? || @tags.any? %>
     <!-- Filter by tags -->
-    <div class="mb-4">
-      <h5>Filter by Tags:</h5>
-      <div class="d-flex flex-wrap gap-2">
-        <%= link_to "All", items_path, 
-            class: "btn btn-sm #{'btn-secondary' if params[:tag].blank?} #{'btn-outline-secondary' if params[:tag].present?}" %>
-        <% @tags.each do |tag| %>
-          <%= link_to tag.name, items_path(tag: tag.id), 
-              class: "btn btn-sm #{'btn-primary' if params[:tag] == tag.id.to_s} #{'btn-outline-primary' if params[:tag] != tag.id.to_s}" %>
+    <%= form_with url: items_path, method: :get, local: true, class: "mb-4" do |form| %>
+      <div class="row">
+        <div class="col-md-8">
+          <h5>Filter by Tags:</h5>
+          <div class="row g-2">
+            <% @tags.each do |tag| %>
+              <div class="col-6 col-md-4 col-lg-3">
+                <div class="form-check">
+                  <%= form.check_box :tags, 
+                      { multiple: true, checked: @selected_tags.include?(tag) }, 
+                      tag.id, "" %>
+                  <%= form.label "tags_#{tag.id}", tag.name, class: "form-check-label" %>
+                  <span class="badge bg-light text-dark ms-1"><%= tag.items.count %></span>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        
+        <div class="col-md-4">
+          <h5>Filter Type:</h5>
+          <div class="form-check">
+            <%= form.radio_button :filter_type, "any", checked: params[:filter_type] != "all" %>
+            <%= form.label :filter_type_any, "Any selected tags (OR)", class: "form-check-label" %>
+          </div>
+          <div class="form-check">
+            <%= form.radio_button :filter_type, "all", checked: params[:filter_type] == "all" %>
+            <%= form.label :filter_type_all, "All selected tags (AND)", class: "form-check-label" %>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mt-3">
+        <%= form.submit "Apply Filters", class: "btn btn-primary" %>
+        <%= link_to "Clear All", items_path, class: "btn btn-outline-secondary" %>
+        <% if @selected_tags.any? %>
+          <span class="ms-3 text-muted">
+            Filtered by: 
+            <% @selected_tags.each do |tag| %>
+              <span class="badge bg-primary me-1"><%= tag.name %></span>
+            <% end %>
+            (<%= params[:filter_type] == "all" ? "must have all" : "any of these" %>)
+          </span>
         <% end %>
       </div>
-    </div>
-
+    <% end %>
     <!-- Items Grid -->
     <div class="row g-4">
       <% @items.each do |item| %>

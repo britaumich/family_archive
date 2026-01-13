@@ -2,13 +2,39 @@ class ItemsController < ApplicationController
   before_action :set_item, only: %i[ show ]
 
   def index
-    @items = Item.includes(:tags).with_attached_file.order(created_at: :desc)
     @tags = Tag.all.order(:name)
+    @selected_tags = []
     
-    # Filter by tag if specified
-    if params[:tag].present?
-      @selected_tag = Tag.find(params[:tag])
-      @items = @items.joins(:tags).where(tags: { id: params[:tag] })
+    # Filter by multiple tags if specified
+    if params[:tags].present?
+      tag_ids = params[:tags].reject(&:blank?).map(&:to_i)
+      @selected_tags = Tag.where(id: tag_ids)
+      
+      if tag_ids.any?
+        # AND logic: items must have ALL selected tags
+        if params[:filter_type] == 'all'
+          # Use subquery to find items with all required tags
+          item_ids = Item.joins(:tags)
+                        .where(tags: { id: tag_ids })
+                        .group('items.id')
+                        .having('COUNT(DISTINCT tags.id) = ?', tag_ids.length)
+                        .pluck('items.id')
+          @items = Item.includes(:tags).with_attached_file
+                      .where(id: item_ids)
+                      .order(created_at: :desc)
+        else
+          # OR logic (default): items must have ANY of the selected tags
+          @items = Item.includes(:tags).with_attached_file
+                      .joins(:tags)
+                      .where(tags: { id: tag_ids })
+                      .distinct
+                      .order(created_at: :desc)
+        end
+      else
+        @items = Item.includes(:tags).with_attached_file.order(created_at: :desc)
+      end
+    else
+      @items = Item.includes(:tags).with_attached_file.order(created_at: :desc)
     end
   end
 
