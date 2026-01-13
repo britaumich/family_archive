@@ -1,12 +1,22 @@
-<% content_for :title, "Editing tag" %>
+<h1>Editing Tag</h1>
 
-<h1>Editing tag</h1>
-
-<%= render "form", tag: @tag %>
-
-<br>
-
-<div>
-  <%= link_to "Show this tag", @tag %> |
-  <%= link_to "Back to categories", categories_path %>
-</div>
+<%= form_with(model: tag=@tag) do |form| %>
+  <% if tag.errors.any? %>
+    <div class="text-danger">
+      <h2><%= pluralize(tag.errors.count, "error") %></h2>
+      <ul>
+        <% tag.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div>
+    <%= form.label :name, "Name:", class: "nowrap" %>
+    <%= form.text_field :name %>
+  </div>
+  <div class="d-flex flex-row justify-content-start align-items-center gap-3">
+    <%= form.submit "Update" %>
+    <%= link_to "Cancel", tags_path, class: "link_to" %>
+  </div>
+<% end %>

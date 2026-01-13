@@ -4,7 +4,11 @@ class TagsController < ApplicationController
   # GET /tags or /tags.json
   def index
     @tag = Tag.new
-    @tags = Tag.all
+    if params[:search].present?
+      @tags = Tag.where("name ILIKE :search", search: "%#{params[:search]}%").order(:name)
+    else
+      @tags = Tag.order(:name)
+    end 
   end
 
   # GET /tags/1 or /tags/1.json
@@ -27,7 +31,7 @@ class TagsController < ApplicationController
     if @tag.save 
       flash.now[:notice] = "Tag was successfully created."
       @tag = Tag.new
-      @tags = Tag.all.order(:name)
+      @tags = Tag.order(:name)  
     else
       render :new, status: :unprocessable_entity
     end

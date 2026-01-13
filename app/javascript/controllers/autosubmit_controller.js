@@ -23,7 +23,7 @@ export default class extends Controller {
 
     this.timeout = setTimeout(() => {
       this.formTarget.requestSubmit()
-    }, 200)
+    }, 1000)
   }
 
   async check(event){
