@@ -10,4 +10,6 @@
 class Tag < ApplicationRecord
   has_many :tagables
   has_many :items, through: :tagables
+
+  validates :name, presence: true, uniqueness: true
 end
