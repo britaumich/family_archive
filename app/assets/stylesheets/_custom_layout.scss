@@ -205,26 +205,30 @@ form label.required:after {
   }
 }
 
-.flash {
-  font-size: 1.5rem;
-  font-weight: bold;
-  text-align: center;
-  padding: 20px;
-  display: flex;
-  align-items: center;
-  position: fixed;
-  top: 1.5rem; // Customize this value
-  right: 0.5rem; // Customize this value
-  padding: 1rem 1.25rem; // Equivalent to py-3 px-5
-  border-radius: .5rem; // Similar to Bootstrap's rounded-lg
+// .flash {
+//   font-size: 1.5rem;
+//   font-weight: bold;
+//   text-align: center;
+//   padding: 20px;
+//   display: flex;
+//   align-items: center;
+//   position: fixed;
+//   top: 1.5rem; // Customize this value
+//   right: 0.5rem; // Customize this value
+//   padding: 1rem 1.25rem; // Equivalent to py-3 px-5
+//   border-radius: .5rem; // Similar to Bootstrap's rounded-lg
+// }
+
+.notice {
+  color: $flash-notice-color;
+  font-size: 1.25rem; // fs-5 equivalent
+  font-weight: 500; // fw-medium equivalent
 }
 
-.flash_notice {
-  background-color: $flash-notice-color;
-}
-
-.flash_alert {
-  background-color: $flash-alert-color;
+.alert {
+  color: $flash-alert-color;
+  font-size: 1.25rem; // fs-5 equivalent
+  font-weight: 500; // fw-medium equivalent
 }
 
 svg.wh6 {
