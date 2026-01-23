@@ -1,0 +1,25 @@
+<%= form_with(model: admin_user, class: "needs-validation", novalidate: true) do |form| %>
+  <% if admin_user.errors.any? %>
+    <div id="error_explanation" class="alert alert-danger mt-3">
+      <p class="fs-5"><%= t('error', count: admin_user.errors.count) %> <%= t('forms.messages.prohibited this record from being saved') %>:</p>
+      <ul class="mb-0">
+        <% admin_user.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-4">
+    <%= form.label :email, class: "form-label" %>
+    <%= form.text_field :email, class: "form-control", required: true %>
+  </div>
+
+  <div class="d-flex gap-2">
+    <%= form.submit t('forms.buttons.submit'), class: "btn btn-primary" %>
+    <%= link_to admin_users_path, class: "btn btn-outline-secondary" do %>
+      <%= t('forms.buttons.cancel') %>
+      <i class="fa fa-times ms-1" aria-hidden="true"></i>
+    <% end %>
+  </div>
+<% end %>
