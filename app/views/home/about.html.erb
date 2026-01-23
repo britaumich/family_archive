@@ -1,2 +1,17 @@
-<h1>Pages#home</h1>
-<p>Find me in app/views/home/about.html.erb</p>
+<h1>Family Archive</h1>
+<p>Someting about the app</p>
+<div class="d-grid w-25 mt-6 mb-8">
+  <% if authenticated? %>
+    <div>
+      <%= link_to "Sign Out", session_path, 
+        method: :delete, 
+        data: { turbo_method: :delete, confirm: "Are you sure?" },
+        class: "btn btn-sign" 
+      %>
+    </div>
+  <% else %> 
+    <div>
+      <%= link_to "Sign In", new_session_path, data: {turbo: "false"}, class: "btn btn-sign" %>
+    </div>
+  <% end %>
+</div>
