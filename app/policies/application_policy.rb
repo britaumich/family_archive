@@ -43,7 +43,7 @@ class ApplicationPolicy
   end
 
   def admin_user?
-    AdminUser.exists?(id: user&.email_address)
+    AdminUser.exists?(email: user&.email_address)
   end
 
   class Scope
