@@ -3,6 +3,7 @@
 # Table name: items
 #
 #  id         :bigint           not null, primary key
+#  caption    :string
 #  item_type  :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
