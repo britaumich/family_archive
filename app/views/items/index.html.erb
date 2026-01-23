@@ -91,6 +91,15 @@
                 <small class="text-muted">Uploaded: <%= item.created_at.strftime("%B %d, %Y at %I:%M %p") %></small>
               </div>
               
+              <!-- Caption -->
+              <% if item.caption.present? %>
+                <div class="mb-2">
+                  <p class="mb-0 text-truncate" title="<%= item.caption %>">
+                    <strong>Caption:</strong> <%= item.caption %>
+                  </p>
+                </div>
+              <% end %>
+              
               <!-- Tags -->
               <% if item.tags.any? %>
                 <div class="mb-2">
