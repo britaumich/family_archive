@@ -1,6 +1,6 @@
 module ApplicationHelper
   def render_flash_stream
-    turbo_stream.update 'flash', partial: 'layouts/flash'
+    turbo_stream.update 'flash', partial: 'layouts/notification'
   end
 
   def css_class_for_flash(type)
