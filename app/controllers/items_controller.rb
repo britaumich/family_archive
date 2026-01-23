@@ -36,17 +36,21 @@ class ItemsController < ApplicationController
     else
       @items = Item.includes(:tags).with_attached_file.order(created_at: :desc)
     end
+    authorize @items
   end
 
   def show
     @item = Item.find(params[:id])
+    authorize @item
   end
 
   def edit
     @tags = Tag.order(:name)
+    authorize @item
   end
 
   def update
+    authorize @item
     if @item.update(item_params)
       # Update tags if provided
       if params[:tag_ids].present?
@@ -64,11 +68,13 @@ class ItemsController < ApplicationController
   end
 
   def destroy
+    authorize @item
     @item.destroy
     redirect_to items_path, notice: 'Item was successfully deleted.'
   end
 
   def upload_files_page
+    authorize Item
     @tags = Tag.order(:name)
   end
 

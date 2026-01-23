@@ -9,6 +9,7 @@ class TagsController < ApplicationController
             else
               Tag.order(:name)
             end
+    authorize @tags
   end
 
   # GET /tags/1 or /tags/1.json
@@ -27,7 +28,7 @@ class TagsController < ApplicationController
   # POST /tags or /tags.json
   def create
     @tag = Tag.new(tag_params)
-
+    authorize @tag
     if @tag.save
       flash.now[:notice] = 'Tag was successfully created.'
       @tag = Tag.new
