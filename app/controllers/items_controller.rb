@@ -1,5 +1,5 @@
 class ItemsController < ApplicationController
-  before_action :set_item, only: %i[ show ]
+  before_action :set_item, only: %i[ show edit update destroy ]
 
   def index
     @tags = Tag.all.order(:name)
@@ -42,6 +42,32 @@ class ItemsController < ApplicationController
     @item = Item.find(params[:id])
   end
 
+  def edit
+    @tags = Tag.order(:name)
+  end
+
+  def update
+    if @item.update(item_params)
+      # Update tags if provided
+      if params[:tag_ids].present?
+        @item.tags.clear
+        params[:tag_ids].each do |tag_id|
+          tag = Tag.find(tag_id) if tag_id.present?
+          @item.tags << tag if tag
+        end
+      end
+      redirect_to @item, notice: 'Item was successfully updated.'
+    else
+      @tags = Tag.order(:name)
+      render :edit
+    end
+  end
+
+  def destroy
+    @item.destroy
+    redirect_to items_path, notice: 'Item was successfully deleted.'
+  end
+
   def upload_files_page
     @tags = Tag.order(:name)
   end
@@ -69,6 +95,10 @@ class ItemsController < ApplicationController
   private
     def set_item
       @item = Item.find(params[:id])
+    end
+
+    def item_params
+      params.require(:item).permit(:item_type, :file, :caption)
     end
 
 end
