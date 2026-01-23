@@ -20,7 +20,7 @@
           </div>
           <div class="mt-3">
             <%= label_tag 'item_type', 'Select Item Type:' %>
-            <%= select_tag 'item_type', options_for_select([['Photo', 'photo'], ['Video', 'video'], ['Document', 'document']]), prompt: 'Select Item Type', class: 'form-select' %>
+            <%= select_tag 'item_type', options_for_select([['Photo', 'photo'], ['Video', 'video'], ['Document', 'document']], 'photo'), prompt: 'Select Item Type', class: 'form-select' %>
           </div>
           <div class="mt-3">
             <%= label_tag 'item_type', 'Select Tags:' %>
