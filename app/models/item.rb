@@ -9,7 +9,7 @@
 #  updated_at :datetime         not null
 #
 class Item < ApplicationRecord
-  has_many :tagables
+  has_many :tagables, dependent: :destroy
   has_many :tags, through: :tagables
 
   has_one_attached :file
