@@ -1,19 +1,18 @@
 class TagsController < ApplicationController
-  before_action :set_tag, only: %i[ show edit update destroy ]
+  before_action :set_tag, only: %i[show edit update destroy]
 
   # GET /tags or /tags.json
   def index
     @tag = Tag.new
-    if params[:search].present?
-      @tags = Tag.where("name ILIKE :search", search: "%#{params[:search]}%").order(:name)
-    else
-      @tags = Tag.order(:name)
-    end 
+    @tags = if params[:search].present?
+              Tag.where('name ILIKE :search', search: "%#{params[:search]}%").order(:name)
+            else
+              Tag.order(:name)
+            end
   end
 
   # GET /tags/1 or /tags/1.json
-  def show
-  end
+  def show; end
 
   # GET /tags/new
   def new
@@ -21,17 +20,16 @@ class TagsController < ApplicationController
   end
 
   # GET /tags/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /tags or /tags.json
   def create
     @tag = Tag.new(tag_params)
 
-    if @tag.save 
-      flash.now[:notice] = "Tag was successfully created."
+    if @tag.save
+      flash.now[:notice] = 'Tag was successfully created.'
       @tag = Tag.new
-      @tags = Tag.order(:name)  
+      @tags = Tag.order(:name)
     else
       render :new, status: :unprocessable_entity
     end
@@ -41,7 +39,7 @@ class TagsController < ApplicationController
   def update
     respond_to do |format|
       if @tag.update(tag_params)
-        format.html { redirect_to @tag, notice: "Tag was successfully updated.", status: :see_other }
+        format.html { redirect_to @tag, notice: 'Tag was successfully updated.', status: :see_other }
         format.json { render :show, status: :ok, location: @tag }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -55,21 +53,22 @@ class TagsController < ApplicationController
     if @tag.destroy
       @tags = Tag.all.order(:name)
       @tag = Tag.new
-      flash.now[:notice] = "Tag was successfully deleted."
+      flash.now[:notice] = 'Tag was successfully deleted.'
     else
       @tags = Tag.all.order(:name)
-      flash.now[:notice] = "Error deleting tag."
+      flash.now[:notice] = 'Error deleting tag.'
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_tag
-      @tag = Tag.find(params.expect(:id))
-    end
 
-    # Only allow a list of trusted parameters through.
-    def tag_params
-      params.expect(tag: [ :name ])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_tag
+    @tag = Tag.find(params.expect(:id))
+  end
+
+  # Only allow a list of trusted parameters through.
+  def tag_params
+    params.expect(tag: [:name])
+  end
 end
