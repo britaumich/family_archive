@@ -49,9 +49,9 @@ module Authentication
 
     def after_authentication_url
       if authenticated?
-        root_url
-      else
         session.delete(:return_to_after_authenticating) || root_url
+      else
+        root_url
       end
     end
 
