@@ -43,7 +43,13 @@ class ApplicationPolicy
   end
 
   def admin_user?
-    AdminUser.exists?(email: user&.email_address)
+    return false unless user
+    email = user.email_address
+    cache_key = "admin_user_status:#{email}"
+    Rails.cache.fetch(cache_key, expires_in: 1.hour) do
+      Rails.logger.debug "********************************** policy: checking admin user status for #{email}"
+      AdminUser.exists?(email: email)
+    end
   end
 
   class Scope
