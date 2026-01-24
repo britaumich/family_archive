@@ -15,7 +15,6 @@ class AdminUsersController < ApplicationController
 
   # GET /admin_users/1/edit
   def edit
-    authorize @admin_user
   end
 
   # POST /admin_users or /admin_users.json
@@ -35,7 +34,6 @@ class AdminUsersController < ApplicationController
 
   # PATCH/PUT /admin_users/1 or /admin_users/1.json
   def update
-    authorize @admin_user
     respond_to do |format|
       if @admin_user.update(admin_user_params)
         format.html { redirect_to admin_users_url, notice: t('forms.messages.Admin user was successfully updated') }
@@ -49,7 +47,6 @@ class AdminUsersController < ApplicationController
 
   # DELETE /admin_users/1 or /admin_users/1.json
   def destroy
-    authorize @admin_user
     if @admin_user.destroy
       flash.now[:notice] = t('forms.messages.Admin user was successfully deleted')
     else
