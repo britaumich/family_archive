@@ -17,9 +17,11 @@
     <% end %>
   </div>
 
-  <div>
-    <%= render "form", tag: @tag %>
-  </div>
+  <% if policy(Tag).create? %>
+    <div>
+      <%= render "form", tag: @tag %>
+    </div>
+  <% end %>
   <div class="mt-2">
     <%= render "listing" %>
   </div>

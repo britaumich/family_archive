@@ -1,0 +1,13 @@
+<div class="container-fluid">
+
+  <% content_for :title, t('text.admin_users')  %>
+
+  <div class="d-flex justify-content-between align-items-center">
+    <h1 class="fw-bold display-4"><%= t('text.Admins') %></h1>
+    <%= link_to t('menu.new'), new_admin_user_path, class: "btn btn-primary" %>
+  </div>
+
+  <div id="admin_users" class="w-100">
+    <%= render 'admin_users_list' %>
+  </div>
+</div>
