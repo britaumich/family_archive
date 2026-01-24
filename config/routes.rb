@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   resources :items do
   end
   resources :tags
-  resource :registration, only: [:new,:create]
+  resource :registration, only: [:new, :create]
   resource :session
   resources :passwords, param: :token
   resources :admin_users, except: [:show]
