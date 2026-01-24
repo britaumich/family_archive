@@ -51,7 +51,6 @@ class AdminUsersController < ApplicationController
   def destroy
     authorize @admin_user
     if @admin_user.destroy
-      User.find_by(email_address: email)&.destroy!
       flash.now[:notice] = t('forms.messages.Admin user was successfully deleted')
     else
       flash.now[:alert] = t('text.Admin user could not be deleted ')
