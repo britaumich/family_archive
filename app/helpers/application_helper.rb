@@ -16,7 +16,7 @@ module ApplicationHelper
     if is_admin_user?(user)
       "#{user.email_address} (Admin)"
     else
-      current_user.email_address
+      user.email_address
     end
   end
 
