@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-12 col-md-8">
-      <h1 class="fw-bold display-4 mb-4">Register</h1>
+      <h1 class="fw-bold display-4 mb-4"><%= t('page_titles.register') %></h1>
 
       <%= form_with(model: @user, url: registration_path, local: true, class: "needs-validation", novalidate: true) do |form| %>
         <% if @user.errors.any? %>
@@ -16,27 +16,27 @@
         <% end %>
 
         <div class="mb-4">
-          <%= form.label :email_address, "Email Address", class: "form-label" %>
-          <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address], class: "form-control" %>
+          <%= form.label :email_address, t('auth.email_address'), class: "form-label" %>
+          <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: t('auth.enter_email'), value: params[:email_address], class: "form-control" %>
         </div>
 
         <div class="mb-4">
-          <%= form.label :password, "Password", class: "form-label" %>
-          <%= form.password_field :password, required: true, autocomplete: "new-password", placeholder: "Enter your password", maxlength: 72, class: "form-control" %>
+          <%= form.label :password, t('auth.password'), class: "form-label" %>
+          <%= form.password_field :password, required: true, autocomplete: "new-password", placeholder: t('auth.enter_password'), maxlength: 72, class: "form-control" %>
         </div>
 
         <div class="mb-4">
-          <%= form.label :password_confirmation, "Confirm Password", class: "form-label" %>
-          <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password", placeholder: "Confirm password", maxlength: 72, class: "form-control" %>
+          <%= form.label :password_confirmation, t('auth.confirm_password'), class: "form-label" %>
+          <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password", placeholder: t('auth.confirm_password_placeholder'), maxlength: 72, class: "form-control" %>
         </div>
 
         <div class="d-flex flex-column flex-sm-row align-items-sm-center gap-3">
           <div>
-            <%= form.submit "Register", class: "btn btn-primary" %>
+            <%= form.submit t('auth.register'), class: "btn btn-primary" %>
           </div>
 
           <div class="text-muted">
-            <%= link_to "Login", new_session_path, class: "text-decoration-none" %>
+            <%= link_to t('auth.login'), new_session_path, class: "text-decoration-none" %>
           </div>
         </div>
       <% end %>

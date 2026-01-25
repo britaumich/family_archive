@@ -1,27 +1,27 @@
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-12 col-md-8">
-      <h1 class="fw-bold display-4 mb-4">Sign in</h1>
+      <h1 class="fw-bold display-4 mb-4"><%= t('page_titles.sign_in') %></h1>
 
       <%= form_with url: session_url, class: "needs-validation", novalidate: true do |form| %>
         <div class="mb-4">
-          <%= form.label :email_address, "Email Address", class: "form-label" %>
-          <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address], class: "form-control" %>
+          <%= form.label :email_address, t('auth.email_address'), class: "form-label" %>
+          <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: t('auth.enter_email'), value: params[:email_address], class: "form-control" %>
         </div>
 
         <div class="mb-4">
-          <%= form.label :password, "Password", class: "form-label" %>
-          <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Enter your password", maxlength: 72, class: "form-control" %>
+          <%= form.label :password, t('auth.password'), class: "form-label" %>
+          <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: t('auth.enter_password'), maxlength: 72, class: "form-control" %>
         </div>
 
         <div class="d-flex flex-column flex-sm-row align-items-sm-center gap-3">
           <div>
-            <%= form.submit "Sign in", class: "btn btn-primary" %>
+            <%= form.submit t('auth.sign_in'), class: "btn btn-primary" %>
           </div>
 
           <div class="text-muted">
-              <%= link_to "Register", new_registration_path, class: "text-decoration-none" %> <br>
-            <%#= link_to "Forgot password?", new_password_path, class: "text-decoration-none" %>
+              <%= link_to t('auth.register'), new_registration_path, class: "text-decoration-none" %> <br>
+            <%#= link_to t('auth.forgot_password'), new_password_path, class: "text-decoration-none" %>
           </div>
         </div>
       <% end %>

@@ -1,17 +1,17 @@
-<h1>Family Archive</h1>
-<p>Something about the app</p>
+<h1><%= t('page_titles.family_archive') %></h1>
+<p><%= t('pages.about.description') %></p>
 <div class="d-grid w-25 mt-6 mb-8">
   <% if authenticated? %>
     <div>
-      <%= link_to "Sign Out", session_path, 
+      <%= link_to t('auth.sign_out'), session_path, 
         method: :delete, 
-        data: { turbo_method: :delete, confirm: "Are you sure?" },
+        data: { turbo_method: :delete, confirm: t('forms.confirmation.are_you_sure') },
         class: "btn btn-sign" 
       %>
     </div>
   <% else %> 
     <div>
-      <%= link_to "Sign In", new_session_path, data: {turbo: "false"}, class: "btn btn-sign" %>
+      <%= link_to t('auth.sign_in'), new_session_path, data: {turbo: "false"}, class: "btn btn-sign" %>
     </div>
   <% end %>
 </div>
