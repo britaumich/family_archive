@@ -18,4 +18,6 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root 'home#about'
+
+  get '/change_locale/:locale', to: 'settings#change_locale', as: :change_locale
 end
