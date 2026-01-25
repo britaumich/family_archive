@@ -16,33 +16,43 @@
       <% if authenticated? %>
         <div class="nav-item dropdown navbar_dropdown_item h-100 px-2 rounded-0 border-0">
           <a class="nav-link h-100 d-flex align-items-center fs-5 focus-ring border-0 rounded-2" style="--bs-focus-ring-color:#E5E5E5;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Main
+            <%= t('menu.navbar.main') %>
           </a>
           <ul class="dropdown-menu bg-primary rounded-0 navbar_dropdown_item">
             <li>
-              <%= link_to "Tags", tags_path, class: 'dropdown-item navbar_dropdown_item' %>
+              <%= link_to t('menu.navbar.tags'), tags_path, class: 'dropdown-item navbar_dropdown_item' %>
             </li>
             <li>
-              <%= link_to "Items", items_path, class: 'dropdown-item navbar_dropdown_item' %>
+              <%= link_to t('menu.navbar.items'), items_path, class: 'dropdown-item navbar_dropdown_item' %>
             </li>
           </ul>
         </div>
         <% if policy(AdminUser).index? %>
           <div class="nav-item dropdown navbar_dropdown_item h-100 px-2 rounded-0 border-0">
             <a class="nav-link h-100 d-flex align-items-center fs-5 focus-ring border-0 rounded-2" style="--bs-focus-ring-color:#E5E5E5;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Admin
+              <%= t('menu.navbar.admin') %>
             </a>
             <ul class="dropdown-menu bg-primary rounded-0 navbar_dropdown_item">
               <li>
-                <%= link_to "Upload Files", upload_files_page_path, class: 'dropdown-item navbar_dropdown_item' %>
+                <%= link_to t('menu.navbar.upload_files'), upload_files_page_path, class: 'dropdown-item navbar_dropdown_item' %>
               </li>
               <li>
-                <%= link_to "Admin Users", admin_users_path, class: 'dropdown-item navbar_dropdown_item' %>
+                <%= link_to t('menu.navbar.admin_users'), admin_users_path, class: 'dropdown-item navbar_dropdown_item' %>
               </li>
             </ul>
           </div>
         <% end %>
       <% end %>
+
+      <div class="nav-item navbar_dropdown_item h-100 px-2 rounded-0 border-0">
+        <div class="d-flex align-items-center justify-content-between">
+          <% if I18n.locale == :en %>
+            <%= link_to t('menu.languages.ru'), change_locale_path(:ru), class: "nav-link h-100 d-flex align-items-center fs-5 focus-ring border-0 rounded-2", style: "--bs-focus-ring-color:#E5E5E5;" %>
+          <% else %>
+            <%= link_to t('menu.languages.en'), change_locale_path(:en), class: "nav-link h-100 d-flex align-items-center fs-5 focus-ring border-0 rounded-2", style: "--bs-focus-ring-color:#E5E5E5;" %>
+          <% end %>
+        </div>
+      </div>
 
       <% if authenticated? %>
         <div class="nav-item dropdown navbar_dropdown_item h-100 px-2 mr-2 rounded-0 border-0 hide-on-mobile ms-auto">
@@ -50,7 +60,7 @@
             <%= display_user_with_role(current_user) %>
           </a>
           <div class="d-flex flex-row justify-content-center align-items-center mt-2">
-            <%= link_to "Sign Out", session_path, 
+            <%= link_to t('menu.navbar.sign_out'), session_path, 
               method: :delete, 
               data: { turbo_method: :delete, confirm: "Are you sure?" },
               class: "btn btn-sign" 
@@ -63,6 +73,6 @@
   </div>
   <!-- this is the hamburger menu-->
   <div class="collapse navbar-collapse d-md-none" id="navbarBurgerMenu">
-    <%= link_to "About", about_path, class: 'dropdown-item navbar_dropdown_item font-weight: bold' %>
+    <%= link_to t('menu.navbar.about'), about_path, class: 'dropdown-item navbar_dropdown_item font-weight: bold' %>
   </div>
 </nav>
