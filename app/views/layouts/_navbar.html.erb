@@ -46,10 +46,8 @@
 
       <div class="nav-item navbar_dropdown_item h-100 px-2 rounded-0 border-0">
         <div class="d-flex align-items-center justify-content-between">
-          <% if I18n.locale == :en %>
-            <%= link_to t('menu.languages.ru'), change_locale_path(:ru), class: "nav-link h-100 d-flex align-items-center fs-5 focus-ring border-0 rounded-2", style: "--bs-focus-ring-color:#E5E5E5;" %>
-          <% else %>
-            <%= link_to t('menu.languages.en'), change_locale_path(:en), class: "nav-link h-100 d-flex align-items-center fs-5 focus-ring border-0 rounded-2", style: "--bs-focus-ring-color:#E5E5E5;" %>
+          <% I18n.available_locales.each do |locale| %>
+            <%= link_to locale.to_s.upcase, url_for(locale: locale), class: (I18n.locale == locale ? 'current-locale' : '') %>
           <% end %>
         </div>
       </div>

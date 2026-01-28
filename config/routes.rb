@@ -19,5 +19,10 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root 'home#about'
 
-  get '/change_locale/:locale', to: 'settings#change_locale', as: :change_locale
+  scope "(:locale)", locale: /en|ru/ do
+    resources :items
+    resources :tags
+    resource :registration, only: [:new, :create]
+  end
+
 end

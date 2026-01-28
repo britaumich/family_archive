@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   include Pundit::Authorization
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
-  before_action :set_locale
+  around_action :switch_locale
 
   helper_method :current_user
 
@@ -17,13 +17,13 @@ class ApplicationController < ActionController::Base
     redirect_to(root_path)
   end
 
-  def set_locale
-    if cookies[:educator_locale] && I18n.available_locales.include?(cookies[:educator_locale].to_sym)
-      l = cookies[:educator_locale].to_sym
-    else
-      l = I18n.default_locale
-      cookies.permanent[:educator_locale] = l
-    end
-    I18n.locale = l
+  def switch_locale(&action)
+    locale = params[:locale] || I18n.default_locale
+    I18n.with_locale(locale, &action)
   end
+
+  def default_url_options
+    { locale: I18n.locale }
+  end
+
 end
