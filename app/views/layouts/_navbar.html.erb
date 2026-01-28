@@ -46,13 +46,11 @@
 
       <div class="nav-item navbar_dropdown_item h-100 px-2 rounded-0 border-0">
         <div class="d-flex align-items-center justify-content-between">
-          <% I18n.available_locales.each do |locale| %>
-            <% 
-              locale_name = locale == :en ? 'English' : 'Русский'
-              current_class = I18n.locale == locale ? 'nav-link current-locale fs-6 focus-ring border-0 rounded-2 text-decoration-none' : 'nav-link fs-6 focus-ring border-0 rounded-2 text-decoration-none'
-            %>
-            <%= link_to locale_name, url_for(locale: locale), class: current_class, style: "--bs-focus-ring-color:#E5E5E5;" %>
-          <% end %>
+          <% 
+            other_locale = I18n.locale == :en ? :ru : :en
+            locale_name = other_locale == :en ? 'English' : 'Русский'
+          %>
+          <%= link_to locale_name, url_for(locale: other_locale), class: 'nav-link fs-5 focus-ring border-0 rounded-2 text-decoration-none', style: "--bs-focus-ring-color:#E5E5E5;" %>
         </div>
       </div>
 
