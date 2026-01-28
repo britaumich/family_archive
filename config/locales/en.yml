@@ -47,22 +47,72 @@ en:
     enter_email: "Enter your email address"
     enter_password: "Enter your password"
     confirm_password_placeholder: "Confirm password"
+    not_authorized: "You are not authorized to access this page."
   forms:
+    cancel: "Cancel"
+    errors:
+      header:
+        one: "1 error"
+        other: "%{count} errors"
     labels:
       search_tag: "Search Tag by Name:"
       filter_by_tags: "Filter by Tags:"
       filter_type: "Filter Type:"
+      filter_type_any: "Any of these tags (OR)"
+      filter_type_all: "All of these tags (AND)"
+      filtered_by: "Filtered by"
+      must_have_all: "must have all"
+      any_of_these: "any of these"
+      no_file_attached: "No file attached"
+      type: "Type"
+      uploaded: "Uploaded"
+      caption: "Caption"
+      tags: "Tags"
       create_tag: "Create Tag by Name:"
     placeholders:
       name: "Name"
-    actions:
-      clear_filters: "Clear Filters"
+    buttons:
+      edit: "Edit"
+      submit: "Save"
+      delete: "Delete"
+      back: "Back to List"
+      search: "Search"
+      clear: "Clear Filters"
       upload_files: "Upload Files"
       create: "Create"
+      apply_filters: "Apply Filters"
+      view_details: "View Details"
+    flash:
+      tag_created: "Tag was successfully created."
+      tag_updated: "Tag was successfully updated."
+      tag_deleted: "Tag was successfully deleted."
+      error_deleting_tag: "Error deleting tag."
+      unauthorized: "You are not authorized to perform this action."
+      please_select_files_and_tags: "Please select files and at least one tag."
+      item_created: "Item was successfully created."
+      files_uploaded: "Files uploaded successfully."
+      item_updated: "Item was successfully updated."
+      item_deleted: "Item was successfully deleted."
+      admin_user_created: "Admin user was successfully created."
+      admin_user_updated: "Admin user was successfully updated."
+      admin_user_deleted: "Admin user was successfully deleted."
+      admin_user_could_not_be_deleted: "Admin user could not be deleted."
+      registered_successfully: "Registered successfully."
+    messages:
+        no_tags_found: "No Tags found"
     confirmation:
       are_you_sure: "Are you sure?"
     errors:
       error: "error"
+  tags:
+    edit:
+      title: "Editing Tag"
+      update: "Update"
+  views:
+    items:
+      no_items_yet: "No items yet"
+      start_building_archive: "Start building your family archive by uploading your first files"
+      upload_first_file: "Upload First File"
   pages:
     about:
       description: "Something about the app"
@@ -88,10 +138,5 @@ en:
       messages:
         success: "The operation was successful!"
         prohibited this record from being saved: "prohibited this record from being saved"
-    buttons:
-      edit: "Edit"
-      submit: "Save"
-      delete: "Delete"
-      back: "Back to List"
-      search: "Search"
-      clear: "Clear Filters"
+
+

@@ -30,7 +30,7 @@ class TagsController < ApplicationController
     @tag = Tag.new(tag_params)
     authorize @tag
     if @tag.save
-      flash.now[:notice] = 'Tag was successfully created.'
+      flash.now[:notice] = t('forms.flash.tag_created')
       @tag = Tag.new
       @tags = Tag.order(:name)
     else
@@ -42,7 +42,7 @@ class TagsController < ApplicationController
   def update
     respond_to do |format|
       if @tag.update(tag_params)
-        format.html { redirect_to @tag, notice: 'Tag was successfully updated.', status: :see_other }
+        format.html { redirect_to @tag, notice: t('forms.flash.tag_updated'), status: :see_other }
         format.json { render :show, status: :ok, location: @tag }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -56,10 +56,10 @@ class TagsController < ApplicationController
     if @tag.destroy
       @tags = Tag.all.order(:name)
       @tag = Tag.new
-      flash.now[:notice] = 'Tag was successfully deleted.'
+      flash.now[:notice] = t('forms.flash.tag_deleted')
     else
       @tags = Tag.all.order(:name)
-      flash.now[:notice] = 'Error deleting tag.'
+      flash.now[:notice] = t('forms.flash.error_deleting_tag')
     end
   end
 
@@ -67,11 +67,11 @@ class TagsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_tag
-    @tag = Tag.find(params.expect(:id))
+    @tag = Tag.find(params.require(:id))
   end
 
   # Only allow a list of trusted parameters through.
   def tag_params
-    params.expect(tag: [:name])
+    params.require(:tag).permit(:name)
   end
 end

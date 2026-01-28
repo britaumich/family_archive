@@ -23,7 +23,7 @@ class AdminUsersController < ApplicationController
     authorize @admin_user
     respond_to do |format|
       if @admin_user.save
-        format.html { redirect_to admin_users_url, notice: t('forms.messages.Admin user was successfully added') }
+        format.html { redirect_to admin_users_url, notice: t('forms.flash.admin_user_created') }
         format.json { render :show, status: :created, location: @admin_user }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -36,7 +36,7 @@ class AdminUsersController < ApplicationController
   def update
     respond_to do |format|
       if @admin_user.update(admin_user_params)
-        format.html { redirect_to admin_users_url, notice: t('forms.messages.Admin user was successfully updated') }
+        format.html { redirect_to admin_users_url, notice: t('forms.flash.admin_user_updated') }
         format.json { render :show, status: :ok, location: @admin_user }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -48,9 +48,9 @@ class AdminUsersController < ApplicationController
   # DELETE /admin_users/1 or /admin_users/1.json
   def destroy
     if @admin_user.destroy
-      flash.now[:notice] = t('forms.messages.Admin user was successfully deleted')
+      flash.now[:notice] = t('forms.flash.admin_user_deleted')
     else
-      flash.now[:alert] = t('text.Admin user could not be deleted ')
+      flash.now[:alert] = t('forms.flash.admin_user_could_not_be_deleted')
       flash.now[:alert] += @admin_user.errors.full_messages.join(', ')
     end
     @admin_users = AdminUser.order(:email)

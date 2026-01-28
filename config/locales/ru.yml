@@ -35,6 +35,7 @@ ru:
     family_archive: "Семейный архив"
     tag_list: "Список тегов"
     about: "О нас"
+    admins: "Администраторы"
   auth:
     sign_in: "Войти"
     sign_out: "Выйти"
@@ -47,36 +48,84 @@ ru:
     enter_email: "Введите адрес электронной почты"
     enter_password: "Введите пароль"
     confirm_password_placeholder: "Подтвердите пароль"
+    not_authorized: "У вас нет прав для доступа к этой странице."
   forms:
+    cancel: "Отмена"
+    errors:
+      header:
+        one: "1 ошибка"
+        few: "%{count} ошибки"
+        many: "%{count} ошибок"
+        other: "%{count} ошибок"
     labels:
       search_tag: "Поиск тега по названию:"
       filter_by_tags: "Фильтр по тегам:"
       filter_type: "Тип фильтра:"
+      filter_type_any: "Любой из этих тегов (ИЛИ)"
+      filter_type_all: "Все эти теги (И)"
+      filtered_by: "Отфильтровано по"
+      must_have_all: "должен содержать все"
+      any_of_these: "любой из этих"
+      no_file_attached: "Файл не прикреплен"
+      type: "Тип"
+      uploaded: "Загружено"
+      caption: "Подпись"
+      tags: "Теги"
       create_tag: "Создать тег по названию:"
     placeholders:
       name: "Название"
-    actions:
-      clear_filters: "Очистить фильтры"
-      upload_files: "Загрузить файлы"
-      create: "Создать"
     confirmation:
       are_you_sure: "Вы уверены?"
     errors:
       error: "ошибка"
     messages:
-      success: "Операция была успешно выполнена!"
-      prohibited this record from being saved: "- запись не может быть сохранена"
+      no_tags_found: "Теги не найдены."
+      errors:
+        blank: "- поле не может быть пустым"
+        success: "Операция была успешно выполнена!"
+        prohibited this record from being saved: "- запись не может быть сохранена"
+    flash:
+      tag_created: "Тег успешно создан."
+      tag_updated: "Тег успешно обновлен."
+      tag_deleted: "Тег успешно удален."
+      error_deleting_tag: "Ошибка при удалении тега."
+      unauthorized: "У вас нет прав для выполнения этого действия."
+      item_created: "Файл успешно создан."
+      files_uploaded: "Файлы успешно загружены."
+      please_select_files_and_tags: "Выберите файлы и хотя бы один тег."
+      item_updated: "Файл успешно обновлен."
+      item_deleted: "Файл успешно удален."
+      admin_user_created: "Администратор успешно создан."
+      admin_user_updated: "Администратор успешно обновлен."
+      admin_user_deleted: "Администратор успешно удален."
+      admin_user_could_not_be_deleted: "Администратор не может быть удален."
+      registered_successfully: "Регистрация прошла успешно."
     buttons:
-     edit: "Редактировать"
-     submit: "Сохранить"
-     delete: "Удалить"
-     back: "Назад к списку"
-     search: "Найти"
-     clear: "Обнулить фильтры"
-     cancel: "Отменить"
-     save: "Сохранить"
-     add: "Добавить"
-     update: "Обновить"
+      edit: "Редактировать"
+      submit: "Сохранить"
+      delete: "Удалить"
+      back: "Назад к списку"
+      search: "Найти"
+      cancel: "Отменить"
+      save: "Сохранить"
+      add: "Добавить"
+      update: "Обновить"
+      upload_files: "Загрузить файлы"
+      create: "Создать"
+      clear_filters: "Обнулить фильтры"
+      apply_filters: "Применить фильтры"
+      view_details: "Подробнее"
+    confirmation:
+      are_you_sure: "Вы уверены?"
+  tags:
+    edit:
+      title: "Редактирование тега"
+      update: "Обновить"
+  views:
+    items:
+      no_items_yet: "Пока нет файлов"
+      start_building_archive: "Начните создавать свой семейный архив, загрузив первые файлы"
+      upload_first_file: "Загрузить первый файл"
   pages:
     about:
       description: "Что-то о приложении"
@@ -98,24 +147,13 @@ ru:
   activerecord:
     attributes:
       item:
+        caption: "Описание"
+        item_type: "Тип файла"
+        file: "Файл"
       tag:
         name: "Название"
       admin_user:
         email: "Адрес электронной почты"
-    errors:
-      models:
-        item:
-      messages:
-        blank: "- поле не может буть пустым"
-        success: "Операция была успешно выполнена!"
-        prohibited this record from being saved: "- запись не может быть сохранена"
-    buttons:
-      edit: "Редактировать"
-      submit: "Сохранить"
-      delete: "Удалить"
-      back: "Назад к списку"
-      search: "Найти"
-      clear: "Обнулить фильтры"
   helpers:
     page_entries_info:
       one_page:

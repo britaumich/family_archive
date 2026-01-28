@@ -1,14 +1,14 @@
 <%= turbo_frame_tag 'tags' do %>  
   <div id="tags">
   <% if @tags.empty? %>
-    No Tags found
+    <%= t('forms.messages.no_tags_found') %>
   <% else %>
     <table class="table text-center">
       <thead class="table-group-divider">
         <tr>
-          <th>Name</th>
-          <td>Edit</td>
-          <td>Delete</td>
+          <th><%= t('activerecord.attributes.tag.name') %></th>
+          <td><%= t('forms.buttons.edit') %></td>
+          <td><%= t('forms.buttons.delete') %></td>
         </tr>
       </thead>
       <tbody class="table-group-divider">
@@ -23,7 +23,7 @@
               <% end %>
             </td>
             <td class="tag_tbody_td">
-              <%= link_to tag_path(tag), data: { turbo_confirm: 'Are you sure you want to delete this tag?', turbo_method: :delete}, aria: { label: "#{dom_id(tag)}_delete" }  do %>
+              <%= link_to tag_path(tag), data: { turbo_confirm: t('forms.confirmation.are_you_sure'), turbo_method: :delete}, aria: { label: "#{dom_id(tag)}_delete" }  do %>
               <i class="bi bi-trash-fill text-danger"></i>
               <% end %>
             </td>
