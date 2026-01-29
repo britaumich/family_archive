@@ -2,7 +2,7 @@
   <%= form_with(model: tag, data: { controller: "autosubmit", autosubmit_target: "form" }) do |form| %>
     <% if tag.errors.any? %>
       <div class="text-danger">
-        <h2><%= pluralize(tag.errors.count, t('forms.errors.error')) %></h2>
+        <h2><%= t('forms.errors.header', count: tag.errors.count) %></h2>
         <ul>
           <% tag.errors.each do |error| %>
             <li><%= error.full_message %></li>
