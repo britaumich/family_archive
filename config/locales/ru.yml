@@ -28,7 +28,6 @@
 #       enabled: "ON"
 
 ru:
-  hello: "Привет мир"
   page_titles:
     sign_in: "Войти"
     register: "Регистрация"
@@ -36,12 +35,11 @@ ru:
     tag_list: "Список тегов"
     about: "О нас"
     admins: "Администраторы"
+    upload_files: "Загрузить файлы"
   auth:
     sign_in: "Войти"
     sign_out: "Выйти"
     register: "Зарегистрироваться"
-    login: "Логин"
-    forgot_password: "Забыли пароль?"
     email_address: "Адрес электронной почты"
     password: "Пароль"
     confirm_password: "Подтвердите пароль"
@@ -71,50 +69,48 @@ ru:
       uploaded: "Загружено"
       caption: "Подпись"
       tags: "Теги"
-      create_tag: "Создать тег по названию:"
+      create_tag: "Создать тег по названию:"      
+      choose_files: "Выберите файлы для загрузки:"
+      select_item_type: "Выберите тип элемента:"
+      select_tags: "Выберите теги:"
+      upload_instructions: "Добавьте инструкции"
+      item_types:
+        photo: "Фотография"
+        video: "Видео"
+        document: "Документ"
+        select_prompt: "Выберите тип элемента"    
     placeholders:
       name: "Название"
-    confirmation:
-      are_you_sure: "Вы уверены?"
-    errors:
-      error: "ошибка"
-    messages:
-      no_tags_found: "Теги не найдены."
-      errors:
-        blank: "- поле не может быть пустым"
-        success: "Операция была успешно выполнена!"
-        prohibited this record from being saved: "- запись не может быть сохранена"
+    buttons:
+      edit: "Редактировать"
+      submit: "Сохранить"
+      delete: "Удалить"
+      cancel: "Отменить"
+      search: "Найти"
+      upload_files: "Загрузить файлы"
+      upload: "Загрузить"
+      create: "Создать"
+      apply_filters: "Применить фильтры"
+      clear_filters: "Обнулить фильтры"
+      view_details: "Подробнее"
     flash:
       tag_created: "Тег успешно создан."
       tag_updated: "Тег успешно обновлен."
       tag_deleted: "Тег успешно удален."
       error_deleting_tag: "Ошибка при удалении тега."
       unauthorized: "У вас нет прав для выполнения этого действия."
-      item_created: "Файл успешно создан."
-      files_uploaded: "Файлы успешно загружены."
       please_select_files_and_tags: "Выберите файлы и хотя бы один тег."
       item_updated: "Файл успешно обновлен."
       item_deleted: "Файл успешно удален."
+      files_uploaded: "Файлы успешно загружены."
       admin_user_created: "Администратор успешно создан."
       admin_user_updated: "Администратор успешно обновлен."
       admin_user_deleted: "Администратор успешно удален."
       admin_user_could_not_be_deleted: "Администратор не может быть удален."
       registered_successfully: "Регистрация прошла успешно."
-    buttons:
-      edit: "Редактировать"
-      submit: "Сохранить"
-      delete: "Удалить"
-      back: "Назад к списку"
-      search: "Найти"
-      cancel: "Отменить"
-      save: "Сохранить"
-      add: "Добавить"
-      update: "Обновить"
-      upload_files: "Загрузить файлы"
-      create: "Создать"
-      clear_filters: "Обнулить фильтры"
-      apply_filters: "Применить фильтры"
-      view_details: "Подробнее"
+    messages:
+      no_tags_found: "Теги не найдены."
+      prohibited this record from being saved: "- запись не может быть сохранена"
     confirmation:
       are_you_sure: "Вы уверены?"
   tags:
@@ -130,10 +126,7 @@ ru:
     about:
       description: "Что-то о приложении"
   menu:
-    languages:
-      lang: "Язык"
-      ru: "Русский"
-      en: "English"
+    new: "Добавить"
     navbar:
       main: "Основное"
       tags: "Теги"
@@ -143,43 +136,20 @@ ru:
       upload_files: "Загрузить файлы"
       sign_out: "Выйти"
       about: "О нас"
-    new: "Добавить"
+  text:
+    admin_users: "Администраторы"
+    New: "Новый"
+    Admin: "Администратор"
+    "Editing Admin": "Редактирование администратора"
+    "Are you sure?": "Вы уверены?"
+  error:
+    one: "1 ошибка"
+    few: "%{count} ошибки"
+    many: "%{count} ошибок"
+    other: "%{count} ошибок"
   activerecord:
     attributes:
-      item:
-        caption: "Описание"
-        item_type: "Тип файла"
-        file: "Файл"
       tag:
         name: "Название"
       admin_user:
         email: "Адрес электронной почты"
-  helpers:
-    page_entries_info:
-      one_page:
-        display_entries:
-          zero: "Не найдено ни одной записи"
-          one: "Найдена <b>1</b> запись"
-          other: "Найдены <b>все</b> записи - <b>%{count}</b>"
-      more_pages:
-        display_entries: "Показаны <b>%{first}&nbsp;-&nbsp;%{last}</b> из <b>%{total}</b> записей"
-  views:
-    pagination:
-      first: "&laquo; Первая"
-      last: "Последная &raquo;"
-      previous: "&lsaquo; Предыдущая"
-      next: "Следующая &rsaquo;"
-      truncate: "..."
-  date:
-    month_names: [~, Января, Февраля, Марта, Апреля, Мая, Июня,
-                    Июля, Августа, Сентября, Октября, Ноября, Декабря]
-    calendar_month_names: [~, Январь, Февраль, Март, Апрель, Май, Июнь,
-                    Июль, Август, Сентябрь, Октябрь, Ноябрь, Декабрь]
-    formats:
-      default: "%d-%m-%Y"
-      with_month: "%d %B, %Y"
-  error:
-    zero: 'нет ошибок'
-    one: '%{count} ошибка'
-    few: '%{count} ошибки'
-    many: '%{count} ошибок'
