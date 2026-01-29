@@ -4,6 +4,7 @@ class TagsController < ApplicationController
   # GET /tags or /tags.json
   def index
     @tag = Tag.new
+    @tag_types = TagType.order(:name)
     @tags = if params[:search].present?
               Tag.where('name ILIKE :search', search: "%#{params[:search]}%").order(:name)
             else
@@ -19,10 +20,12 @@ class TagsController < ApplicationController
   # GET /tags/new
   def new
     @tag = Tag.new
+    @tag_types = TagType.order(:name)
   end
 
   # GET /tags/1/edit
   def edit
+    @tag_types = TagType.order(:name)
   end
 
   # POST /tags or /tags.json
@@ -33,7 +36,9 @@ class TagsController < ApplicationController
       flash.now[:notice] = t('forms.flash.tag_created')
       @tag = Tag.new
       @tags = Tag.order(:name)
+      @tag_types = TagType.order(:name)
     else
+      @tag_types = TagType.order(:name)
       render :new, status: :unprocessable_entity
     end
   end
@@ -42,9 +47,10 @@ class TagsController < ApplicationController
   def update
     respond_to do |format|
       if @tag.update(tag_params)
-        format.html { redirect_to @tag, notice: t('forms.flash.tag_updated'), status: :see_other }
+        format.html { redirect_to tags_path, notice: t('forms.flash.tag_updated'), status: :see_other }
         format.json { render :show, status: :ok, location: @tag }
       else
+        @tag_types = TagType.order(:name)
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @tag.errors, status: :unprocessable_entity }
       end
@@ -72,6 +78,6 @@ class TagsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def tag_params
-    params.expect(tag: [:name])
+    params.expect(tag: [:name, :tag_type_id])
   end
 end

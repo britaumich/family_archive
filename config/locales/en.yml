@@ -72,6 +72,8 @@ en:
       tags: "Tags"
       create_tag: "Create Tag by Name:"
       create_tag_type: "Create Tag Type by Name:"
+      select_tag_type: "Select Tag Type"
+      no_tag_type: "No Type"
       search_tag_type: "Search Tag Type by Name:"
       tags_count: "Tags Count"
       choose_files: "Choose files to upload:"
@@ -181,6 +183,7 @@ en:
     attributes:
       tag:
         name: "Name"
+        tag_type: "Tag Type"
       tag_type:
         name: "Name"
       admin_user:

@@ -7,6 +7,7 @@
       <thead class="table-group-divider">
         <tr>
           <th><%= t('activerecord.attributes.tag.name') %></th>
+          <th><%= t('activerecord.attributes.tag.tag_type') %></th>
           <td><%= t('forms.buttons.edit') %></td>
           <td><%= t('forms.buttons.delete') %></td>
         </tr>
@@ -16,6 +17,13 @@
           <tr class="tag_tbody_tr">
             <td class="tag_tbody_td">
               <%= tag.name %>
+            </td>
+            <td class="tag_tbody_td">
+              <% if tag.tag_type %>
+                <span class="badge bg-secondary"><%= tag.tag_type.name %></span>
+              <% else %>
+                <span class="text-muted"><%= t('forms.labels.no_tag_type') %></span>
+              <% end %>
             </td>
             <td class="tag_tbody_td">
               <%= link_to edit_tag_path(tag), data: { turbo_frame: "_top" }, aria: { label: "#{dom_id(tag)}_edit" } do%>

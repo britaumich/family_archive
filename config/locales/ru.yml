@@ -74,6 +74,8 @@ ru:
       tags: "Теги"
       create_tag: "Создать тег по названию:"
       create_tag_type: "Создать тип тега по названию:"
+      select_tag_type: "Выберите тип тега"
+      no_tag_type: "Без типа"
       search_tag_type: "Поиск типа тега по названию:"
       tags_count: "Количество тегов"      
       choose_files: "Выберите файлы для загрузки:"
@@ -182,6 +184,7 @@ ru:
     attributes:
       tag:
         name: "Название"
+        tag_type: "Тип тега"
       tag_type:
         name: "Название"
       admin_user:
