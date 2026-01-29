@@ -13,8 +13,9 @@ class ApplicationController < ActionController::Base
   end
   
   def user_not_authorized
-    flash[:alert] = t('auth.not_authorized')
-    redirect_to(root_path)
+    locale = params[:locale] || I18n.default_locale
+    flash[:alert] = I18n.with_locale(locale) { t('auth.not_authorized') }
+    redirect_to(root_path(locale: locale))
   end
 
   def switch_locale(&action)
