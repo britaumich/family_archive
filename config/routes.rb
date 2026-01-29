@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     post 'upload_files', to: 'items#upload_files', as: :upload_files
     resources :items
     resources :tags
+    resources :tag_types
     resource :registration, only: [:new, :create]
     resource :session
     resources :passwords, param: :token
