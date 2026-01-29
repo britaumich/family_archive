@@ -1,0 +1,180 @@
+# Files in the config/locales directory are used for internationalization and
+# are automatically loaded by Rails. If you want to use locales other than
+# English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t "hello"
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t("hello") %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more about the API, please read the Rails Internationalization guide
+# at https://guides.rubyonrails.org/i18n.html.
+#
+# Be aware that YAML interprets the following case-insensitive strings as
+# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
+# must be quoted to be interpreted as strings. For example:
+#
+#     en:
+#       "yes": yup
+#       enabled: "ON"
+
+ru:
+  page_titles:
+    sign_in: "Войти"
+    register: "Регистрация"
+    family_archive: "Семейный архив"
+    tag_list: "Список тегов"
+    about: "О нас"
+    admins: "Администраторы"
+    upload_files: "Загрузить файлы"
+  auth:
+    sign_in: "Войти"
+    sign_out: "Выйти"
+    register: "Зарегистрироваться"
+    email_address: "Адрес электронной почты"
+    password: "Пароль"
+    confirm_password: "Подтвердите пароль"
+    enter_email: "Введите адрес электронной почты"
+    enter_password: "Введите пароль"
+    confirm_password_placeholder: "Подтвердите пароль"
+    not_authorized: "У вас нет прав для доступа к этой странице."
+    invalid_credentials: "Неверный адрес электронной почты или пароль."
+    rate_limit_exceeded: "Слишком много попыток входа. Пожалуйста, попробуйте позже."
+  forms:
+    cancel: "Отмена"
+    errors:
+      header:
+        one: "1 ошибка"
+        few: "%{count} ошибки"
+        many: "%{count} ошибок"
+        other: "%{count} ошибок"
+    labels:
+      search_tag: "Поиск тега по названию:"
+      filter_by_tags: "Фильтр по тегам:"
+      filter_type: "Тип фильтра:"
+      filter_type_any: "Любой из этих тегов (ИЛИ)"
+      filter_type_all: "Все эти теги (И)"
+      filtered_by: "Отфильтровано по"
+      must_have_all: "должен содержать все"
+      any_of_these: "любой из этих"
+      no_file_attached: "Файл не прикреплен"
+      type: "Тип"
+      uploaded: "Загружено"
+      caption: "Подпись"
+      tags: "Теги"
+      create_tag: "Создать тег по названию:"      
+      choose_files: "Выберите файлы для загрузки:"
+      select_item_type: "Выберите тип элемента:"
+      select_tags: "Выберите теги:"
+      upload_instructions: "Добавьте инструкции"
+      item_types:
+        photo: "Фотография"
+        video: "Видео"
+        document: "Документ"
+        select_prompt: "Выберите тип элемента"    
+    placeholders:
+      name: "Название"
+    buttons:
+      edit: "Редактировать"
+      submit: "Сохранить"
+      delete: "Удалить"
+      cancel: "Отменить"
+      search: "Найти"
+      upload_files: "Загрузить файлы"
+      upload: "Загрузить"
+      create: "Создать"
+      apply_filters: "Применить фильтры"
+      clear_filters: "Обнулить фильтры"
+      view_details: "Подробнее"
+      back_to_items: "Вернуться к файлам"
+    flash:
+      tag_created: "Тег успешно создан."
+      tag_updated: "Тег успешно обновлен."
+      tag_deleted: "Тег успешно удален."
+      error_deleting_tag: "Ошибка при удалении тега."
+      unauthorized: "У вас нет прав для выполнения этого действия."
+      please_select_files_and_tags: "Выберите файлы и хотя бы один тег."
+      item_updated: "Файл успешно обновлен."
+      item_deleted: "Файл успешно удален."
+      files_uploaded: "Файлы успешно загружены."
+      admin_user_created: "Администратор успешно создан."
+      admin_user_updated: "Администратор успешно обновлен."
+      admin_user_deleted: "Администратор успешно удален."
+      admin_user_could_not_be_deleted: "Администратор не может быть удален."
+      registered_successfully: "Регистрация прошла успешно."
+    messages:
+      no_tags_found: "Теги не найдены."
+      prohibited this record from being saved: "- запись не может быть сохранена"
+    confirmation:
+      are_you_sure: "Вы уверены?"
+  tags:
+    edit:
+      title: "Редактирование тега"
+      update: "Обновить"
+  views:
+    items:
+      no_items_yet: "Пока нет файлов"
+      start_building_archive: "Начните создавать свой семейный архив, загрузив первые файлы"
+      upload_first_file: "Загрузить первый файл"
+      show:
+        item_details: "Подробности"
+        type: "Тип:"
+        caption: "Описание:"
+        created: "Создано:"
+        file: "Файл:"
+        tags: "Теги"
+        no_tags_assigned: "Теги не назначены"
+        actions: "Действия"
+        delete_confirmation: "Вы уверены, что хотите удалить этот файл? Это действие нельзя отменить."
+        no_file_attached: "Файл не прикреплен"
+        download: "Скачать"
+        document: "Документ"
+        video_not_supported: "Ваш браузер не поддерживает видео."
+  pages:
+    about:
+      description: "Что-то о приложении"
+  menu:
+    new: "Добавить"
+    navbar:
+      main: "Основное"
+      tags: "Теги"
+      items: "Файлы"
+      admin: "Админ"
+      admin_users: "Администраторы"
+      upload_files: "Загрузить файлы"
+      sign_out: "Выйти"
+      about: "О нас"
+  text:
+    admin_users: "Администраторы"
+    New: "Новый"
+    Admin: "Администратор"
+    "Editing Admin": "Редактирование администратора"
+    "Are you sure?": "Вы уверены?"
+  error:
+    one: "1 ошибка"
+    few: "%{count} ошибки"
+    many: "%{count} ошибок"
+    other: "%{count} ошибок"
+  activerecord:
+    attributes:
+      tag:
+        name: "Название"
+      admin_user:
+        email: "Адрес электронной почты"
+      user:
+        email_address: "Адрес электронной почты"
+    errors:
+      models:
+        user:
+          attributes:
+            email_address:
+              taken: "уже зарегистрирован. Пожалуйста, войдите в систему или используйте другой адрес электронной почты."

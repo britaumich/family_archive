@@ -60,7 +60,7 @@ class ItemsController < ApplicationController
           @item.tags << tag if tag
         end
       end
-      redirect_to @item, notice: 'Item was successfully updated.'
+      redirect_to @item, notice: t('forms.flash.item_updated')
     else
       @tags = Tag.order(:name)
       render :edit
@@ -70,7 +70,7 @@ class ItemsController < ApplicationController
   def destroy
     authorize @item
     @item.destroy
-    redirect_to items_path, notice: 'Item was successfully deleted.'
+    redirect_to items_path, notice: t('forms.flash.item_deleted')
   end
 
   def upload_files_page
@@ -90,10 +90,10 @@ class ItemsController < ApplicationController
           @item.tags << tag
         end
       end
-      flash[:notice] = 'Files uploaded successfully.'
+      flash[:notice] = t('forms.flash.files_uploaded')
       redirect_to upload_files_page_path
     else
-      flash[:alert] = 'Please select files and at least one tag.'
+      flash[:alert] = t('forms.flash.please_select_files_and_tags')
       redirect_to upload_files_page_path
     end
   end
@@ -101,10 +101,10 @@ class ItemsController < ApplicationController
   private
 
   def set_item
-    @item = Item.find(params[:id])
+    @item = Item.find(params.expect(:id))
   end
 
   def item_params
-    params.require(:item).permit(:item_type, :file, :caption)
+    params.expect(item: [:item_type, :file, :caption])
   end
 end

@@ -9,10 +9,13 @@ class RegistrationsController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       start_new_session_for(@user)
-      redirect_to root_url, notice: t('forms.messages.Registered successfully')
+      redirect_to root_url, notice: t('forms.flash.registered_successfully')
     else
       render :new, status: :unprocessable_entity
     end
+  rescue ActiveRecord::RecordNotUnique
+    @user.errors.add(:email_address, t('activerecord.errors.models.user.attributes.email_address.taken'))
+    render :new, status: :unprocessable_entity
   end
 
   private

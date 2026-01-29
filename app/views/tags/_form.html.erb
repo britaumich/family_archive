@@ -2,7 +2,7 @@
   <%= form_with(model: tag, data: { controller: "autosubmit", autosubmit_target: "form" }) do |form| %>
     <% if tag.errors.any? %>
       <div class="text-danger">
-        <h2><%= pluralize(tag.errors.count, "error") %></h2>
+        <h2><%= t('forms.errors.header', count: tag.errors.count) %></h2>
         <ul>
           <% tag.errors.each do |error| %>
             <li><%= error.full_message %></li>
@@ -11,10 +11,10 @@
       </div>
     <% end %>
     <div>
-      <%= form.label :name, "Create Tag by Name:", class: "nowrap" %>
+      <%= form.label :name, t('forms.labels.create_tag'), class: "nowrap" %>
       <div class="d-flex flex-row justify-content-start align-items-center gap-3">
-        <%= form.text_field :name, placeholder: "Name", class: "w-50" %>
-        <%= form.submit "Create" %>
+        <%= form.text_field :name, placeholder: t('forms.placeholders.name'), class: "w-50" %>
+        <%= form.submit t('forms.buttons.create') %>
       </div>
     </div>
   <% end %>

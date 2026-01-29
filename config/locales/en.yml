@@ -28,4 +28,152 @@
 #       enabled: "ON"
 
 en:
-  hello: "Hello world"
+  page_titles:
+    sign_in: "Sign in"
+    register: "Register"
+    family_archive: "Family Archive"
+    tag_list: "Tag List"
+    about: "About"
+    admins: "Admin Users"
+    upload_files: "Upload Files"
+  auth:
+    sign_in: "Sign in"
+    sign_out: "Sign Out"
+    register: "Register"
+    email_address: "Email Address"
+    password: "Password"
+    confirm_password: "Confirm Password"
+    enter_email: "Enter your email address"
+    enter_password: "Enter your password"
+    confirm_password_placeholder: "Confirm password"
+    not_authorized: "You are not authorized to access this page."
+    invalid_credentials: "Invalid email or password."
+    rate_limit_exceeded: "Too many login attempts. Please try again later."
+  forms:
+    cancel: "Cancel"
+    errors:
+      header:
+        one: "1 error"
+        other: "%{count} errors"
+    labels:
+      search_tag: "Search Tag by Name:"
+      filter_by_tags: "Filter by Tags:"
+      filter_type: "Filter Type:"
+      filter_type_any: "Any of these tags (OR)"
+      filter_type_all: "All of these tags (AND)"
+      filtered_by: "Filtered by"
+      must_have_all: "must have all"
+      any_of_these: "any of these"
+      no_file_attached: "No file attached"
+      type: "Type"
+      uploaded: "Uploaded"
+      caption: "Caption"
+      tags: "Tags"
+      create_tag: "Create Tag by Name:"
+      choose_files: "Choose files to upload:"
+      select_item_type: "Select Item Type:"
+      select_tags: "Select Tags:"
+      upload_instructions: "Add some instructions"
+      item_types:
+        photo: "Photo"
+        video: "Video"
+        document: "Document"
+        select_prompt: "Select Item Type"
+    placeholders:
+      name: "Name"
+    buttons:
+      edit: "Edit"
+      submit: "Save"
+      delete: "Delete"
+      cancel: "Cancel"
+      search: "Search"
+      upload_files: "Upload Files"
+      upload: "Upload"
+      create: "Create"
+      apply_filters: "Apply Filters"
+      clear_filters: "Clear Filters"
+      view_details: "View Details"
+      back_to_items: "Back to Items"
+    flash:
+      tag_created: "Tag was successfully created."
+      tag_updated: "Tag was successfully updated."
+      tag_deleted: "Tag was successfully deleted."
+      error_deleting_tag: "Error deleting tag."
+      unauthorized: "You are not authorized to perform this action."
+      please_select_files_and_tags: "Please select files and at least one tag."
+      item_updated: "Item was successfully updated."
+      item_deleted: "Item was successfully deleted."
+      files_uploaded: "Files uploaded successfully."
+      admin_user_created: "Admin user was successfully created."
+      admin_user_updated: "Admin user was successfully updated."
+      admin_user_deleted: "Admin user was successfully deleted."
+      admin_user_could_not_be_deleted: "Admin user could not be deleted."
+      registered_successfully: "Registered successfully."
+    messages:
+      no_tags_found: "No Tags found"
+      prohibited this record from being saved: "prohibited this record from being saved"
+    confirmation:
+      are_you_sure: "Are you sure?"
+  tags:
+    edit:
+      title: "Editing Tag"
+      update: "Update"
+  views:
+    items:
+      no_items_yet: "No items yet"
+      start_building_archive: "Start building your family archive by uploading your first files"
+      upload_first_file: "Upload First File"
+      show:
+        item_details: "Item Details"
+        type: "Type:"
+        caption: "Caption:"
+        created: "Created:"
+        file: "File:"
+        tags: "Tags"
+        no_tags_assigned: "No tags assigned"
+        actions: "Actions"
+        edit_item: "Edit Item"
+        delete_item: "Delete Item"
+        back_to_items: "Back to Items"
+        delete_confirmation: "Are you sure you want to delete this item? This action cannot be undone."
+        no_file_attached: "No file attached"
+        download: "Download"
+        document: "Document"
+        video_not_supported: "Your browser does not support the video tag."
+  pages:
+    about:
+      description: "Something about the app"
+  menu:
+    new: "New"
+    navbar:
+      main: "Main"
+      tags: "Tags"
+      items: "Items"
+      admin: "Admin"
+      admin_users: "Admin Users"
+      upload_files: "Upload Files"
+      sign_out: "Sign Out"
+      about: "About"
+  text:
+    admin_users: "Admin Users"
+    New: "New"
+    Admin: "Admin"
+    "Editing Admin": "Editing Admin"
+    "Are you sure?": "Are you sure?"
+  error:
+    one: "1 error"
+    other: "%{count} errors"
+  activerecord:
+    attributes:
+      tag:
+        name: "Name"
+      admin_user:
+        email: "Email Address"
+      user:
+        email_address: "Email Address"
+    errors:
+      models:
+        user:
+          attributes:
+            email_address:
+              taken: "has already been registered. Please sign in or use a different email address."
