@@ -7,6 +7,10 @@ class ItemPolicy  < ApplicationPolicy
     authenticated?
   end
 
+  def show?
+    authenticated?
+  end
+
   def create?
     admin_user?
   end
