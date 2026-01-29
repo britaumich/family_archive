@@ -47,6 +47,8 @@ en:
     enter_password: "Enter your password"
     confirm_password_placeholder: "Confirm password"
     not_authorized: "You are not authorized to access this page."
+    invalid_credentials: "Invalid email or password."
+    rate_limit_exceeded: "Too many login attempts. Please try again later."
   forms:
     cancel: "Cancel"
     errors:

@@ -47,6 +47,8 @@ ru:
     enter_password: "Введите пароль"
     confirm_password_placeholder: "Подтвердите пароль"
     not_authorized: "У вас нет прав для доступа к этой странице."
+    invalid_credentials: "Неверный адрес электронной почты или пароль."
+    rate_limit_exceeded: "Слишком много попыток входа. Пожалуйста, попробуйте позже."
   forms:
     cancel: "Отмена"
     errors:
