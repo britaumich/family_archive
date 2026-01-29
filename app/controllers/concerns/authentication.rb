@@ -34,15 +34,15 @@ module Authentication
     def request_authentication
       session[:return_to_after_authenticating] = request.url
       unless authenticated?
-        redirect_to new_session_path, alert: 'Authenticate to access this page.'
+        redirect_to new_session_path(locale: I18n.locale), alert: 'Authenticate to access this page.'
       end
     end
 
     def after_authentication_url
       if authenticated?
-        session.delete(:return_to_after_authenticating) || root_url
+        session.delete(:return_to_after_authenticating) || root_url(locale: I18n.locale)
       else
-        root_url
+        root_url(locale: I18n.locale)
       end
     end
 
