@@ -13,6 +13,9 @@ class RegistrationsController < ApplicationController
     else
       render :new, status: :unprocessable_entity
     end
+  rescue ActiveRecord::RecordNotUnique
+    @user.errors.add(:email_address, t('activerecord.errors.models.user.attributes.email_address.taken'))
+    render :new, status: :unprocessable_entity
   end
 
   private

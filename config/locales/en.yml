@@ -149,3 +149,11 @@ en:
         name: "Name"
       admin_user:
         email: "Email Address"
+      user:
+        email_address: "Email Address"
+    errors:
+      models:
+        user:
+          attributes:
+            email_address:
+              taken: "has already been registered. Please sign in or use a different email address."
