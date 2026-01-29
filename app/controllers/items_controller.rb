@@ -105,6 +105,6 @@ class ItemsController < ApplicationController
   end
 
   def item_params
-    params.require(:item).permit(:item_type, :file, :caption)
+    params.expect(item: [:item_type, :file, :caption])
   end
 end
