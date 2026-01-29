@@ -95,6 +95,7 @@ ru:
       apply_filters: "Применить фильтры"
       clear_filters: "Обнулить фильтры"
       view_details: "Подробнее"
+      back_to_items: "Вернуться к файлам"
     flash:
       tag_created: "Тег успешно создан."
       tag_updated: "Тег успешно обновлен."
@@ -124,6 +125,20 @@ ru:
       no_items_yet: "Пока нет файлов"
       start_building_archive: "Начните создавать свой семейный архив, загрузив первые файлы"
       upload_first_file: "Загрузить первый файл"
+      show:
+        item_details: "Подробности"
+        type: "Тип:"
+        caption: "Описание:"
+        created: "Создано:"
+        file: "Файл:"
+        tags: "Теги"
+        no_tags_assigned: "Теги не назначены"
+        actions: "Действия"
+        delete_confirmation: "Вы уверены, что хотите удалить этот файл? Это действие нельзя отменить."
+        no_file_attached: "Файл не прикреплен"
+        download: "Скачать"
+        document: "Документ"
+        video_not_supported: "Ваш браузер не поддерживает видео."
   pages:
     about:
       description: "Что-то о приложении"
