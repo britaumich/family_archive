@@ -101,7 +101,7 @@ class ItemsController < ApplicationController
   private
 
   def set_item
-    @item = Item.find(params[:id])
+    @item = Item.find(params.expect(:id))
   end
 
   def item_params
