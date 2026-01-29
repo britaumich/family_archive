@@ -1,0 +1,40 @@
+<%= turbo_frame_tag 'tag_types' do %>  
+  <div id="tag_types">
+  <% if @tag_types.empty? %>
+    <%= t('forms.messages.no_tag_types_found') %>
+  <% else %>
+    <table class="table text-center">
+      <thead class="table-group-divider">
+        <tr>
+          <th><%= t('activerecord.attributes.tag_type.name') %></th>
+          <th><%= t('forms.labels.tags_count') %></th>
+          <td><%= t('forms.buttons.edit') %></td>
+          <td><%= t('forms.buttons.delete') %></td>
+        </tr>
+      </thead>
+      <tbody class="table-group-divider">
+        <% @tag_types.each do |tag_type| %>
+          <tr class="tag_type_tbody_tr">
+            <td class="tag_type_tbody_td">
+              <%= tag_type.name %>
+            </td>
+            <td class="tag_type_tbody_td">
+              <span class="badge bg-light text-dark"><%= tag_type.tags.count %></span>
+            </td>
+            <td class="tag_type_tbody_td">
+              <%= link_to edit_tag_type_path(tag_type), data: { turbo_frame: "_top" }, aria: { label: "#{dom_id(tag_type)}_edit" } do%>
+              <i class="bi bi-pencil-square text-primary"></i>
+              <% end %>
+            </td>
+            <td class="tag_type_tbody_td">
+              <%= link_to tag_type_path(tag_type), data: { turbo_confirm: t('forms.confirmation.are_you_sure'), turbo_method: :delete}, aria: { label: "#{dom_id(tag_type)}_delete" }  do %>
+              <i class="bi bi-trash-fill text-danger"></i>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+  </div>
+<% end %>

@@ -1,0 +1,18 @@
+<p>
+  <strong>Name:</strong>
+  <%= @tag_type.name %>
+</p>
+
+<p>
+  <strong>Tags:</strong>
+  <% if @tag_type.tags.any? %>
+    <% @tag_type.tags.each do |tag| %>
+      <span class="badge bg-primary"><%= tag.name %></span>
+    <% end %>
+  <% else %>
+    <em>No tags assigned to this type</em>
+  <% end %>
+</p>
+
+<%= link_to 'Edit', edit_tag_type_path(@tag_type) %> |
+<%= link_to 'Back', tag_types_path %>

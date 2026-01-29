@@ -1,0 +1,28 @@
+<div class="container-fluid">
+  <h1><%= t('page_titles.tag_type_list') %></h1>
+  <div id="search bar">
+    <%= form_with url: tag_types_path, method: :get, local: true,
+    data: { 
+          controller: "autosubmit", 
+          autosubmit_target: "form",
+          turbo_frame: "tag_types_list"
+        } do |form| %>
+      <%= form.label :search, t('forms.labels.search_tag_type'), style: "display: block"%>
+      <div class="d-flex flex-row justify-content-start align-items-center gap-3">
+      <%= form.text_field :search, value: params[:search], placeholder: t('forms.placeholders.name'), class: "w-50", data: { action: "input->autosubmit#search" } %>
+      <a class="link_to" data-action="autosubmit#clearFilters">
+        <%= t('forms.buttons.clear_filters') %>
+      </a>
+      </div>
+    <% end %>
+  </div>
+
+  <% if policy(TagType).create? %>
+    <div>
+      <%= render "form", tag_type: @tag_type %>
+    </div>
+  <% end %>
+  <div class="mt-2">
+    <%= render "listing" %>
+  </div>
+</div>
