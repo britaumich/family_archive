@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
       start_new_session_for user
       redirect_to after_authentication_url
     else
-      redirect_to new_session_path, alert: t("auth.invalid_credentials"), status: :see_other
+      redirect_to new_session_path, alert: t("auth.invalid_credentials")
     end
   end
 
