@@ -33,6 +33,7 @@ ru:
     register: "Регистрация"
     family_archive: "Семейный архив"
     tag_list: "Список тегов"
+    tag_type_list: "Список типов тегов"
     about: "О нас"
     admins: "Администраторы"
     upload_files: "Загрузить файлы"
@@ -71,7 +72,10 @@ ru:
       uploaded: "Загружено"
       caption: "Подпись"
       tags: "Теги"
-      create_tag: "Создать тег по названию:"      
+      create_tag: "Создать тег по названию:"
+      create_tag_type: "Создать тип тега по названию:"
+      search_tag_type: "Поиск типа тега по названию:"
+      tags_count: "Количество тегов"      
       choose_files: "Выберите файлы для загрузки:"
       select_item_type: "Выберите тип элемента:"
       select_tags: "Выберите теги:"
@@ -100,7 +104,11 @@ ru:
       tag_created: "Тег успешно создан."
       tag_updated: "Тег успешно обновлен."
       tag_deleted: "Тег успешно удален."
+      tag_type_created: "Тип тега успешно создан."
+      tag_type_updated: "Тип тега успешно обновлен."
+      tag_type_deleted: "Тип тега успешно удален."
       error_deleting_tag: "Ошибка при удалении тега."
+      error_deleting_tag_type: "Ошибка при удалении типа тега."
       unauthorized: "У вас нет прав для выполнения этого действия."
       please_select_files_and_tags: "Выберите файлы и хотя бы один тег."
       item_updated: "Файл успешно обновлен."
@@ -113,12 +121,17 @@ ru:
       registered_successfully: "Регистрация прошла успешно."
     messages:
       no_tags_found: "Теги не найдены."
+      no_tag_types_found: "Типы тегов не найдены."
       prohibited this record from being saved: "- запись не может быть сохранена"
     confirmation:
       are_you_sure: "Вы уверены?"
   tags:
     edit:
       title: "Редактирование тега"
+      update: "Обновить"
+  tag_types:
+    edit:
+      title: "Редактирование типа тега"
       update: "Обновить"
   views:
     items:
@@ -147,6 +160,7 @@ ru:
     navbar:
       main: "Основное"
       tags: "Теги"
+      tag_types: "Типы тегов"
       items: "Файлы"
       admin: "Админ"
       admin_users: "Администраторы"
@@ -167,6 +181,8 @@ ru:
   activerecord:
     attributes:
       tag:
+        name: "Название"
+      tag_type:
         name: "Название"
       admin_user:
         email: "Адрес электронной почты"

@@ -33,6 +33,7 @@ en:
     register: "Register"
     family_archive: "Family Archive"
     tag_list: "Tag List"
+    tag_type_list: "Tag Type List"
     about: "About"
     admins: "Admin Users"
     upload_files: "Upload Files"
@@ -70,6 +71,9 @@ en:
       caption: "Caption"
       tags: "Tags"
       create_tag: "Create Tag by Name:"
+      create_tag_type: "Create Tag Type by Name:"
+      search_tag_type: "Search Tag Type by Name:"
+      tags_count: "Tags Count"
       choose_files: "Choose files to upload:"
       select_item_type: "Select Item Type:"
       select_tags: "Select Tags:"
@@ -98,7 +102,11 @@ en:
       tag_created: "Tag was successfully created."
       tag_updated: "Tag was successfully updated."
       tag_deleted: "Tag was successfully deleted."
+      tag_type_created: "Tag type was successfully created."
+      tag_type_updated: "Tag type was successfully updated."
+      tag_type_deleted: "Tag type was successfully deleted."
       error_deleting_tag: "Error deleting tag."
+      error_deleting_tag_type: "Error deleting tag type."
       unauthorized: "You are not authorized to perform this action."
       please_select_files_and_tags: "Please select files and at least one tag."
       item_updated: "Item was successfully updated."
@@ -111,12 +119,17 @@ en:
       registered_successfully: "Registered successfully."
     messages:
       no_tags_found: "No Tags found"
+      no_tag_types_found: "No Tag Types found"
       prohibited this record from being saved: "prohibited this record from being saved"
     confirmation:
       are_you_sure: "Are you sure?"
   tags:
     edit:
       title: "Editing Tag"
+      update: "Update"
+  tag_types:
+    edit:
+      title: "Editing Tag Type"
       update: "Update"
   views:
     items:
@@ -148,6 +161,7 @@ en:
     navbar:
       main: "Main"
       tags: "Tags"
+      tag_types: "Tag Types"
       items: "Items"
       admin: "Admin"
       admin_users: "Admin Users"
@@ -166,6 +180,8 @@ en:
   activerecord:
     attributes:
       tag:
+        name: "Name"
+      tag_type:
         name: "Name"
       admin_user:
         email: "Email Address"
