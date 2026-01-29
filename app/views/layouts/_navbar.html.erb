@@ -62,7 +62,7 @@
           <div class="d-flex flex-row justify-content-center align-items-center mt-2">
             <%= link_to t('menu.navbar.sign_out'), session_path, 
               method: :delete, 
-              data: { turbo_method: :delete, confirm: "Are you sure?" },
+              data: { turbo_method: :delete, turbo_confirm: t('forms.confirmation.are_you_sure') },
               class: "btn btn-sign" 
             %>
           </div>
