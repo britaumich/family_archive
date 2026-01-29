@@ -6,9 +6,12 @@ class TagsController < ApplicationController
     @tag = Tag.new
     @tag_types = TagType.order(:name)
     @tags = if params[:search].present?
-              Tag.where('name ILIKE :search', search: "%#{params[:search]}%").order(:name)
+              Tag.left_joins(:tag_type)
+                 .where('tags.name ILIKE :search', search: "%#{params[:search]}%")
+                 .order('tag_types.name ASC NULLS LAST, tags.name ASC')
             else
-              Tag.order(:name)
+              Tag.left_joins(:tag_type)
+                 .order('tag_types.name ASC NULLS LAST, tags.name ASC')
             end
     authorize @tags
   end
@@ -67,6 +70,25 @@ class TagsController < ApplicationController
       @tags = Tag.all.order(:name)
       flash.now[:notice] = t('forms.flash.error_deleting_tag')
     end
+  end
+
+  # PATCH /tags/bulk_assign
+  def bulk_assign
+    tag_ids = params[:tag_ids]&.reject(&:blank?)
+    tag_type_id = params[:tag_type_id].presence
+    
+    if tag_ids&.any?
+      Tag.where(id: tag_ids).update_all(tag_type_id: tag_type_id)
+      flash.now[:notice] = t('forms.flash.tags_assigned_to_type')
+    else
+      flash.now[:alert] = t('forms.flash.no_tags_selected')
+    end
+    
+    @tag = Tag.new
+    @tag_types = TagType.order(:name)
+    @tags = Tag.order(:name)
+    
+    render :index
   end
 
   private

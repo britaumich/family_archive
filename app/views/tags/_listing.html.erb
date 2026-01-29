@@ -3,21 +3,36 @@
   <% if @tags.empty? %>
     <%= t('forms.messages.no_tags_found') %>
   <% else %>
-    <table class="table text-center">
-      <thead class="table-group-divider">
-        <tr>
-          <th><%= t('activerecord.attributes.tag.name') %></th>
-          <th><%= t('activerecord.attributes.tag.tag_type') %></th>
-          <td><%= t('forms.buttons.edit') %></td>
-          <td><%= t('forms.buttons.delete') %></td>
-        </tr>
-      </thead>
-      <tbody class="table-group-divider">
-        <% @tags.each do |tag| %>
-          <tr class="tag_tbody_tr">
-            <td class="tag_tbody_td">
-              <%= tag.name %>
-            </td>
+    <%= form_tag bulk_assign_tags_path, method: :patch, data: { turbo_frame: "tags" } do %>
+      <div class="mb-3 d-flex align-items-center gap-3">
+        <%= select_tag :tag_type_id, 
+            options_from_collection_for_select(@tag_types, :id, :name), 
+            { prompt: t('forms.labels.assign_tag_type'), include_blank: true, 
+              class: "form-select", style: "width: auto;" } %>
+        <%= submit_tag t('forms.buttons.assign'), class: "btn btn-primary btn-sm" %>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="toggleAllCheckboxes(this)">
+          <%= t('forms.buttons.select_all') %>
+        </button>
+      </div>
+      <table class="table text-center">
+        <thead class="table-group-divider">
+          <tr>
+            <th><%= t('forms.labels.select') %></th>
+            <th><%= t('activerecord.attributes.tag.name') %></th>
+            <th><%= t('activerecord.attributes.tag.tag_type') %></th>
+            <td><%= t('forms.buttons.edit') %></td>
+            <td><%= t('forms.buttons.delete') %></td>
+          </tr>
+        </thead>
+        <tbody class="table-group-divider">
+          <% @tags.each do |tag| %>
+            <tr class="tag_tbody_tr">
+              <td class="tag_tbody_td">
+                <%= check_box_tag "tag_ids[]", tag.id, false, class: "form-check-input" %>
+              </td>
+              <td class="tag_tbody_td">
+                <%= tag.name %>
+              </td>
             <td class="tag_tbody_td">
               <% if tag.tag_type %>
                 <span class="badge bg-secondary"><%= tag.tag_type.name %></span>
@@ -39,6 +54,17 @@
         <% end %>
       </tbody>
     </table>
+    <% end %>
   <% end %>
   </div>
+
+<script>
+function toggleAllCheckboxes(button) {
+  const checkboxes = document.querySelectorAll('input[name="tag_ids[]"]');
+  const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+  
+  checkboxes.forEach(cb => cb.checked = !allChecked);
+  button.textContent = allChecked ? '<%= t('forms.buttons.select_all') %>' : '<%= t('forms.buttons.unselect_all') %>';
+}
+</script>
 <% end %>
