@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get 'up' => 'rails/health#show', as: :rails_health_check
 
-  scope "(:locale)", locale: /en|ru/ do
+  scope "(:locale)", locale: /#{I18n.available_locales.join('|')}/ do
     get 'home/about', to: 'home#about', as: :about
     get 'upload_files_page', to: 'items#upload_files_page', as: :upload_files_page
     post 'upload_files', to: 'items#upload_files', as: :upload_files
