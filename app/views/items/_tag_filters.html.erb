@@ -41,7 +41,7 @@
                 <!-- All other tag types as dropdown -->
                 <div class="mb-2">
                   <%= form.collection_select :tags, tags, :id, :name, 
-                      { prompt: t("forms.labels.select_tag", tag_type: tag_type ? tag_type.name : 'Tags'), selected: @selected_tags.pluck(:id) },
+                      { prompt: "#{t('forms.labels.select')} #{tag_type ? tag_type.name : t('forms.labels.no_tag_type')}", selected: @selected_tags.pluck(:id) },
                       { multiple: true, class: "form-select", style: "width: 100%; max-width: 300px;" } %>
                 </div>
               <% end %>
