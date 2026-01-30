@@ -88,8 +88,8 @@ class TagsController < ApplicationController
     
     @tag = Tag.new
     @tag_types = TagType.order(:name)
-    @tags = Tag.order(:name)
-    
+    @tags = Tag.left_joins(:tag_type)
+                 .order('tag_types.name ASC NULLS LAST, tags.name ASC')
     render :index
   end
 
