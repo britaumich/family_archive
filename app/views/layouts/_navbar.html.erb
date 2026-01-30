@@ -4,7 +4,7 @@
       <div id="Logo" class="d-flex align-items-center">
         <%= image_tag 'family.jpg', alt: 'Family Archive Logo', class: 'logo-brand' %>
         <div class="nav-title h-100">
-          Family Archive
+          <%= t('menu.navbar.title') %>
         </div>
       </div>
     <% end %>
@@ -38,6 +38,9 @@
             <ul class="dropdown-menu bg-primary rounded-0 navbar_dropdown_item">
               <li>
                 <%= link_to t('menu.navbar.upload_files'), upload_files_page_path, class: 'dropdown-item navbar_dropdown_item' %>
+              </li>
+              <li>
+                <%= link_to t('menu.navbar.bulk_assign_tags'), bulk_assign_tags_form_items_path, class: 'dropdown-item navbar_dropdown_item' %>
               </li>
               <li>
                 <%= link_to t('menu.navbar.admin_users'), admin_users_path, class: 'dropdown-item navbar_dropdown_item' %>
