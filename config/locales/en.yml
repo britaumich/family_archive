@@ -174,7 +174,7 @@ en:
         no_items_selected: "Please select at least one item"
         no_tags_selected: "Please select at least one tag to remove"
         unauthorized: "You are not authorized to remove tags from one or more selected items"
-      bulk_assign_tags_form:
+      editing_tags_page:
         title: "Editing Tags"
         select_tags: "Select Tags to Assign"
         select_items: "Select Items"

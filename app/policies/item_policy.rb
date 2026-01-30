@@ -39,7 +39,7 @@ class ItemPolicy  < ApplicationPolicy
     admin_user?
   end
 
-  def bulk_assign_tags_form?
+  def editing_tags_page?
     admin_user?
   end
 

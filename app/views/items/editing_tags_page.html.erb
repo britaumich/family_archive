@@ -2,10 +2,10 @@
   <div class="row">
     <div class="col-12">
       <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2><%= t('views.items.bulk_assign_tags_form.title') %></h2>
+        <h2><%= t('views.items.editing_tags_page.title') %></h2>
       </div>
 
-      <%= render 'tag_filters', form_url: bulk_assign_tags_form_items_path, clear_url: bulk_assign_tags_form_items_path, card_wrapper: true %>
+      <%= render 'tag_filters', form_url: editing_tags_page_items_path, clear_url: editing_tags_page_items_path %>
 
       <%= form_tag bulk_assign_tags_items_path, method: :patch do %>
         <div class="row">
@@ -13,7 +13,7 @@
           <div class="col-md-4">
             <div class="card">
               <div class="card-header">
-                <h5 class="mb-0"><%= t('views.items.bulk_assign_tags_form.select_tags') %></h5>
+                <h5 class="mb-0"><%= t('views.items.editing_tags_page.select_tags') %></h5>
               </div>
               <div class="card-body">
                 <% if @assignment_tags_by_type.any? %>
@@ -48,7 +48,7 @@
           <div class="col-md-8">
             <div class="card">
               <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0"><%= t('views.items.bulk_assign_tags_form.select_items') %></h5>
+                <h5 class="mb-0"><%= t('views.items.editing_tags_page.select_items') %></h5>
                 <button type="button" class="btn btn-secondary btn-sm" onclick="toggleAllItemCheckboxes(this)">
                   <%= t('views.items.index.select_all') %>
                 </button>

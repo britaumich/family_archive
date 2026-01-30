@@ -10,7 +10,7 @@ Rails.application.routes.draw do
     get 'upload_files_page', to: 'items#upload_files_page', as: :upload_files_page
     post 'upload_files', to: 'items#upload_files', as: :upload_files
     resources :items do
-      get :bulk_assign_tags_form, on: :collection
+      get :editing_tags_page, on: :collection
       patch :bulk_assign_tags, on: :collection
       patch :bulk_remove_tags, on: :collection
     end

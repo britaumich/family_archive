@@ -182,7 +182,7 @@ ru:
         no_items_selected: "Выберите хотя бы один файл"
         no_tags_selected: "Выберите хотя бы один тег для удаления"
         unauthorized: "У вас нет прав для удаления тегов с одного или нескольких выбранных файлов"
-      bulk_assign_tags_form:
+      editing_tags_page:
         title: "Редактирование тегов"
         select_tags: "Выберите теги для назначения"
         select_items: "Выберите файлы"

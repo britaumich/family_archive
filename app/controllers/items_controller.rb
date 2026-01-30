@@ -99,8 +99,8 @@ class ItemsController < ApplicationController
     end
   end
 
-  def bulk_assign_tags_form
-    authorize Item
+  def editing_tags_page
+    authorize Item, :editing_tags_page?
     
     @tags = Tag.includes(:tag_type).order('tag_types.name ASC NULLS LAST, tags.name ASC')
     @tags_by_type = @tags.group_by(&:tag_type)
@@ -152,12 +152,12 @@ class ItemsController < ApplicationController
     tag_ids = params[:tag_ids]&.reject(&:blank?)
 
     if item_ids.blank?
-      redirect_to bulk_assign_tags_form_items_path, alert: t('forms.flash.no_items_selected')
+      redirect_to editing_tags_page_items_path, alert: t('forms.flash.no_items_selected')
       return
     end
 
     if tag_ids.blank?
-      redirect_to bulk_assign_tags_form_items_path, alert: t('forms.flash.no_tags_selected') 
+      redirect_to editing_tags_page_items_path, alert: t('forms.flash.no_tags_selected') 
       return
     end
 
@@ -179,9 +179,9 @@ class ItemsController < ApplicationController
     end
 
     if assigned_count > 0
-      redirect_to bulk_assign_tags_form_items_path, notice: t('forms.flash.tags_assigned_to_items', count: assigned_count, items: items.count, tags: tags.count)
+      redirect_to editing_tags_page_items_path, notice: t('forms.flash.tags_assigned_to_items', count: assigned_count, items: items.count, tags: tags.count)
     else
-      redirect_to bulk_assign_tags_form_items_path, notice: t('forms.flash.tags_already_assigned')
+      redirect_to editing_tags_page_items_path, notice: t('forms.flash.tags_already_assigned')
     end
   end
 
@@ -190,12 +190,12 @@ class ItemsController < ApplicationController
     tag_ids = params[:tag_ids]&.reject(&:blank?)
 
     if item_ids.blank?
-      redirect_to bulk_assign_tags_form_items_path, alert: t('forms.flash.no_items_selected')
+      redirect_to editing_tags_page_items_path, alert: t('forms.flash.no_items_selected')
       return
     end
 
     if tag_ids.blank?
-      redirect_to bulk_assign_tags_form_items_path, alert: t('forms.flash.no_tags_selected') 
+      redirect_to editing_tags_page_items_path, alert: t('forms.flash.no_tags_selected') 
       return
     end
 
@@ -218,12 +218,12 @@ class ItemsController < ApplicationController
     end
 
     if removed_count > 0
-      redirect_to bulk_assign_tags_form_items_path, notice: t('forms.flash.tags_removed_from_items', count: removed_count, items: items.count, tags: tags.count)
+      redirect_to editing_tags_page_items_path, notice: t('forms.flash.tags_removed_from_items', count: removed_count, items: items.count, tags: tags.count)
     else
-      redirect_to bulk_assign_tags_form_items_path, notice: t('forms.flash.no_tags_removed')
+      redirect_to editing_tags_page_items_path, notice: t('forms.flash.no_tags_removed')
     end
   rescue Pundit::NotAuthorizedError
-    redirect_to bulk_assign_tags_form_items_path, alert: t('forms.flash.unauthorized')
+    redirect_to editing_tags_page_items_path, alert: t('forms.flash.unauthorized')
   end
 
   private
