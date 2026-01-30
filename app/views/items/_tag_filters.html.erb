@@ -26,40 +26,40 @@
       <div class="row g-3">
         <% @tags_by_type.each do |tag_type, tags| %>
           <div class="col-xl-4 col-lg-6 col-md-12">
-            <div class="card h-100">
-              <div class="card-header py-2">
-                <h6 class="mb-0 text-primary">
-                  <%= tag_type ? tag_type.name : t('forms.labels.no_tag_type') %>
-                </h6>
-              </div>
-              <div class="card-body py-2">
-                <% if tag_type&.name&.downcase == 'year' %>
-                  <!-- Year tags as dropdown -->
+            <div class="mb-3">
+              <h6 class="text-muted">
+                <%= tag_type ? tag_type.name : t('forms.labels.no_tag_type') %>
+              </h6>
+              <% if tag_type&.name&.downcase == 'year' %>
+                <!-- Year tags as dropdown -->
+                <div class="mb-2">
                   <%= form.collection_select :tags, tags, :id, :name, 
                       { prompt: t('forms.labels.select_year'), selected: @selected_tags.pluck(:id) },
-                      { multiple: true, class: "form-select form-select-sm" } %>
-                <% else %>
-                  <!-- All other tag types as dropdown -->
+                      { multiple: true, class: "form-select", style: "width: 100%; max-width: 300px;" } %>
+                </div>
+              <% else %>
+                <!-- All other tag types as dropdown -->
+                <div class="mb-2">
                   <%= form.collection_select :tags, tags, :id, :name, 
                       { prompt: t("forms.labels.select_tag", tag_type: tag_type ? tag_type.name : 'Tags'), selected: @selected_tags.pluck(:id) },
-                      { multiple: true, class: "form-select form-select-sm" } %>
-                <% end %>
-                
-                <!-- Display selected tags for this type -->
-                <% selected_tags_for_type = @selected_tags.select { |tag| tag.tag_type == tag_type } %>
-                <% if selected_tags_for_type.any? %>
-                  <div class="mt-2">
-                    <% selected_tags_for_type.each do |tag| %>
-                      <span class="badge bg-primary me-1 mb-1" style="font-size: 0.75em;">
-                        <%= tag.name %>
-                        <% unless tag_type&.name&.downcase == 'year' %>
-                          <small>(<%= tag.items.count %>)</small>
-                        <% end %>
-                      </span>
-                    <% end %>
-                  </div>
-                <% end %>
-              </div>
+                      { multiple: true, class: "form-select", style: "width: 100%; max-width: 300px;" } %>
+                </div>
+              <% end %>
+              
+              <!-- Display selected tags for this type -->
+              <% selected_tags_for_type = @selected_tags.select { |tag| tag.tag_type == tag_type } %>
+              <% if selected_tags_for_type.any? %>
+                <div class="mt-2">
+                  <% selected_tags_for_type.each do |tag| %>
+                    <span class="badge bg-primary me-1 mb-1" style="font-size: 0.75em;">
+                      <%= tag.name %>
+                      <% unless tag_type&.name&.downcase == 'year' %>
+                        <small>(<%= tag.items.count %>)</small>
+                      <% end %>
+                    </span>
+                  <% end %>
+                </div>
+              <% end %>
             </div>
           </div>
         <% end %>
@@ -68,11 +68,11 @@
     
     <!-- Filter Type Options -->
     <div class="col-lg-3 col-md-4">
-      <div class="card h-100">
-        <div class="card-header py-2">
-          <h6 class="mb-0"><%= t('forms.labels.filter_type') %></h6>
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0"><%= t('forms.labels.filter_type') %></h5>
         </div>
-        <div class="card-body py-2">
+        <div class="card-body">
           <div class="form-check mb-2">
             <%= form.radio_button :filter_type, "any", checked: params[:filter_type] != "all", class: "form-check-input" %>
             <%= form.label :filter_type_any, t('forms.labels.filter_type_any'), class: "form-check-label" %>
