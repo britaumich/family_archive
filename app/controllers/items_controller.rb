@@ -144,20 +144,20 @@ class ItemsController < ApplicationController
                                .transform_keys(&:name)
                                .sort
     @assignment_tags_without_type = Tag.where(tag_type: nil)
-    # @assignment_tags_by_type['No Type'] = @assignment_tags_without_type if @assignment_tags_without_type.any?
   end
 
   def bulk_assign_tags
+    authorize Item
     item_ids = params[:item_ids]&.reject(&:blank?)
     tag_ids = params[:tag_ids]&.reject(&:blank?)
 
     if item_ids.blank?
-      redirect_to items_path, alert: t('items.bulk_assign_tags.no_items_selected')
+      redirect_to bulk_assign_tags_form_items_path, alert: t('forms.flash.no_items_selected')
       return
     end
 
     if tag_ids.blank?
-      redirect_to items_path, alert: t('items.bulk_assign_tags.no_tags_selected') 
+      redirect_to bulk_assign_tags_form_items_path, alert: t('forms.flash.no_tags_selected') 
       return
     end
 
@@ -179,12 +179,51 @@ class ItemsController < ApplicationController
     end
 
     if assigned_count > 0
-      redirect_to items_path, notice: t('items.bulk_assign_tags.success', count: assigned_count, items: items.count, tags: tags.count)
+      redirect_to bulk_assign_tags_form_items_path, notice: t('forms.flash.tags_assigned_to_items', count: assigned_count, items: items.count, tags: tags.count)
     else
-      redirect_to items_path, notice: t('items.bulk_assign_tags.already_assigned')
+      redirect_to bulk_assign_tags_form_items_path, notice: t('forms.flash.tags_already_assigned')
+    end
+  end
+
+  def bulk_remove_tags
+    item_ids = params[:item_ids]&.reject(&:blank?)
+    tag_ids = params[:tag_ids]&.reject(&:blank?)
+
+    if item_ids.blank?
+      redirect_to bulk_assign_tags_form_items_path, alert: t('forms.flash.no_items_selected')
+      return
+    end
+
+    if tag_ids.blank?
+      redirect_to bulk_assign_tags_form_items_path, alert: t('forms.flash.no_tags_selected') 
+      return
+    end
+
+    # Find items and authorize each
+    items = Item.where(id: item_ids)
+    items.each { |item| authorize item, :edit? }
+    
+    tags = Tag.where(id: tag_ids)
+    
+    removed_count = 0
+    items.each do |item|
+      tags.each do |tag|
+        # Remove association if it exists
+        tagable = item.tagables.find_by(tag: tag)
+        if tagable
+          tagable.destroy
+          removed_count += 1
+        end
+      end
+    end
+
+    if removed_count > 0
+      redirect_to bulk_assign_tags_form_items_path, notice: t('forms.flash.tags_removed_from_items', count: removed_count, items: items.count, tags: tags.count)
+    else
+      redirect_to bulk_assign_tags_form_items_path, notice: t('forms.flash.no_tags_removed')
     end
   rescue Pundit::NotAuthorizedError
-    redirect_to items_path, alert: t('items.bulk_assign_tags.unauthorized')
+    redirect_to bulk_assign_tags_form_items_path, alert: t('forms.flash.unauthorized')
   end
 
   private

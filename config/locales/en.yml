@@ -52,6 +52,12 @@ en:
     rate_limit_exceeded: "Too many login attempts. Please try again later."
   forms:
     cancel: "Cancel"
+    buttons:
+      back: "Back"
+      cancel: "Cancel"
+      assign_tags: "Assign Tags"
+      apply_filters: "Apply Filters"
+      clear_filters: "Clear Filters"
     errors:
       header:
         one: "1 error"
@@ -122,6 +128,13 @@ en:
       item_updated: "Item was successfully updated."
       item_deleted: "Item was successfully deleted."
       files_uploaded: "Files uploaded successfully."
+      tags_assigned_to_items: "Tags successfully assigned"
+      tags_already_assigned: "All selected tags were already assigned to the selected items"
+      tags_removed_from_items: "Tags successfully removed"
+      no_tags_removed: "None of the selected tags were assigned to the selected items"
+      no_items_selected: "Please select at least one item"
+      no_tags_selected: "Please select at least one tag"
+      unauthorized: "You are not authorized to perform this action"
       admin_user_created: "Admin user was successfully created."
       admin_user_updated: "Admin user was successfully updated."
       admin_user_deleted: "Admin user was successfully deleted."
@@ -146,6 +159,31 @@ en:
       no_items_yet: "No items yet"
       start_building_archive: "Start building your family archive by uploading your first files"
       upload_first_file: "Upload First File"
+      index:
+        items_list: "Items"
+        bulk_assign_tags: "Editing Tags"
+        select_all: "Select All"
+        unselect_all: "Unselect All"
+        assign_selected: "Assign to Selected"
+        remove_selected: "Remove from Selected"
+        no_items_selected: "Please select at least one item"
+        no_tags_selected: "Please select at least one tag"
+      bulk_remove_tags:
+        success: "Successfully removed %{tags} tag(s) from %{items} item(s) (%{count} removals)"
+        none_removed: "None of the selected tags were assigned to the selected items"
+        no_items_selected: "Please select at least one item"
+        no_tags_selected: "Please select at least one tag to remove"
+        unauthorized: "You are not authorized to remove tags from one or more selected items"
+      bulk_assign_tags_form:
+        title: "Editing Tags"
+        select_tags: "Select Tags to Assign"
+        select_items: "Select Items"
+      bulk_assign_tags:
+        success: "Successfully assigned %{tags} tag(s) to %{items} item(s) (%{count} new assignments)"
+        already_assigned: "All selected tags were already assigned to the selected items"
+        no_items_selected: "Please select at least one item"
+        no_tags_selected: "Please select at least one tag to assign"
+        unauthorized: "You are not authorized to assign tags to one or more selected items"
       show:
         item_details: "Item Details"
         type: "Type:"
@@ -169,6 +207,7 @@ en:
   menu:
     new: "New"
     navbar:
+      title: "Family Archive"
       main: "Main"
       tags: "Tags"
       tag_types: "Tag Types"
@@ -176,6 +215,7 @@ en:
       admin: "Admin"
       admin_users: "Admin Users"
       upload_files: "Upload Files"
+      bulk_assign_tags: "Bulk Assign Tags"
       sign_out: "Sign Out"
       about: "About"
   text:

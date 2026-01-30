@@ -1,9 +1,14 @@
 <% if @items.any? %>
-  <!-- Items Grid -->
-  <div class="row g-4">
-    <% @items.each do |item| %>
-      <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-        <div class="card h-100 shadow-sm">
+  <div class="mb-3 d-flex align-items-center justify-content-between">
+    <h4><%= t('views.items.index.items_list') %></h4>
+    <%= link_to t('views.items.index.bulk_assign_tags'), bulk_assign_tags_form_items_path, class: "btn btn-primary" %>
+  </div>
+    
+    <!-- Items Grid -->
+    <div class="row g-4">
+      <% @items.each do |item| %>
+        <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+          <div class="card h-100 shadow-sm">
           <% if item.file.attached? %>
             <% if item.file.content_type.start_with?('image/') %>
               <%= link_to item_path(item), class: "text-decoration-none" do %>
