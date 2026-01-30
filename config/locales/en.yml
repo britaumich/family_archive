@@ -119,6 +119,7 @@ en:
       tag_type_created: "Tag type was successfully created."
       tag_type_updated: "Tag type was successfully updated."
       tag_type_deleted: "Tag type was successfully deleted."
+      cannot_delete_tag_type_with_tags: "Cannot delete tag type because it has associated tags."
       error_deleting_tag: "Error deleting tag."
       error_deleting_tag_type: "Error deleting tag type."
       tags_assigned_to_type: "Selected tags were successfully assigned to the tag type."
@@ -244,3 +245,9 @@ en:
           attributes:
             email_address:
               taken: "has already been registered. Please sign in or use a different email address."
+        tag_types:
+          attributes:
+            name:
+              taken: "has already been taken."
+              blank: "can't be blank."
+              cannot_delete_tag_type_with_associated_tags: "cannot be deleted because it has associated tags."

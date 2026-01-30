@@ -121,6 +121,7 @@ ru:
       tag_type_created: "Тип тега успешно создан."
       tag_type_updated: "Тип тега успешно обновлен."
       tag_type_deleted: "Тип тега успешно удален."
+      cannot_delete_tag_type_with_tags: "Невозможно удалить тип тега, поскольку к нему привязаны теги."
       error_deleting_tag: "Ошибка при удалении тега."
       error_deleting_tag_type: "Ошибка при удалении типа тега."
       tags_assigned_to_type: "Выбранные теги успешно назначены к типу тега."
@@ -251,3 +252,9 @@ ru:
           attributes:
             email_address:
               taken: "уже зарегистрирован. Пожалуйста, войдите в систему или используйте другой адрес электронной почты."
+        tag_type:
+          attributes:
+            name:
+              taken: "уже занято."
+              blank: "не может быть пустым."
+              cannot_delete_tag_type_with_associated_tags: "не может быть удален, потому что имеет связанные теги."
