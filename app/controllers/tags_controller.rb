@@ -34,7 +34,8 @@ class TagsController < ApplicationController
     if @tag.save
       flash.now[:notice] = t('forms.flash.tag_created')
       @tag = Tag.new
-      @tags = Tag.order(:name)
+      @tags = Tag.left_joins(:tag_type)
+                 .order('tag_types.name ASC NULLS LAST, tags.name ASC')
       @tag_types = TagType.order(:name)
     else
       @tag_types = TagType.order(:name)
@@ -59,12 +60,14 @@ class TagsController < ApplicationController
   # DELETE /tags/1 or /tags/1.json
   def destroy
     if @tag.destroy
-      @tags = Tag.all.order(:name)
+      @tags = Tag.left_joins(:tag_type)
+                 .order('tag_types.name ASC NULLS LAST, tags.name ASC')
       @tag = Tag.new
       @tag_types = TagType.order(:name)
       flash.now[:notice] = t('forms.flash.tag_deleted')
     else
-      @tags = Tag.all.order(:name)
+      @tags = Tag.left_joins(:tag_type)
+                 .order('tag_types.name ASC NULLS LAST, tags.name ASC')
       @tag_types = TagType.order(:name)
       flash.now[:notice] = t('forms.flash.error_deleting_tag')
     end
