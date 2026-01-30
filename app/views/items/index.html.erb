@@ -10,19 +10,40 @@
       <div class="row">
         <div class="col-md-8">
           <h5><%= t('forms.labels.filter_by_tags') %></h5>
-          <div class="row g-2">
-            <% @tags.each do |tag| %>
-              <div class="col-6 col-md-4 col-lg-3">
-                <div class="form-check">
-                  <%= form.check_box :tags, 
-                      { multiple: true, checked: @selected_tags.include?(tag) }, 
-                      tag.id, "" %>
-                  <%= form.label "tags_#{tag.id}", tag.name, class: "form-check-label" %>
-                  <span class="badge bg-light text-dark ms-1"><%= tag.items.count %></span>
+          
+          <% @tags_by_type.each do |tag_type, tags| %>
+            <div class="mb-3">
+              <h6 class="text-primary">
+                <%= tag_type ? tag_type.name : t('forms.labels.no_tag_type') %>
+              </h6>
+              
+              <% if tag_type&.name&.downcase == 'year' %>
+                <!-- Year tags as dropdown -->
+                <div class="mb-2">
+                  <%= form.collection_select :tags, tags, :id, :name, 
+                      { prompt: t('forms.labels.select_year'), selected: @selected_tags.pluck(:id) },
+                      { multiple: true, class: "form-select", style: "width: auto; max-width: 200px;" } %>
+                  <% tags.each do |tag| %>
+                    <% if @selected_tags.include?(tag) %>
+                      <span class="badge bg-primary me-1"><%= tag.name %></span>
+                    <% end %>
+                  <% end %>
                 </div>
-              </div>
-            <% end %>
-          </div>
+              <% else %>
+                <!-- All other tag types as dropdown -->
+                <div class="mb-2">
+                  <%= form.collection_select :tags, tags, :id, :name, 
+                      { prompt: "Select #{tag_type ? tag_type.name : 'Tags'}", selected: @selected_tags.pluck(:id) },
+                      { multiple: true, class: "form-select", style: "width: auto; max-width: 300px;" } %>
+                  <% tags.each do |tag| %>
+                    <% if @selected_tags.include?(tag) %>
+                      <span class="badge bg-primary me-1"><%= tag.name %> <small>(<%= tag.items.count %>)</small></span>
+                    <% end %>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
         </div>
         
         <div class="col-md-4">

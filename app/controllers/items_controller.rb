@@ -2,7 +2,8 @@ class ItemsController < ApplicationController
   before_action :set_item, only: %i[show edit update destroy]
 
   def index
-    @tags = Tag.all.order(:name)
+    @tags = Tag.includes(:tag_type).order('tag_types.name ASC NULLS LAST, tags.name ASC')
+    @tags_by_type = @tags.group_by(&:tag_type)
     @selected_tags = []
 
     # Filter by multiple tags if specified

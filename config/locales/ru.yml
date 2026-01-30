@@ -78,6 +78,7 @@ ru:
       no_tag_type: "Без типа"
       assign_tag_type: "Назначить тип тега"
       select: "Выбрать"
+      select_year: "Выберите год"
       search_tag_type: "Поиск типа тега по названию:"
       tags_count: "Количество тегов"      
       choose_files: "Выберите файлы для загрузки:"
