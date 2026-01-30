@@ -1,5 +1,5 @@
 class TagsController < ApplicationController
-  before_action :set_tag, only: %i[show edit update destroy]
+  before_action :set_tag, only: %i[edit update destroy]
 
   # GET /tags or /tags.json
   def index
@@ -14,10 +14,6 @@ class TagsController < ApplicationController
                  .order('tag_types.name ASC NULLS LAST, tags.name ASC')
             end
     authorize @tags
-  end
-
-  # GET /tags/1 or /tags/1.json
-  def show
   end
 
   # GET /tags/new

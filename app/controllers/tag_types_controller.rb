@@ -1,5 +1,5 @@
 class TagTypesController < ApplicationController
-  before_action :set_tag_type, only: %i[show edit update destroy]
+  before_action :set_tag_type, only: %i[edit update destroy]
 
   # GET /tag_types or /tag_types.json
   def index
@@ -10,10 +10,6 @@ class TagTypesController < ApplicationController
                    TagType.order(:name)
                  end
     authorize @tag_types
-  end
-
-  # GET /tag_types/1 or /tag_types/1.json
-  def show
   end
 
   # GET /tag_types/new
