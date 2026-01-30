@@ -1,5 +1,5 @@
 <%= turbo_frame_tag 'tags' do %>  
-  <div id="tags">
+  <div id="tags" data-controller="toggle" data-toggle-select-text-value="<%= t('forms.buttons.select_all') %>" data-toggle-unselect-text-value="<%= t('forms.buttons.unselect_all') %>">
   <% if @tags.empty? %>
     <%= t('forms.messages.no_tags_found') %>
   <% else %>
@@ -10,7 +10,7 @@
             { prompt: t('forms.labels.assign_tag_type'), include_blank: true, 
               class: "form-select", style: "width: auto;" } %>
         <%= submit_tag t('forms.buttons.assign'), class: "btn btn-primary btn-sm" %>
-        <button type="button" class="btn btn-secondary btn-sm" onclick="toggleAllCheckboxes(this)">
+        <button type="button" class="btn btn-secondary btn-sm" data-toggle-target="button" data-action="click->toggle#toggle">
           <%= t('forms.buttons.select_all') %>
         </button>
       </div>
@@ -28,7 +28,7 @@
           <% @tags.each do |tag| %>
             <tr class="tag_tbody_tr">
               <td class="tag_tbody_td">
-                <%= check_box_tag "tag_ids[]", tag.id, false, class: "form-check-input" %>
+                <%= check_box_tag "tag_ids[]", tag.id, false, class: "form-check-input", data: { toggle_target: "checkbox" } %>
               </td>
               <td class="tag_tbody_td">
                 <%= tag.name %>
@@ -57,14 +57,4 @@
     <% end %>
   <% end %>
   </div>
-
-<script>
-function toggleAllCheckboxes(button) {
-  const checkboxes = document.querySelectorAll('input[name="tag_ids[]"]');
-  const allChecked = Array.from(checkboxes).every(cb => cb.checked);
-  
-  checkboxes.forEach(cb => cb.checked = !allChecked);
-  button.textContent = allChecked ? '<%= t('forms.buttons.select_all') %>' : '<%= t('forms.buttons.unselect_all') %>';
-}
-</script>
 <% end %>
