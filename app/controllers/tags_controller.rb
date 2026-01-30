@@ -65,11 +65,14 @@ class TagsController < ApplicationController
     if @tag.destroy
       @tags = Tag.all.order(:name)
       @tag = Tag.new
+      @tag_types = TagType.order(:name)
       flash.now[:notice] = t('forms.flash.tag_deleted')
     else
       @tags = Tag.all.order(:name)
+      @tag_types = TagType.order(:name)
       flash.now[:notice] = t('forms.flash.error_deleting_tag')
     end
+    render :index
   end
 
   # PATCH /tags/bulk_assign
