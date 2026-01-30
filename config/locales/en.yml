@@ -79,6 +79,7 @@ en:
       create_tag: "Create Tag by Name:"
       create_tag_type: "Create Tag Type by Name:"
       select_tag_type: "Select Tag Type"
+      select_tag: "Select Tag"
       no_tag_type: "No Type"
       assign_tag_type: "Assign Tag Type"
       select: "Select"

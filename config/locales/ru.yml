@@ -81,6 +81,7 @@ ru:
       create_tag: "Создать тег по названию:"
       create_tag_type: "Создать тип тега по названию:"
       select_tag_type: "Выберите тип тега"
+      select_tag: "Выберите тег"
       no_tag_type: "Без типа"
       assign_tag_type: "Назначить тип тега"
       select: "Выбрать"
