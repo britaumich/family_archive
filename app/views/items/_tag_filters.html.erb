@@ -41,7 +41,7 @@
                 <% else %>
                   <!-- All other tag types as dropdown -->
                   <%= form.collection_select :tags, tags, :id, :name, 
-                      { prompt: "Select #{tag_type ? tag_type.name : 'Tags'}", selected: @selected_tags.pluck(:id) },
+                      { prompt: t("forms.labels.select_tag_type", tag_type: tag_type ? tag_type.name : 'Tags'), selected: @selected_tags.pluck(:id) },
                       { multiple: true, class: "form-select form-select-sm" } %>
                 <% end %>
                 
