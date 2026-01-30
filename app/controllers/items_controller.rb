@@ -179,13 +179,14 @@ class ItemsController < ApplicationController
     end
 
     if assigned_count > 0
-      redirect_to editing_tags_page_items_path, notice: t('forms.flash.tags_assigned_to_items', count: assigned_count, items: items.count, tags: tags.count)
+      redirect_to editing_tags_page_items_path, notice: t('forms.flash.tags_assigned_to_items')
     else
       redirect_to editing_tags_page_items_path, notice: t('forms.flash.tags_already_assigned')
     end
   end
 
   def bulk_remove_tags
+    authorize Item
     item_ids = params[:item_ids]&.reject(&:blank?)
     tag_ids = params[:tag_ids]&.reject(&:blank?)
 
@@ -218,12 +219,10 @@ class ItemsController < ApplicationController
     end
 
     if removed_count > 0
-      redirect_to editing_tags_page_items_path, notice: t('forms.flash.tags_removed_from_items', count: removed_count, items: items.count, tags: tags.count)
+      redirect_to editing_tags_page_items_path, notice: t('forms.flash.tags_removed_from_items')
     else
       redirect_to editing_tags_page_items_path, notice: t('forms.flash.no_tags_removed')
     end
-  rescue Pundit::NotAuthorizedError
-    redirect_to editing_tags_page_items_path, alert: t('forms.flash.unauthorized')
   end
 
   private
