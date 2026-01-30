@@ -1,0 +1,68 @@
+<!-- Filter by tags -->
+<%= form_with url: items_path, method: :get, local: true, class: "mb-4" do |form| %>
+  <div class="row">
+    <div class="col-md-8">
+      <h5><%= t('forms.labels.filter_by_tags') %></h5>
+      
+      <% @tags_by_type.each do |tag_type, tags| %>
+        <div class="mb-3">
+          <h6 class="text-primary">
+            <%= tag_type ? tag_type.name : t('forms.labels.no_tag_type') %>
+          </h6>
+          
+          <% if tag_type&.name&.downcase == 'year' %>
+            <!-- Year tags as dropdown -->
+            <div class="mb-2">
+              <%= form.collection_select :tags, tags, :id, :name, 
+                  { prompt: t('forms.labels.select_year'), selected: @selected_tags.pluck(:id) },
+                  { multiple: true, class: "form-select", style: "width: auto; max-width: 200px;" } %>
+              <% tags.each do |tag| %>
+                <% if @selected_tags.include?(tag) %>
+                  <span class="badge bg-primary me-1"><%= tag.name %></span>
+                <% end %>
+              <% end %>
+            </div>
+          <% else %>
+            <!-- All other tag types as dropdown -->
+            <div class="mb-2">
+              <%= form.collection_select :tags, tags, :id, :name, 
+                  { prompt: "Select #{tag_type ? tag_type.name : 'Tags'}", selected: @selected_tags.pluck(:id) },
+                  { multiple: true, class: "form-select", style: "width: auto; max-width: 300px;" } %>
+              <% tags.each do |tag| %>
+                <% if @selected_tags.include?(tag) %>
+                  <span class="badge bg-primary me-1"><%= tag.name %> <small>(<%= tag.items.count %>)</small></span>
+                <% end %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+    
+    <div class="col-md-4">
+      <h5><%= t('forms.labels.filter_type') %></h5>
+      <div class="form-check">
+        <%= form.radio_button :filter_type, "any", checked: params[:filter_type] != "all" %>
+        <%= form.label :filter_type_any, t('forms.labels.filter_type_any'), class: "form-check-label" %>
+      </div>
+      <div class="form-check">
+        <%= form.radio_button :filter_type, "all", checked: params[:filter_type] == "all" %>
+        <%= form.label :filter_type_all, t('forms.labels.filter_type_all'), class: "form-check-label" %>
+      </div>
+    </div>
+  </div>
+  
+  <div class="mt-3">
+    <%= form.submit t('forms.buttons.apply_filters'), class: "btn btn-primary" %>
+    <%= link_to t('forms.buttons.clear_filters'), items_path, class: "btn btn-outline-secondary" %>
+    <% if @selected_tags.any? %>
+      <span class="ms-3 text-muted">
+        <%= t('forms.labels.filtered_by') %>:
+        <% @selected_tags.each do |tag| %>
+          <span class="badge bg-primary me-1"><%= tag.name %></span>
+        <% end %>
+        (<%= params[:filter_type] == "all" ? t('forms.labels.must_have_all') : t('forms.labels.any_of_these') %>)
+      </span>
+    <% end %>
+  </div>
+<% end %>
