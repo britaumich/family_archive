@@ -245,7 +245,7 @@ en:
           attributes:
             email_address:
               taken: "has already been registered. Please sign in or use a different email address."
-        tag_types:
+        tag_type:
           attributes:
             name:
               taken: "has already been taken."
