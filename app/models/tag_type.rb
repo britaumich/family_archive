@@ -8,7 +8,15 @@
 #  updated_at :datetime         not null
 #
 class TagType < ApplicationRecord
-  has_many :tags, dependent: :destroy
-  
+  has_many :tags
+  before_destroy :ensure_no_tags
   validates :name, presence: true, uniqueness: true
+
+  private
+
+  def ensure_no_tags
+    if tags.exists?
+      throw(:abort)
+    end
+  end
 end
