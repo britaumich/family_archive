@@ -35,6 +35,14 @@ class ItemPolicy  < ApplicationPolicy
     admin_user?
   end
 
+  def bulk_assign_tags?
+    admin_user?
+  end
+
+  def editing_tags_page?
+    admin_user?
+  end
+
   class Scope
     def initialize(user, scope)
       @user = user

@@ -1,0 +1,107 @@
+<!-- Filter by tags -->
+<% 
+  form_url = local_assigns.fetch(:form_url, items_path)
+  clear_url = local_assigns.fetch(:clear_url, items_path)
+  card_wrapper = local_assigns.fetch(:card_wrapper, false)
+%>
+
+<% if card_wrapper %>
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5 class="mb-0"><%= t('forms.labels.filter_by_tags') %></h5>
+    </div>
+    <div class="card-body">
+<% end %>
+
+<%= form_with url: form_url, method: :get, local: true, class: "mb-4" do |form| %>
+  <div class="row">
+    <div class="col-12">
+      <h5><%= t('forms.labels.filter_by_tags') %></h5>
+    </div>
+  </div>
+  
+  <div class="row">
+    <!-- Tag Types Grid -->
+    <div class="col-lg-9 col-md-8">
+      <div class="row g-3">
+        <% @tags_by_type.each do |tag_type, tags| %>
+          <div class="col-xl-4 col-lg-6 col-md-12">
+            <div class="mb-3">
+              <h6 class="text-muted">
+                <%= tag_type ? tag_type.name : t('forms.labels.no_tag_type') %>
+              </h6>
+              <% if tag_type&.name&.downcase == 'year' %>
+                <!-- Year tags as dropdown -->
+                <div class="mb-2">
+                  <%= form.collection_select :tags, tags, :id, :name, 
+                      { prompt: t('forms.labels.select_year'), selected: @selected_tags.pluck(:id) },
+                      { multiple: true, class: "form-select", style: "width: 100%; max-width: 300px;" } %>
+                </div>
+              <% else %>
+                <!-- All other tag types as dropdown -->
+                <div class="mb-2">
+                  <%= form.collection_select :tags, tags, :id, :name, 
+                      { prompt: "#{t('forms.labels.select')} #{tag_type ? tag_type.name : t('forms.labels.no_tag_type')}", selected: @selected_tags.pluck(:id) },
+                      { multiple: true, class: "form-select", style: "width: 100%; max-width: 300px;" } %>
+                </div>
+              <% end %>
+              
+              <!-- Display selected tags for this type -->
+              <% selected_tags_for_type = @selected_tags.select { |tag| tag.tag_type == tag_type } %>
+              <% if selected_tags_for_type.any? %>
+                <div class="mt-2">
+                  <% selected_tags_for_type.each do |tag| %>
+                    <span class="badge bg-primary me-1 mb-1" style="font-size: 0.75em;">
+                      <%= tag.name %>
+                      <% unless tag_type&.name&.downcase == 'year' %>
+                        <small>(<%= tag.items.count %>)</small>
+                      <% end %>
+                    </span>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    
+    <!-- Filter Type Options -->
+    <div class="col-lg-3 col-md-4">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0"><%= t('forms.labels.filter_type') %></h5>
+        </div>
+        <div class="card-body">
+          <div class="form-check mb-2">
+            <%= form.radio_button :filter_type, "any", checked: params[:filter_type] != "all", class: "form-check-input" %>
+            <%= form.label :filter_type_any, t('forms.labels.filter_type_any'), class: "form-check-label" %>
+          </div>
+          <div class="form-check">
+            <%= form.radio_button :filter_type, "all", checked: params[:filter_type] == "all", class: "form-check-input" %>
+            <%= form.label :filter_type_all, t('forms.labels.filter_type_all'), class: "form-check-label" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="mt-3">
+    <%= form.submit t('forms.buttons.apply_filters'), class: "btn btn-primary" %>
+    <%= link_to t('forms.buttons.clear_filters'), clear_url, class: "btn btn-outline-secondary" %>
+    <% if @selected_tags.any? %>
+      <span class="ms-3 text-muted">
+        <%= t('forms.labels.filtered_by') %>:
+        <% @selected_tags.each do |tag| %>
+          <span class="badge bg-primary me-1"><%= tag.name %></span>
+        <% end %>
+        (<%= params[:filter_type] == "all" ? t('forms.labels.must_have_all') : t('forms.labels.any_of_these') %>)
+      </span>
+    <% end %>
+  </div>
+<% end %>
+
+<% if card_wrapper %>
+    </div>
+  </div>
+<% end %>

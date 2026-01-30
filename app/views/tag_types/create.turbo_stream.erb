@@ -1,0 +1,7 @@
+<%= turbo_stream.update "tag_types" do %>
+  <%= render "listing" %>
+<% end %>
+
+<%= turbo_stream.update "new_tag_type" do %>
+  <%= render "form", tag_type: @tag_type %>
+<% end %>

@@ -33,6 +33,7 @@ en:
     register: "Register"
     family_archive: "Family Archive"
     tag_list: "Tag List"
+    tag_type_list: "Tag Type List"
     about: "About"
     admins: "Admin Users"
     upload_files: "Upload Files"
@@ -51,6 +52,12 @@ en:
     rate_limit_exceeded: "Too many login attempts. Please try again later."
   forms:
     cancel: "Cancel"
+    buttons:
+      back: "Back"
+      cancel: "Cancel"
+      assign_tags: "Assign Tags"
+      apply_filters: "Apply Filters"
+      clear_filters: "Clear Filters"
     errors:
       header:
         one: "1 error"
@@ -70,6 +77,15 @@ en:
       caption: "Caption"
       tags: "Tags"
       create_tag: "Create Tag by Name:"
+      create_tag_type: "Create Tag Type by Name:"
+      select_tag_type: "Select Tag Type"
+      select_tag: "Select Tag"
+      no_tag_type: "No Type"
+      assign_tag_type: "Assign Tag Type"
+      select: "Select"
+      select_year: "Select Year"
+      search_tag_type: "Search Tag Type by Name:"
+      tags_count: "Tags Count"
       choose_files: "Choose files to upload:"
       select_item_type: "Select Item Type:"
       select_tags: "Select Tags:"
@@ -90,6 +106,9 @@ en:
       upload_files: "Upload Files"
       upload: "Upload"
       create: "Create"
+      assign: "Assign"
+      select_all: "Select All"
+      unselect_all: "Unselect All"
       apply_filters: "Apply Filters"
       clear_filters: "Clear Filters"
       view_details: "View Details"
@@ -98,12 +117,26 @@ en:
       tag_created: "Tag was successfully created."
       tag_updated: "Tag was successfully updated."
       tag_deleted: "Tag was successfully deleted."
+      tag_type_created: "Tag type was successfully created."
+      tag_type_updated: "Tag type was successfully updated."
+      tag_type_deleted: "Tag type was successfully deleted."
+      cannot_delete_tag_type_with_tags: "Cannot delete tag type because it has associated tags."
       error_deleting_tag: "Error deleting tag."
+      error_deleting_tag_type: "Error deleting tag type."
+      tags_assigned_to_type: "Selected tags were successfully assigned to the tag type."
+      no_tags_selected: "Please select at least one tag to assign."
       unauthorized: "You are not authorized to perform this action."
       please_select_files_and_tags: "Please select files and at least one tag."
       item_updated: "Item was successfully updated."
       item_deleted: "Item was successfully deleted."
       files_uploaded: "Files uploaded successfully."
+      tags_assigned_to_items: "Tags successfully assigned"
+      tags_already_assigned: "All selected tags were already assigned to the selected items"
+      tags_removed_from_items: "Tags successfully removed"
+      no_tags_removed: "None of the selected tags were assigned to the selected items"
+      no_items_selected: "Please select at least one item"
+      no_tags_selected: "Please select at least one tag"
+      unauthorized: "You are not authorized to perform this action"
       admin_user_created: "Admin user was successfully created."
       admin_user_updated: "Admin user was successfully updated."
       admin_user_deleted: "Admin user was successfully deleted."
@@ -111,6 +144,7 @@ en:
       registered_successfully: "Registered successfully."
     messages:
       no_tags_found: "No Tags found"
+      no_tag_types_found: "No Tag Types found"
       prohibited this record from being saved: "prohibited this record from being saved"
     confirmation:
       are_you_sure: "Are you sure?"
@@ -118,11 +152,40 @@ en:
     edit:
       title: "Editing Tag"
       update: "Update"
+  tag_types:
+    edit:
+      title: "Editing Tag Type"
+      update: "Update"
   views:
     items:
       no_items_yet: "No items yet"
       start_building_archive: "Start building your family archive by uploading your first files"
       upload_first_file: "Upload First File"
+      index:
+        items_list: "Items"
+        bulk_assign_tags: "Editing Tags"
+        select_all: "Select All"
+        unselect_all: "Unselect All"
+        assign_selected: "Assign to Selected"
+        remove_selected: "Remove from Selected"
+        no_items_selected: "Please select at least one item"
+        no_tags_selected: "Please select at least one tag"
+      bulk_remove_tags:
+        success: "Successfully removed %{tags} tag(s) from %{items} item(s) (%{count} removals)"
+        none_removed: "None of the selected tags were assigned to the selected items"
+        no_items_selected: "Please select at least one item"
+        no_tags_selected: "Please select at least one tag to remove"
+        unauthorized: "You are not authorized to remove tags from one or more selected items"
+      editing_tags_page:
+        title: "Editing Tags"
+        select_tags: "Select Tags to Assign"
+        select_items: "Select Items"
+      bulk_assign_tags:
+        success: "Successfully assigned %{tags} tag(s) to %{items} item(s) (%{count} new assignments)"
+        already_assigned: "All selected tags were already assigned to the selected items"
+        no_items_selected: "Please select at least one item"
+        no_tags_selected: "Please select at least one tag to assign"
+        unauthorized: "You are not authorized to assign tags to one or more selected items"
       show:
         item_details: "Item Details"
         type: "Type:"
@@ -146,12 +209,15 @@ en:
   menu:
     new: "New"
     navbar:
+      title: "Family Archive"
       main: "Main"
       tags: "Tags"
+      tag_types: "Tag Types"
       items: "Items"
       admin: "Admin"
       admin_users: "Admin Users"
       upload_files: "Upload Files"
+      bulk_assign_tags: "Bulk Assign Tags"
       sign_out: "Sign Out"
       about: "About"
   text:
@@ -167,6 +233,9 @@ en:
     attributes:
       tag:
         name: "Name"
+        tag_type: "Tag Type"
+      tag_type:
+        name: "Name"
       admin_user:
         email: "Email Address"
       user:
@@ -177,3 +246,9 @@ en:
           attributes:
             email_address:
               taken: "has already been registered. Please sign in or use a different email address."
+        tag_type:
+          attributes:
+            name:
+              taken: "has already been taken."
+              blank: "can't be blank."
+              cannot_delete_tag_type_with_associated_tags: "cannot be deleted because it has associated tags."

@@ -33,6 +33,7 @@ ru:
     register: "Регистрация"
     family_archive: "Семейный архив"
     tag_list: "Список тегов"
+    tag_type_list: "Список типов тегов"
     about: "О нас"
     admins: "Администраторы"
     upload_files: "Загрузить файлы"
@@ -51,6 +52,12 @@ ru:
     rate_limit_exceeded: "Слишком много попыток входа. Пожалуйста, попробуйте позже."
   forms:
     cancel: "Отмена"
+    buttons:
+      back: "Назад"
+      cancel: "Отмена"
+      assign_tags: "Назначить теги"
+      apply_filters: "Применить фильтры"
+      clear_filters: "Очистить фильтры"
     errors:
       header:
         one: "1 ошибка"
@@ -71,7 +78,16 @@ ru:
       uploaded: "Загружено"
       caption: "Подпись"
       tags: "Теги"
-      create_tag: "Создать тег по названию:"      
+      create_tag: "Создать тег по названию:"
+      create_tag_type: "Создать тип тега по названию:"
+      select_tag_type: "Выберите тип тега"
+      select_tag: "Выберите тег"
+      no_tag_type: "Без типа"
+      assign_tag_type: "Назначить тип тега"
+      select: "Выберите"
+      select_year: "Выберите год"
+      search_tag_type: "Поиск типа тега по названию:"
+      tags_count: "Количество тегов"
       choose_files: "Выберите файлы для загрузки:"
       select_item_type: "Выберите тип элемента:"
       select_tags: "Выберите теги:"
@@ -92,6 +108,9 @@ ru:
       upload_files: "Загрузить файлы"
       upload: "Загрузить"
       create: "Создать"
+      assign: "Назначить"
+      select_all: "Выбрать все"
+      unselect_all: "Отменить выбор"
       apply_filters: "Применить фильтры"
       clear_filters: "Обнулить фильтры"
       view_details: "Подробнее"
@@ -100,12 +119,26 @@ ru:
       tag_created: "Тег успешно создан."
       tag_updated: "Тег успешно обновлен."
       tag_deleted: "Тег успешно удален."
+      tag_type_created: "Тип тега успешно создан."
+      tag_type_updated: "Тип тега успешно обновлен."
+      tag_type_deleted: "Тип тега успешно удален."
+      cannot_delete_tag_type_with_tags: "Невозможно удалить тип тега, поскольку к нему привязаны теги."
       error_deleting_tag: "Ошибка при удалении тега."
+      error_deleting_tag_type: "Ошибка при удалении типа тега."
+      tags_assigned_to_type: "Выбранные теги успешно назначены к типу тега."
+      no_tags_selected: "Пожалуйста, выберите хотя бы один тег для назначения."
       unauthorized: "У вас нет прав для выполнения этого действия."
       please_select_files_and_tags: "Выберите файлы и хотя бы один тег."
       item_updated: "Файл успешно обновлен."
       item_deleted: "Файл успешно удален."
       files_uploaded: "Файлы успешно загружены."
+      tags_assigned_to_items: "Тэги добавлены"
+      tags_already_assigned: "Все выбранные теги уже назначены выбранным файлам"
+      tags_removed_from_items: "Тэги удалены"
+      no_tags_removed: "Ни один из выбранных тегов не был назначен выбранным файлам"
+      no_items_selected: "Выберите хотя бы один файл"
+      no_tags_selected: "Выберите хотя бы один тег"
+      unauthorized: "У вас нет прав для выполнения этого действия"
       admin_user_created: "Администратор успешно создан."
       admin_user_updated: "Администратор успешно обновлен."
       admin_user_deleted: "Администратор успешно удален."
@@ -113,6 +146,7 @@ ru:
       registered_successfully: "Регистрация прошла успешно."
     messages:
       no_tags_found: "Теги не найдены."
+      no_tag_types_found: "Типы тегов не найдены."
       prohibited this record from being saved: "- запись не может быть сохранена"
     confirmation:
       are_you_sure: "Вы уверены?"
@@ -120,11 +154,40 @@ ru:
     edit:
       title: "Редактирование тега"
       update: "Обновить"
+  tag_types:
+    edit:
+      title: "Редактирование типа тега"
+      update: "Обновить"
   views:
     items:
       no_items_yet: "Пока нет файлов"
       start_building_archive: "Начните создавать свой семейный архив, загрузив первые файлы"
       upload_first_file: "Загрузить первый файл"
+      index:
+        items_list: "Файлы"
+        bulk_assign_tags: "Редактирование тегов у файлов"
+        select_all: "Выбрать все"
+        unselect_all: "Отменить выбор"
+        assign_selected: "Назначить выбранным"
+        remove_selected: "Удалить с выбранных"
+        no_items_selected: "Выберите хотя бы один файл"
+        no_tags_selected: "Выберите хотя бы один тег"
+      bulk_assign_tags:
+        success: "Успешно назначено %{tags} тегов %{items} файлам (%{count} новых назначений)"
+        already_assigned: "Все выбранные теги уже назначены выбранным файлам"
+        no_items_selected: "Выберите хотя бы один файл"
+        no_tags_selected: "Выберите хотя бы один тег для назначения"
+        unauthorized: "У вас нет прав для назначения тегов одному или нескольким выбранным файлам"
+      bulk_remove_tags:
+        success: "Успешно удалено %{tags} тегов с %{items} файлов (%{count} удалений)"
+        none_removed: "Ни один из выбранных тегов не был назначен выбранным файлам"
+        no_items_selected: "Выберите хотя бы один файл"
+        no_tags_selected: "Выберите хотя бы один тег для удаления"
+        unauthorized: "У вас нет прав для удаления тегов с одного или нескольких выбранных файлов"
+      editing_tags_page:
+        title: "Редактирование тегов"
+        select_tags: "Выберите теги для назначения"
+        select_items: "Выберите файлы"
       show:
         item_details: "Подробности"
         type: "Тип:"
@@ -145,12 +208,15 @@ ru:
   menu:
     new: "Добавить"
     navbar:
+      title: "Семейный архив"
       main: "Основное"
       tags: "Теги"
+      tag_types: "Типы тегов"
       items: "Файлы"
       admin: "Админ"
       admin_users: "Администраторы"
       upload_files: "Загрузить файлы"
+      bulk_assign_tags: "Редактирование тегов"
       sign_out: "Выйти"
       about: "О нас"
   text:
@@ -168,6 +234,9 @@ ru:
     attributes:
       tag:
         name: "Название"
+        tag_type: "Тип тега"
+      tag_type:
+        name: "Название"
       admin_user:
         email: "Адрес электронной почты"
       user:
@@ -178,3 +247,9 @@ ru:
           attributes:
             email_address:
               taken: "уже зарегистрирован. Пожалуйста, войдите в систему или используйте другой адрес электронной почты."
+        tag_type:
+          attributes:
+            name:
+              taken: "уже занято."
+              blank: "не может быть пустым."
+              cannot_delete_tag_type_with_associated_tags: "не может быть удален, потому что имеет связанные теги."

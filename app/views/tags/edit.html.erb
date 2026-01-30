@@ -15,6 +15,12 @@
     <%= form.label :name, t('activerecord.attributes.tag.name') + ":", class: "nowrap" %>
     <%= form.text_field :name %>
   </div>
+  <div>
+    <%= form.label :tag_type_id, t('activerecord.attributes.tag.tag_type') + ":", class: "nowrap" %>
+    <%= form.collection_select :tag_type_id, @tag_types, :id, :name, 
+        { prompt: t('forms.labels.select_tag_type'), include_blank: true }, 
+        { class: "form-select" } %>
+  </div>
   <div class="d-flex flex-row justify-content-start align-items-center gap-3">
     <%= form.submit t('tags.edit.update') %>
     <%= link_to t('forms.cancel'), tags_path, class: "link_to" %>

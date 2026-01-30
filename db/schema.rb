@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_23_180415) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_29_224124) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -64,6 +64,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_23_180415) do
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
+  create_table "tag_types", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name"
+    t.datetime "updated_at", null: false
+  end
+
   create_table "tagables", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "item_id", null: false
@@ -76,7 +82,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_23_180415) do
   create_table "tags", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name"
+    t.bigint "tag_type_id"
     t.datetime "updated_at", null: false
+    t.index ["tag_type_id"], name: "index_tags_on_tag_type_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -92,4 +100,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_23_180415) do
   add_foreign_key "sessions", "users"
   add_foreign_key "tagables", "items"
   add_foreign_key "tagables", "tags"
+  add_foreign_key "tags", "tag_types"
 end

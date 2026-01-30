@@ -9,8 +9,15 @@ Rails.application.routes.draw do
     get 'home/about', to: 'home#about', as: :about
     get 'upload_files_page', to: 'items#upload_files_page', as: :upload_files_page
     post 'upload_files', to: 'items#upload_files', as: :upload_files
-    resources :items
-    resources :tags
+    resources :items do
+      get :editing_tags_page, on: :collection
+      patch :bulk_assign_tags, on: :collection
+      patch :bulk_remove_tags, on: :collection
+    end
+    resources :tags do
+      patch :bulk_assign, on: :collection
+    end
+    resources :tag_types
     resource :registration, only: [:new, :create]
     resource :session
     resources :passwords, param: :token

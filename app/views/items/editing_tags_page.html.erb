@@ -1,0 +1,135 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><%= t('views.items.editing_tags_page.title') %></h2>
+      </div>
+
+      <%= render 'tag_filters', form_url: editing_tags_page_items_path, clear_url: editing_tags_page_items_path %>
+
+      <%= form_tag bulk_assign_tags_items_path, method: :patch do %>
+        <div class="row">
+          <!-- Tag Selection Panel -->
+          <div class="col-md-4">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="mb-0"><%= t('views.items.editing_tags_page.select_tags') %></h5>
+              </div>
+              <div class="card-body">
+                <% if @assignment_tags_by_type.any? %>
+                  <% @assignment_tags_by_type.each do |tag_type_name, tags| %>
+                    <div class="mb-3">
+                      <h6 class="text-muted"><%= tag_type_name %></h6>
+                      <% if tag_type_name&.downcase == 'year' %>
+                        <!-- Year tags as dropdown -->
+                        <div class="mb-2">
+                          <%= select_tag "tag_ids[]", 
+                              options_from_collection_for_select(tags, :id, :name), 
+                              { prompt: t('forms.labels.select_year'), multiple: true, class: "form-select", style: "width: 100%; max-width: 300px;" } %>
+                        </div>
+                      <% else %>
+                        <!-- All other tag types as dropdown -->
+                        <div class="mb-2">
+                          <%= select_tag "tag_ids[]", 
+                              options_from_collection_for_select(tags, :id, :name), 
+                              { prompt: "#{t('forms.labels.select')} #{tag_type_name}", multiple: true, class: "form-select", style: "width: 100%; max-width: 300px;" } %>
+                        </div>
+                      <% end %>
+                    </div>
+                  <% end %>
+                <% else %>
+                  <p class="text-muted"><%= t('forms.messages.no_tags_found') %></p>
+                <% end %>
+              </div>
+            </div>
+          </div>
+
+          <!-- Items Selection Panel -->
+          <div class="col-md-8" data-controller="toggle" data-toggle-select-text-value="<%= t('views.items.index.select_all') %>" data-toggle-unselect-text-value="<%= t('views.items.index.unselect_all') %>">
+            <div class="card">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><%= t('views.items.editing_tags_page.select_items') %></h5>
+                <button type="button" class="btn btn-secondary btn-sm" data-toggle-target="button" data-action="click->toggle#toggle">
+                  <%= t('views.items.index.select_all') %>
+                </button>
+              </div>
+              <div class="card-body" style="max-height: 600px; overflow-y: auto;">
+                <% if @items.any? %>
+                  <div class="row g-3">
+                    <% @items.each do |item| %>
+                      <div class="col-12 col-sm-6 col-lg-4">
+                        <div class="card">
+                          <div class="position-relative">
+                            <!-- Checkbox for item selection -->
+                            <div class="position-absolute top-0 start-0 p-2">
+                              <%= check_box_tag "item_ids[]", item.id, false, class: "form-check-input border-2 custom-checkbox", style: "transform: scale(1.5); background-color: rgba(255,255,255,0.9);", data: { toggle_target: "checkbox" } %>
+                            </div>
+                            <% if item.file.attached? %>
+                              <% if item.file.content_type.start_with?('image/') %>
+                                <%= image_tag item.file, 
+                                    class: "card-img-top", 
+                                    style: "height: 150px; object-fit: cover;",
+                                    alt: "Item #{item.id}" %>
+                              <% elsif item.file.content_type.start_with?('video/') %>
+                                <video class="card-img-top" style="height: 150px; object-fit: cover;">
+                                  <%= content_tag :source, "", src: url_for(item.file), type: item.file.content_type %>
+                                </video>
+                              <% else %>
+                                <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 150px;">
+                                  <i class="bi bi-file-text fs-3 text-muted"></i>
+                                </div>
+                              <% end %>
+                            <% else %>
+                              <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 150px;">
+                                <i class="bi bi-image fs-3 text-muted"></i>
+                              </div>
+                            <% end %>
+                          </div>
+                          
+                          <div class="card-body p-2">
+                            <small class="text-muted d-block">
+                              <%= t('forms.labels.type') %>: <%= item.item_type.humanize %>
+                            </small>
+                            <% if item.caption.present? %>
+                              <small class="text-truncate d-block">
+                                <%= truncate(item.caption, length: 50) %>
+                              </small>
+                            <% end %>
+                            
+                            <% if item.tags.any? %>
+                              <div class="mt-1">
+                                <% item.tags.each do |tag| %>
+                                  <span class="badge bg-secondary me-1" style="font-size: 0.7em;">
+                                    <%= tag.name %>
+                                  </span>
+                                <% end %>
+                              </div>
+                            <% end %>
+                            
+                            <div class="mt-2">
+                              <%= link_to t('forms.buttons.view_details'), item_path(item), class: "btn btn-primary btn-sm w-100", target: "_blank" %>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    <% end %>
+                  </div>
+                <% else %>
+                  <p class="text-muted text-center py-4">
+                    <%= t('views.items.no_items_yet') %>
+                  </p>
+                <% end %>
+              </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="mt-3 text-center">
+              <%= submit_tag t('views.items.index.assign_selected'), class: "btn btn-primary btn-lg" %>
+              <%= submit_tag t('views.items.index.remove_selected'), formaction: bulk_remove_tags_items_path, class: "btn btn-danger btn-lg ms-2" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

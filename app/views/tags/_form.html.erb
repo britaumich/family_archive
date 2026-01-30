@@ -13,7 +13,10 @@
     <div>
       <%= form.label :name, t('forms.labels.create_tag'), class: "nowrap" %>
       <div class="d-flex flex-row justify-content-start align-items-center gap-3">
-        <%= form.text_field :name, placeholder: t('forms.placeholders.name'), class: "w-50" %>
+        <%= form.text_field :name, placeholder: t('forms.placeholders.name'), class: "w-25" %>
+        <%= form.collection_select :tag_type_id, @tag_types, :id, :name, 
+            { prompt: t('forms.labels.select_tag_type'), include_blank: true }, 
+            { class: "form-select w-25" } %>
         <%= form.submit t('forms.buttons.create') %>
       </div>
     </div>

@@ -1,0 +1,21 @@
+<%= turbo_frame_tag 'new_tag_type' do %>  
+  <%= form_with(model: tag_type, data: { controller: "autosubmit", autosubmit_target: "form" }) do |form| %>
+    <% if tag_type.errors.any? %>
+      <div class="text-danger">
+        <h2><%= t('forms.errors.header', count: tag_type.errors.count) %></h2>
+        <ul>
+          <% tag_type.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div>
+      <%= form.label :name, t('forms.labels.create_tag_type'), class: "nowrap" %>
+      <div class="d-flex flex-row justify-content-start align-items-center gap-3">
+        <%= form.text_field :name, placeholder: t('forms.placeholders.name'), class: "w-50" %>
+        <%= form.submit t('forms.buttons.create') %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
