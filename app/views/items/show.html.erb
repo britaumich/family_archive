@@ -131,10 +131,6 @@
         </div>
         <div class="card-body">
           <%= form_tag assign_tags_item_path(@item), method: :patch do %>
-            <% @assignment_tags_by_type ||= Tag.joins(:tag_type).includes(:tag_type)
-                                               .group_by(&:tag_type)
-                                               .transform_keys(&:name)
-                                               .sort %>
             <% if @assignment_tags_by_type.any? %>
               <% @assignment_tags_by_type.each do |tag_type_name, tags| %>
                 <div class="mb-3">
