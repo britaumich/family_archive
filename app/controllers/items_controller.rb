@@ -41,7 +41,6 @@ class ItemsController < ApplicationController
   end
 
   def show
-    @item = Item.find(params[:id])
     # Prepare tags organized by type for assignment
     @assignment_tags_by_type = Tag.joins(:tag_type).includes(:tag_type)
                                .group_by(&:tag_type)
