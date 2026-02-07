@@ -51,7 +51,7 @@
             <div class="mb-3">
               <strong><%= t('views.items.show.caption') %></strong>
               <br>
-              <p class="mb-0"><%= @item.caption %></p>
+              <p class="mb-0"><%= strip_tags(@item.caption) %></p>
             </div>
           <% end %>
           

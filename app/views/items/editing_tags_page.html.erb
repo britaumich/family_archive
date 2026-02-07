@@ -92,7 +92,7 @@
                             </small>
                             <% if item.caption.present? %>
                               <small class="text-truncate d-block">
-                                <%= truncate(item.caption, length: 50) %>
+                                <%= truncate(strip_tags(item.caption)), length: 50) %>
                               </small>
                             <% end %>
                             
