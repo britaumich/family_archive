@@ -165,11 +165,11 @@ class ItemsController < ApplicationController
       return
     end
 
-    # Find items and authorize each
-    items = Item.where(id: item_ids)
+    # Find items and authorize each, preload tags to avoid N+1
+    items = Item.where(id: item_ids).includes(:tags)
     items.each { |item| authorize item, :edit? }
     
-    # Validate that the provided tag IDs exist
+    # Validate that the provided tag IDs exist and load them once
     valid_tag_ids = Tag.where(id: tag_ids).pluck(:id)
     
     if valid_tag_ids.empty?
@@ -177,14 +177,18 @@ class ItemsController < ApplicationController
       return
     end
     
+    # Load all candidate tags once
+    candidate_tags = Tag.where(id: valid_tag_ids).index_by(&:id)
+    
     assigned_count = 0
     items.each do |item|
-      # Find tags that aren't already assigned to avoid duplicates
-      new_tag_ids = valid_tag_ids - item.tag_ids
+      # Use preloaded tags to avoid additional queries
+      existing_tag_ids = item.tags.map(&:id)
+      new_tag_ids = valid_tag_ids - existing_tag_ids
       
       if new_tag_ids.any?
-        # Only load and assign the new tags
-        new_tags = Tag.where(id: new_tag_ids)
+        # Get new tags from the preloaded hash
+        new_tags = new_tag_ids.map { |id| candidate_tags[id] }.compact
         item.tags << new_tags
         assigned_count += new_tag_ids.length
       end
@@ -212,11 +216,11 @@ class ItemsController < ApplicationController
       return
     end
 
-    # Find items and authorize each
-    items = Item.where(id: item_ids)
+    # Find items and authorize each, preload tags to avoid N+1
+    items = Item.where(id: item_ids).includes(:tags)
     items.each { |item| authorize item, :edit? }
     
-    # Validate that the provided tag IDs exist
+    # Validate that the provided tag IDs exist and load them once
     valid_tag_ids = Tag.where(id: tag_ids).pluck(:id)
     
     if valid_tag_ids.empty?
@@ -224,16 +228,20 @@ class ItemsController < ApplicationController
       return
     end
     
+    # Load all candidate tags once
+    candidate_tags = Tag.where(id: valid_tag_ids).index_by(&:id)
+    
     removed_count = 0
     items.each do |item|
-      # Find tags that are currently assigned to the item
-      existing_tag_ids = valid_tag_ids & item.tag_ids
+      # Use preloaded tags to avoid additional queries
+      existing_tag_ids = item.tags.map(&:id)
+      tags_to_remove_ids = valid_tag_ids & existing_tag_ids
       
-      if existing_tag_ids.any?
-        # Only load and remove the existing tags
-        existing_tags = Tag.where(id: existing_tag_ids)
-        item.tags.delete(existing_tags)
-        removed_count += existing_tag_ids.length
+      if tags_to_remove_ids.any?
+        # Get tags to remove from the preloaded hash
+        tags_to_remove = tags_to_remove_ids.map { |id| candidate_tags[id] }.compact
+        item.tags.delete(tags_to_remove)
+        removed_count += tags_to_remove_ids.length
       end
     end
 
