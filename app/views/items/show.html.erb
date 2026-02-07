@@ -31,9 +31,7 @@
           <% end %>
         </div>
       </div>
-    </div>
 
-    <div class="col-lg-4">
       <!-- Item Details -->
       <div class="card mb-4">
         <div class="card-header">
@@ -100,6 +98,28 @@
             </p>
           <% end %>
         </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <!-- Action Buttons -->
+      <div class="d-grid gap-2 mb-4">
+        <%= link_to edit_item_path(@item), class: "btn btn-warning" do %>
+          <i class="fas fa-edit me-2"></i><%= t('forms.buttons.edit') %>
+        <% end %>
+        
+        <%= link_to item_path(@item), 
+            class: "btn btn-danger", 
+            data: { 
+              turbo_confirm: t('views.items.show.delete_confirmation'),
+              turbo_method: :delete
+            } do %>
+          <i class="fas fa-trash me-2"></i><%= t('forms.buttons.delete') %>
+        <% end %>
+        
+        <%= link_to items_path, class: "btn btn-secondary" do %>
+          <i class="fas fa-arrow-left me-2"></i><%= t('forms.buttons.back_to_items') %>
+        <% end %>
       </div>
 
       <!-- Tag Assignment Section -->
@@ -171,35 +191,6 @@
           <% else %>
             <p class="text-muted">No tags to remove.</p>
           <% end %>
-        </div>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="card">
-        <div class="card-header">
-          <h5 class="mb-0">
-            <i class="fas fa-cog me-2"></i><%= t('views.items.show.actions') %>
-          </h5>
-        </div>
-        <div class="card-body">
-          <div class="d-grid gap-2">
-            <%= link_to edit_item_path(@item), class: "btn btn-warning" do %>
-              <i class="fas fa-edit me-2"></i><%= t('forms.buttons.edit') %>
-            <% end %>
-            
-            <%= link_to item_path(@item), 
-                class: "btn btn-danger", 
-                data: { 
-                  turbo_confirm: t('views.items.show.delete_confirmation'),
-                  turbo_method: :delete
-                } do %>
-              <i class="fas fa-trash me-2"></i><%= t('forms.buttons.delete') %>
-            <% end %>
-            
-            <%= link_to items_path, class: "btn btn-secondary" do %>
-              <i class="fas fa-arrow-left me-2"></i><%= t('forms.buttons.back_to_items') %>
-            <% end %>
-          </div>
         </div>
       </div>
     </div>
