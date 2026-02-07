@@ -152,8 +152,8 @@ class ItemsController < ApplicationController
 
   def bulk_assign_tags
     authorize Item
-    item_ids = params[:item_ids]&.reject(&:blank?)
-    tag_ids = params[:tag_ids]&.reject(&:blank?)
+    item_ids = params[:item_ids]&.reject(&:blank?)&.map(&:to_i)
+    tag_ids = params[:tag_ids]&.reject(&:blank?)&.map(&:to_i)
 
     if item_ids.blank?
       redirect_to editing_tags_page_items_path, alert: t('forms.flash.no_items_selected')
@@ -169,16 +169,24 @@ class ItemsController < ApplicationController
     items = Item.where(id: item_ids)
     items.each { |item| authorize item, :edit? }
     
-    tags = Tag.where(id: tag_ids)
+    # Validate that the provided tag IDs exist
+    valid_tag_ids = Tag.where(id: tag_ids).pluck(:id)
+    
+    if valid_tag_ids.empty?
+      redirect_to editing_tags_page_items_path, alert: t('forms.flash.invalid_tags_selected')
+      return
+    end
     
     assigned_count = 0
     items.each do |item|
-      tags.each do |tag|
-        # Only create association if it doesn't already exist
-        unless item.tagables.exists?(tag: tag)
-          item.tagables.create(tag: tag)
-          assigned_count += 1
-        end
+      # Find tags that aren't already assigned to avoid duplicates
+      new_tag_ids = valid_tag_ids - item.tag_ids
+      
+      if new_tag_ids.any?
+        # Only load and assign the new tags
+        new_tags = Tag.where(id: new_tag_ids)
+        item.tags << new_tags
+        assigned_count += new_tag_ids.length
       end
     end
 
@@ -191,8 +199,8 @@ class ItemsController < ApplicationController
 
   def bulk_remove_tags
     authorize Item
-    item_ids = params[:item_ids]&.reject(&:blank?)
-    tag_ids = params[:tag_ids]&.reject(&:blank?)
+    item_ids = params[:item_ids]&.reject(&:blank?)&.map(&:to_i)
+    tag_ids = params[:tag_ids]&.reject(&:blank?)&.map(&:to_i)
 
     if item_ids.blank?
       redirect_to editing_tags_page_items_path, alert: t('forms.flash.no_items_selected')
@@ -208,17 +216,24 @@ class ItemsController < ApplicationController
     items = Item.where(id: item_ids)
     items.each { |item| authorize item, :edit? }
     
-    tags = Tag.where(id: tag_ids)
+    # Validate that the provided tag IDs exist
+    valid_tag_ids = Tag.where(id: tag_ids).pluck(:id)
+    
+    if valid_tag_ids.empty?
+      redirect_to editing_tags_page_items_path, alert: t('forms.flash.invalid_tags_selected')
+      return
+    end
     
     removed_count = 0
     items.each do |item|
-      tags.each do |tag|
-        # Remove association if it exists
-        tagable = item.tagables.find_by(tag: tag)
-        if tagable
-          tagable.destroy
-          removed_count += 1
-        end
+      # Find tags that are currently assigned to the item
+      existing_tag_ids = valid_tag_ids & item.tag_ids
+      
+      if existing_tag_ids.any?
+        # Only load and remove the existing tags
+        existing_tags = Tag.where(id: existing_tag_ids)
+        item.tags.delete(existing_tags)
+        removed_count += existing_tag_ids.length
       end
     end
 
@@ -238,20 +253,25 @@ class ItemsController < ApplicationController
     end
     
     tag_ids = params[:tag_ids].reject(&:blank?).map(&:to_i)
-    tags_to_assign = Tag.where(id: tag_ids)
     
-    if tags_to_assign.any?
-      # Find tags that aren't already assigned to avoid duplicates
-      new_tags = tags_to_assign - @item.tags
-      
-      if new_tags.any?
-        @item.tags << new_tags
-        redirect_to @item, notice: t('forms.flash.tags_assigned_to_item')
-      else
-        redirect_to @item, notice: t('forms.flash.tags_already_assigned')
-      end
-    else
+    # Validate that the provided tag IDs exist
+    valid_tag_ids = Tag.where(id: tag_ids).pluck(:id)
+    
+    if valid_tag_ids.empty?
       redirect_to @item, alert: t('forms.flash.invalid_tags_selected')
+      return
+    end
+    
+    # Find tags that aren't already assigned to avoid duplicates
+    new_tag_ids = valid_tag_ids - @item.tag_ids
+    
+    if new_tag_ids.any?
+      # Only load and assign the new tags
+      new_tags = Tag.where(id: new_tag_ids)
+      @item.tags << new_tags
+      redirect_to @item, notice: t('forms.flash.tags_assigned_to_item')
+    else
+      redirect_to @item, notice: t('forms.flash.tags_already_assigned')
     end
   end
 
@@ -264,20 +284,25 @@ class ItemsController < ApplicationController
     end
     
     tag_ids = params[:tag_ids].reject(&:blank?).map(&:to_i)
-    tags_to_remove = Tag.where(id: tag_ids)
     
-    if tags_to_remove.any?
-      # Find tags that are currently assigned to the item
-      existing_tags = tags_to_remove & @item.tags
-      
-      if existing_tags.any?
-        @item.tags.delete(existing_tags)
-        redirect_to @item, notice: t('forms.flash.tags_removed_from_item')
-      else
-        redirect_to @item, notice: t('forms.flash.no_tags_to_remove')
-      end
-    else
+    # Validate that the provided tag IDs exist
+    valid_tag_ids = Tag.where(id: tag_ids).pluck(:id)
+    
+    if valid_tag_ids.empty?
       redirect_to @item, alert: t('forms.flash.invalid_tags_selected')
+      return
+    end
+    
+    # Find tags that are currently assigned to the item
+    existing_tag_ids = valid_tag_ids & @item.tag_ids
+    
+    if existing_tag_ids.any?
+      # Only load and remove the existing tags
+      existing_tags = Tag.where(id: existing_tag_ids)
+      @item.tags.delete(existing_tags)
+      redirect_to @item, notice: t('forms.flash.tags_removed_from_item')
+    else
+      redirect_to @item, notice: t('forms.flash.no_tags_to_remove')
     end
   end
 
