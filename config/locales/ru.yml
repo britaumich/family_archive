@@ -134,7 +134,7 @@ ru:
       files_uploaded: "Файлы успешно загружены."
       tags_assigned_to_items: "Тэги добавлены"
       tags_already_assigned: "Все выбранные теги уже назначены выбранным файлам"
-      tags_assigned_to_item: "Теги успешно назначены к файлу"
+      tags_assigned_to_item: "Теги назначены"
       tags_removed_from_items: "Тэги удалены"
       no_tags_removed: "Ни один из выбранных тегов не был назначен выбранным файлам"
       tags_removed_from_item: "Теги успешно удалены из файла"
