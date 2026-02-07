@@ -22,16 +22,18 @@
                     alt: "Item #{item.id}" %>
               </a>
             <% elsif item.file.content_type.start_with?('video/') %>
-              <a href="<%= url_for(item.file) %>" 
-                 data-lightbox="gallery" 
-                 data-gallery="items-gallery"
-                 data-title="<%= item.caption.present? ? item.caption : "Video #{item.id}" %>"
-                 data-description="Type: <%= item.item_type.humanize %><br>Uploaded: <%= item.created_at.strftime("%B %d, %Y") %>">
+              <div class="position-relative">
                 <video class="card-img-top lightbox-image" style="height: 250px; object-fit: cover;" muted>
                   <%= content_tag :source, "", src: url_for(item.file), type: item.file.content_type %>
                   Your browser does not support the video tag.
                 </video>
-              </a>
+                <a href="<%= url_for(item.file) %>" 
+                   data-lightbox="gallery" 
+                   data-gallery="items-gallery"
+                   data-title="<%= item.caption.present? ? item.caption : "Video #{item.id}" %>"
+                   data-description="Type: <%= item.item_type.humanize %><br>Uploaded: <%= item.created_at.strftime("%B %d, %Y") %>"
+                   class="stretched-link"></a>
+              </div>
             <% else %>
               <%= link_to item_path(item), class: "text-decoration-none" do %>
                 <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 250px;">
