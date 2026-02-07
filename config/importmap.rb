@@ -8,3 +8,4 @@ pin_all_from 'app/javascript/controllers', under: 'controllers'
 pin 'bootstrap', to: 'bootstrap.bundle.min.js'
 pin '@hotwired/turbo', to: '@hotwired--turbo.js' # @8.0.20
 pin '@rails/actioncable/src', to: '@rails--actioncable--src.js' # @8.1.100
+pin "glightbox", to: "https://ga.jspm.io/npm:glightbox@3.2.0/dist/js/glightbox.min.js"

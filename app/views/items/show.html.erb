@@ -31,9 +31,7 @@
           <% end %>
         </div>
       </div>
-    </div>
 
-    <div class="col-lg-4">
       <!-- Item Details -->
       <div class="card mb-4">
         <div class="card-header">
@@ -53,7 +51,7 @@
             <div class="mb-3">
               <strong><%= t('views.items.show.caption') %></strong>
               <br>
-              <p class="mb-0"><%= @item.caption %></p>
+              <p class="mb-0"><%= strip_tags(@item.caption) %></p>
             </div>
           <% end %>
           
@@ -101,33 +99,94 @@
           <% end %>
         </div>
       </div>
+    </div>
 
+    <div class="col-lg-4">
       <!-- Action Buttons -->
-      <div class="card">
+      <div class="d-grid gap-2 mb-4">
+        <%= link_to edit_item_path(@item), class: "btn btn-warning" do %>
+          <i class="fas fa-edit me-2"></i><%= t('forms.buttons.edit') %>
+        <% end %>
+        
+        <%= link_to item_path(@item), 
+            class: "btn btn-danger", 
+            data: { 
+              turbo_confirm: t('views.items.show.delete_confirmation'),
+              turbo_method: :delete
+            } do %>
+          <i class="fas fa-trash me-2"></i><%= t('forms.buttons.delete') %>
+        <% end %>
+        
+        <%= link_to items_path, class: "btn btn-secondary" do %>
+          <i class="fas fa-arrow-left me-2"></i><%= t('forms.buttons.back_to_items') %>
+        <% end %>
+      </div>
+
+      <!-- Tag Assignment Section -->
+      <div class="card mb-4">
         <div class="card-header">
           <h5 class="mb-0">
-            <i class="fas fa-cog me-2"></i><%= t('views.items.show.actions') %>
+            <i class="fas fa-plus-circle me-2"></i><%= t('views.items.show.assign_tags') %>
           </h5>
         </div>
         <div class="card-body">
-          <div class="d-grid gap-2">
-            <%= link_to edit_item_path(@item), class: "btn btn-warning" do %>
-              <i class="fas fa-edit me-2"></i><%= t('forms.buttons.edit') %>
+          <%= form_tag assign_tags_item_path(@item), method: :patch do %>
+            <% if @assignment_tags_by_type.any? %>
+              <% @assignment_tags_by_type.each do |tag_type_name, tags| %>
+                <div class="mb-3">
+                  <h6 class="text-muted"><%= tag_type_name %></h6>
+                  <% if tag_type_name&.downcase == 'year' %>
+                    <!-- Year tags as dropdown -->
+                    <div class="mb-2">
+                      <%= select_tag "tag_ids[]", 
+                          options_from_collection_for_select(tags, :id, :name), 
+                          { include_blank: t('forms.labels.select_year'), multiple: true, class: "form-select", style: "width: 100%; max-width: 300px;" } %>
+                    </div>
+                  <% else %>
+                    <!-- All other tag types as dropdown -->
+                    <div class="mb-2">
+                      <%= select_tag "tag_ids[]", 
+                          options_from_collection_for_select(tags, :id, :name), 
+                          { include_blank: "#{t('forms.labels.select')} #{tag_type_name}", multiple: true, class: "form-select", style: "width: 100%; max-width: 300px;" } %>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+              <div class="mt-3">
+                <%= submit_tag t('views.items.show.assign_selected_tags'), class: "btn btn-success" %>
+              </div>
+            <% else %>
+              <p class="text-muted"><%= t('forms.messages.no_tags_found') %></p>
             <% end %>
-            
-            <%= link_to item_path(@item), 
-                class: "btn btn-danger", 
-                data: { 
-                  turbo_confirm: t('views.items.show.delete_confirmation'),
-                  turbo_method: :delete
-                } do %>
-              <i class="fas fa-trash me-2"></i><%= t('forms.buttons.delete') %>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Tag Removal Section -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="fas fa-minus-circle me-2"></i><%= t('views.items.show.remove_tags') %>
+          </h5>
+        </div>
+        <div class="card-body">
+          <% if @item.tags.any? %>
+            <%= form_tag remove_tags_item_path(@item), method: :patch do %>
+              <div class="mb-3">
+                <h6 class="text-muted"><%= t('views.items.show.current_tags') %></h6>
+                <div class="mb-2">
+                  <%= select_tag "tag_ids[]", 
+                      options_from_collection_for_select(@item.tags, :id, :name), 
+                      { include_blank: t('views.items.show.select_tags_to_remove'), multiple: true, class: "form-select", style: "width: 100%; max-width: 300px;" } %>
+                </div>
+              </div>
+              <div class="mt-3">
+                <%= submit_tag t('views.items.show.remove_selected_tags'), class: "btn btn-danger" %>
+              </div>
             <% end %>
-            
-            <%= link_to items_path, class: "btn btn-secondary" do %>
-              <i class="fas fa-arrow-left me-2"></i><%= t('forms.buttons.back_to_items') %>
-            <% end %>
-          </div>
+          <% else %>
+            <p class="text-muted"><%= t('views.items.show.no_tags_to_remove_message') %></p>
+          <% end %>
         </div>
       </div>
     </div>

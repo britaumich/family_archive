@@ -13,6 +13,8 @@ Rails.application.routes.draw do
       get :editing_tags_page, on: :collection
       patch :bulk_assign_tags, on: :collection
       patch :bulk_remove_tags, on: :collection
+      patch :assign_tags, on: :member
+      patch :remove_tags, on: :member
     end
     resources :tags do
       patch :bulk_assign, on: :collection

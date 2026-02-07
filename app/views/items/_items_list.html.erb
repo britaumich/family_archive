@@ -5,33 +5,49 @@
   </div>
     
     <!-- Items Grid -->
-    <div class="row g-4">
+    <div class="row g-4" data-controller="lightbox">
       <% @items.each do |item| %>
         <div class="col-12 col-md-6 col-lg-4 col-xl-3">
           <div class="card h-100 shadow-sm">
           <% if item.file.attached? %>
             <% if item.file.content_type.start_with?('image/') %>
-              <%= link_to item_path(item), class: "text-decoration-none" do %>
+              <a href="<%= url_for(item.file) %>" 
+                 data-lightbox="gallery" 
+                 data-gallery="items-gallery"
+                 data-title="<%= item.caption.present? ? strip_tags(item.caption) : "Item #{item.id}" %>"
+                 data-description="Type: <%= item.item_type.humanize %><br>Uploaded: <%= item.created_at.strftime("%B %d, %Y") %>">
                 <%= image_tag item.file, 
-                    class: "card-img-top", 
+                    class: "card-img-top lightbox-image", 
                     style: "height: 250px; object-fit: cover;",
                     alt: "Item #{item.id}" %>
-              <% end %>
+              </a>
             <% elsif item.file.content_type.start_with?('video/') %>
-              <video class="card-img-top" style="height: 250px; object-fit: cover;" controls>
-                <%= content_tag :source, "", src: url_for(item.file), type: item.file.content_type %>
-                Your browser does not support the video tag.
-              </video>
-            <% else %>
-              <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 250px;">
-                <i class="bi bi-file-text fs-1 text-muted"></i>
+              <div class="position-relative">
+                <video class="card-img-top lightbox-image" style="height: 250px; object-fit: cover;" muted>
+                  <%= content_tag :source, "", src: url_for(item.file), type: item.file.content_type %>
+                  Your browser does not support the video tag.
+                </video>
+                <a href="<%= url_for(item.file) %>" 
+                   data-lightbox="gallery" 
+                   data-gallery="items-gallery"
+                   data-title="<%= item.caption.present? ? strip_tags(item.caption) : "Video #{item.id}" %>"
+                   data-description="Type: <%= item.item_type.humanize %><br>Uploaded: <%= item.created_at.strftime("%B %d, %Y") %>"
+                   class="stretched-link"></a>
               </div>
+            <% else %>
+              <%= link_to item_path(item), class: "text-decoration-none" do %>
+                <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 250px;">
+                  <i class="bi bi-file-text fs-1 text-muted"></i>
+                </div>
+              <% end %>
             <% end %>
           <% else %>
-            <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 250px;">
-              <i class="bi bi-image fs-1 text-muted"></i>
-              <span class="text-muted"><%= t('forms.labels.no_file_attached') %></span>
-            </div>
+            <%= link_to item_path(item), class: "text-decoration-none" do %>
+              <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 250px;">
+                <i class="bi bi-image fs-1 text-muted"></i>
+                <span class="text-muted"><%= t('forms.labels.no_file_attached') %></span>
+              </div>
+            <% end %>
           <% end %>
           
           <div class="card-body d-flex flex-column">
@@ -46,8 +62,8 @@
             <!-- Caption -->
             <% if item.caption.present? %>
               <div class="mb-2">
-                <p class="mb-0 text-truncate" title="<%= item.caption %>">
-                  <strong><%= t('forms.labels.caption') %>:</strong> <%= item.caption %>
+                <p class="mb-0 text-truncate" title="caption">
+                  <strong><%= t('forms.labels.caption') %>hell:</strong> <%= strip_tags(item.caption) %>
                 </p>
               </div>
             <% end %>
