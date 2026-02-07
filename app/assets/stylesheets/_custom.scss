@@ -63,3 +63,25 @@ $spacers: map-merge(
 
 // Import Bootstrap icons if needed
 @import 'bootstrap-icons/font/bootstrap-icons';
+
+// Custom checkbox styling for bulk operations
+.custom-checkbox {
+  border: 2px solid #fff !important;
+  background-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.custom-checkbox:checked {
+  background-color: #0d6efd !important;
+  border-color: #0d6efd !important;
+}
+
+// Lightbox image hover effect
+.lightbox-image {
+  transition: transform 0.2s ease-in-out, filter 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.lightbox-image:hover {
+  transform: scale(1.02);
+  filter: brightness(1.05);
+}
