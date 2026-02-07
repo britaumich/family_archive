@@ -140,14 +140,14 @@
                     <div class="mb-2">
                       <%= select_tag "tag_ids[]", 
                           options_from_collection_for_select(tags, :id, :name), 
-                          { prompt: t('forms.labels.select_year'), multiple: true, class: "form-select", style: "width: 100%; max-width: 300px;" } %>
+                          { include_blank: t('forms.labels.select_year'), multiple: true, class: "form-select", style: "width: 100%; max-width: 300px;" } %>
                     </div>
                   <% else %>
                     <!-- All other tag types as dropdown -->
                     <div class="mb-2">
                       <%= select_tag "tag_ids[]", 
                           options_from_collection_for_select(tags, :id, :name), 
-                          { prompt: "#{t('forms.labels.select')} #{tag_type_name}", multiple: true, class: "form-select", style: "width: 100%; max-width: 300px;" } %>
+                          { include_blank: "#{t('forms.labels.select')} #{tag_type_name}", multiple: true, class: "form-select", style: "width: 100%; max-width: 300px;" } %>
                     </div>
                   <% end %>
                 </div>
@@ -177,7 +177,7 @@
                 <div class="mb-2">
                   <%= select_tag "tag_ids[]", 
                       options_from_collection_for_select(@item.tags, :id, :name), 
-                      { prompt: t('views.items.show.select_tags_to_remove'), multiple: true, class: "form-select", style: "width: 100%; max-width: 300px;" } %>
+                      { include_blank: t('views.items.show.select_tags_to_remove'), multiple: true, class: "form-select", style: "width: 100%; max-width: 300px;" } %>
                 </div>
               </div>
               <div class="mt-3">
