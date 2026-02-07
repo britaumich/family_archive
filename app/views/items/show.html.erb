@@ -102,6 +102,78 @@
         </div>
       </div>
 
+      <!-- Tag Assignment Section -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="fas fa-plus-circle me-2"></i>Assign Tags
+          </h5>
+        </div>
+        <div class="card-body">
+          <%= form_tag assign_tags_item_path(@item), method: :patch do %>
+            <% @assignment_tags_by_type ||= Tag.joins(:tag_type).includes(:tag_type)
+                                               .group_by(&:tag_type)
+                                               .transform_keys(&:name)
+                                               .sort %>
+            <% if @assignment_tags_by_type.any? %>
+              <% @assignment_tags_by_type.each do |tag_type_name, tags| %>
+                <div class="mb-3">
+                  <h6 class="text-muted"><%= tag_type_name %></h6>
+                  <% if tag_type_name&.downcase == 'year' %>
+                    <!-- Year tags as dropdown -->
+                    <div class="mb-2">
+                      <%= select_tag "tag_ids[]", 
+                          options_from_collection_for_select(tags, :id, :name), 
+                          { prompt: t('forms.labels.select_year'), multiple: true, class: "form-select", style: "width: 100%; max-width: 300px;" } %>
+                    </div>
+                  <% else %>
+                    <!-- All other tag types as dropdown -->
+                    <div class="mb-2">
+                      <%= select_tag "tag_ids[]", 
+                          options_from_collection_for_select(tags, :id, :name), 
+                          { prompt: "#{t('forms.labels.select')} #{tag_type_name}", multiple: true, class: "form-select", style: "width: 100%; max-width: 300px;" } %>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+              <div class="mt-3">
+                <%= submit_tag "Assign Selected Tags", class: "btn btn-success" %>
+              </div>
+            <% else %>
+              <p class="text-muted"><%= t('forms.messages.no_tags_found') %></p>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Tag Removal Section -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="fas fa-minus-circle me-2"></i>Remove Tags
+          </h5>
+        </div>
+        <div class="card-body">
+          <% if @item.tags.any? %>
+            <%= form_tag remove_tags_item_path(@item), method: :patch do %>
+              <div class="mb-3">
+                <h6 class="text-muted">Current Tags</h6>
+                <div class="mb-2">
+                  <%= select_tag "tag_ids[]", 
+                      options_from_collection_for_select(@item.tags, :id, :name), 
+                      { prompt: "Select tags to remove", multiple: true, class: "form-select", style: "width: 100%; max-width: 300px;" } %>
+                </div>
+              </div>
+              <div class="mt-3">
+                <%= submit_tag "Remove Selected Tags", class: "btn btn-danger" %>
+              </div>
+            <% end %>
+          <% else %>
+            <p class="text-muted">No tags to remove.</p>
+          <% end %>
+        </div>
+      </div>
+
       <!-- Action Buttons -->
       <div class="card">
         <div class="card-header">

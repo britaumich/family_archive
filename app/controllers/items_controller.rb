@@ -1,5 +1,5 @@
 class ItemsController < ApplicationController
-  before_action :set_item, only: %i[show edit update destroy]
+  before_action :set_item, only: %i[show edit update destroy assign_tags remove_tags]
 
   def index
     @tags = Tag.includes(:tag_type).order('tag_types.name ASC NULLS LAST, tags.name ASC')
@@ -42,6 +42,11 @@ class ItemsController < ApplicationController
 
   def show
     @item = Item.find(params[:id])
+    # Prepare tags organized by type for assignment
+    @assignment_tags_by_type = Tag.joins(:tag_type).includes(:tag_type)
+                               .group_by(&:tag_type)
+                               .transform_keys(&:name)
+                               .sort
     authorize @item
   end
 
@@ -222,6 +227,58 @@ class ItemsController < ApplicationController
       redirect_to editing_tags_page_items_path, notice: t('forms.flash.tags_removed_from_items')
     else
       redirect_to editing_tags_page_items_path, notice: t('forms.flash.no_tags_removed')
+    end
+  end
+
+  def assign_tags
+    authorize @item
+    
+    if params[:tag_ids].blank?
+      redirect_to @item, alert: t('forms.flash.no_tags_selected')
+      return
+    end
+    
+    tag_ids = params[:tag_ids].reject(&:blank?).map(&:to_i)
+    tags_to_assign = Tag.where(id: tag_ids)
+    
+    if tags_to_assign.any?
+      # Find tags that aren't already assigned to avoid duplicates
+      new_tags = tags_to_assign - @item.tags
+      
+      if new_tags.any?
+        @item.tags << new_tags
+        redirect_to @item, notice: t('forms.flash.tags_assigned_to_item')
+      else
+        redirect_to @item, notice: t('forms.flash.tags_already_assigned')
+      end
+    else
+      redirect_to @item, alert: t('forms.flash.invalid_tags_selected')
+    end
+  end
+
+  def remove_tags
+    authorize @item
+    
+    if params[:tag_ids].blank?
+      redirect_to @item, alert: t('forms.flash.no_tags_selected')
+      return
+    end
+    
+    tag_ids = params[:tag_ids].reject(&:blank?).map(&:to_i)
+    tags_to_remove = Tag.where(id: tag_ids)
+    
+    if tags_to_remove.any?
+      # Find tags that are currently assigned to the item
+      existing_tags = tags_to_remove & @item.tags
+      
+      if existing_tags.any?
+        @item.tags.delete(existing_tags)
+        redirect_to @item, notice: t('forms.flash.tags_removed_from_item')
+      else
+        redirect_to @item, notice: t('forms.flash.no_tags_to_remove')
+      end
+    else
+      redirect_to @item, alert: t('forms.flash.invalid_tags_selected')
     end
   end
 
