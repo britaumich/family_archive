@@ -206,6 +206,13 @@ ru:
         download: "Скачать"
         document: "Документ"
         video_not_supported: "Ваш браузер не поддерживает видео."
+        assign_tags: "Назначить теги"
+        assign_selected_tags: "Назначить выбранные теги"
+        remove_tags: "Удалить теги"
+        current_tags: "Текущие теги"
+        select_tags_to_remove: "Выберите теги для удаления"
+        remove_selected_tags: "Удалить выбранные теги"
+        no_tags_to_remove_message: "Нет тегов для удаления."
   pages:
     about:
       description: "Что-то о приложении"
