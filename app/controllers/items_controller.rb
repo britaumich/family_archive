@@ -178,37 +178,35 @@ class ItemsController < ApplicationController
     item_ids = params[:item_ids]&.reject(&:blank?)&.map(&:to_i)
     tag_ids = params[:tag_ids]&.reject(&:blank?)&.map(&:to_i)
 
-    if item_ids.blank?
-      redirect_to editing_tags_page_items_path, alert: t('forms.flash.no_items_selected')
-      return
-    end
-
     if tag_ids.blank?
       redirect_to editing_tags_page_items_path, alert: t('forms.flash.no_tags_selected') 
       return
     end
 
-    # Find items and authorize each, preload tags to avoid N+1
-    items = Item.where(id: item_ids).includes(:tags)
-    items.each { |item| authorize item, :edit? }
-    
-    # Validate that the provided tag IDs exist and load them once
-    valid_tag_ids = Tag.where(id: tag_ids).pluck(:id)
-    
-    if valid_tag_ids.empty?
-      redirect_to editing_tags_page_items_path, alert: t('forms.flash.invalid_tags_selected')
+    if item_ids.blank?
+      redirect_to editing_tags_page_items_path, alert: t('forms.flash.no_items_selected')
       return
     end
+
+    # Find items and authorize each, preload tags to avoid N+1
+    items = Item.where(id: item_ids).includes(:tags)
+    # items.each { |item| authorize item, :edit? }
+    
+    # Validate that the provided tag IDs exist and load them once
+    # valid_tag_ids = Tag.where(id: tag_ids).pluck(:id)
+    
+    # if valid_tag_ids.empty?
+    #   redirect_to editing_tags_page_items_path, alert: t('forms.flash.invalid_tags_selected')
+    #   return
+    # end
     
     # Load all candidate tags once
-    candidate_tags = Tag.where(id: valid_tag_ids).index_by(&:id)
-    
+    candidate_tags = Tag.where(id: tag_ids).index_by(&:id)
     assigned_count = 0
     items.each do |item|
       # Use preloaded tags to avoid additional queries
       existing_tag_ids = item.tags.map(&:id)
-      new_tag_ids = valid_tag_ids - existing_tag_ids
-      
+      new_tag_ids = tag_ids - existing_tag_ids
       if new_tag_ids.any?
         # Get new tags from the preloaded hash
         new_tags = new_tag_ids.map { |id| candidate_tags[id] }.compact
