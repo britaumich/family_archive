@@ -14,7 +14,7 @@
     <div class="card-body">
 <% end %>
 
-<%= form_with url: form_url, method: :get, local: false, data: (use_turbo_frames ? { turbo_frame: "items-list" } : {}), class: "mb-4" do |form| %>
+<%= form_with url: form_url, method: :get, local: false, data: { turbo_stream: true }, class: "mb-4" do |form| %>
   <div class="row">
     <div class="col-12">
       <h5><%= t('forms.labels.filter_by_tags') %></h5>
