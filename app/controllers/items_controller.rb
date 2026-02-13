@@ -109,7 +109,6 @@ class ItemsController < ApplicationController
     @tags = Tag.includes(:tag_type).order('tag_types.name ASC NULLS LAST, tags.name ASC')
     @tags_by_type = @tags.group_by(&:tag_type)
     @selected_tags = []
-
     # Filter by multiple tags if specified
     if params[:tags].present?
       tag_ids = params[:tags].reject(&:blank?).map(&:to_i)
@@ -129,10 +128,11 @@ class ItemsController < ApplicationController
                        .order(created_at: :desc)
         else
           # OR logic (default): items must have ANY of the selected tags
+          item_ids = Item.joins(:tags)
+                      .where(tags: { id: tag_ids })
+                      .distinct
           @items = Item.includes(:tags).with_attached_file
-                       .joins(:tags)
-                       .where(tags: { id: tag_ids })
-                       .distinct
+                       .where(id: item_ids)
                        .order(created_at: :desc)
         end
       else
@@ -314,7 +314,74 @@ class ItemsController < ApplicationController
     end
   end
 
+  def apply_filters_to_edit_tags
+    authorize Item, :editing_tags_page?
+    
+    apply_current_filters
+
+    respond_to do |format|
+      format.turbo_stream { render turbo_stream: turbo_stream.replace("items-list", partial: "editing_items_list") }
+      format.html { redirect_to editing_tags_page_items_path(params.permit(:tags, :filter_type)) }
+    end
+  end
+
   private
+
+  def apply_current_filters
+    @tags = Tag.includes(:tag_type).order('tag_types.name ASC NULLS LAST, tags.name ASC')
+    @tags_by_type = @tags.group_by(&:tag_type)
+    @selected_tags = []
+
+    # Filter by multiple tags if specified
+    if params[:tags].present?
+      tag_ids = params[:tags].reject(&:blank?).map(&:to_i)
+      @selected_tags = Tag.where(id: tag_ids)
+
+      if tag_ids.any?
+        # AND logic: items must have ALL selected tags
+        if params[:filter_type] == 'all'
+          # Use subquery to find items with all required tags
+          item_ids = Item.joins(:tags)
+                         .where(tags: { id: tag_ids })
+                         .group('items.id')
+                         .having('COUNT(DISTINCT tags.id) = ?', tag_ids.length)
+                         .pluck('items.id')
+        else
+          # OR logic (default): items must have ANY of the selected tags
+          # Get item IDs that match the filter
+          item_ids = Item.joins(:tags)
+                         .where(tags: { id: tag_ids })
+                         .distinct
+                         .pluck(:id)
+        end
+        
+        # Load the filtered items without includes to avoid tag filtering
+        @items = Item.where(id: item_ids)
+                     .with_attached_file
+                     .order(created_at: :desc)
+        
+        # Load all tags for each item separately to avoid filtering
+        @items = @items.map do |item|
+          item.association(:tags).reset
+          item
+        end
+        
+        # Preload tags for all items at once
+        ActiveRecord::Associations::Preloader.new.preload(@items, :tags)
+      else
+        @items = Item.includes(:tags).with_attached_file.order(created_at: :desc)
+      end
+    else
+      @items = Item.includes(:tags).with_attached_file.order(created_at: :desc)
+    end
+    
+    # Also prepare tags organized by type for assignment
+    @assignment_tags_by_type = Tag.joins(:tag_type).includes(:tag_type)
+                               .group_by(&:tag_type)
+                               .transform_keys(&:name)
+                               .sort
+    @assignment_tags_without_type = Tag.where(tag_type: nil)
+  end
 
   def set_item
     @item = Item.find(params.expect(:id))
