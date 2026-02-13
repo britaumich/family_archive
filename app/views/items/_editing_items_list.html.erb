@@ -7,7 +7,11 @@
             <div class="position-relative">
               <!-- Checkbox for item selection -->
               <div class="position-absolute top-0 start-0 p-2">
-                <%= check_box_tag "item_ids[]", item.id, false, class: "form-check-input border-2 custom-checkbox", style: "transform: scale(1.5); background-color: rgba(255,255,255,0.9);", data: { toggle_target: "checkbox" } %>
+                <% 
+                  # Check if selected_item_ids is available (from turbo_stream updates)
+                  is_checked = defined?(selected_item_ids) && selected_item_ids&.include?(item.id)
+                %>
+                <%= check_box_tag "item_ids[]", item.id, is_checked, class: "form-check-input border-2 custom-checkbox", style: "transform: scale(1.5); background-color: rgba(255,255,255,0.9);", data: { toggle_target: "checkbox" } %>
               </div>
               <% if item.file.attached? %>
                 <% if item.file.content_type.start_with?('image/') %>
