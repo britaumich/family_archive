@@ -9,7 +9,7 @@ class ItemsController < ApplicationController
     # Filter by multiple tags if specified
     if params[:tags].present?
       tag_ids = params[:tags].reject(&:blank?).map(&:to_i)
-      @selected_tags = Tag.where(id: tag_ids)
+      @selected_tags = Tag.includes(:items).where(id: tag_ids)
 
       if tag_ids.any?
         # AND logic: items must have ALL selected tags
@@ -112,7 +112,7 @@ class ItemsController < ApplicationController
     # Filter by multiple tags if specified
     if params[:tags].present?
       tag_ids = params[:tags].reject(&:blank?).map(&:to_i)
-      @selected_tags = Tag.where(id: tag_ids)
+      @selected_tags = Tag.includes(:items).where(id: tag_ids)
 
       if tag_ids.any?
         # AND logic: items must have ALL selected tags
@@ -396,7 +396,7 @@ class ItemsController < ApplicationController
     # Filter by multiple tags if specified
     if params[:tags].present?
       tag_ids = params[:tags].reject(&:blank?).map(&:to_i)
-      @selected_tags = Tag.where(id: tag_ids)
+      @selected_tags = Tag.includes(:items).where(id: tag_ids)
 
       if tag_ids.any?
         # AND logic: items must have ALL selected tags
