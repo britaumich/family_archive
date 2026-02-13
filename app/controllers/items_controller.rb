@@ -131,6 +131,7 @@ class ItemsController < ApplicationController
           item_ids = Item.joins(:tags)
                       .where(tags: { id: tag_ids })
                       .distinct
+                      .pluck(:id)
           @items = Item.includes(:tags).with_attached_file
                        .where(id: item_ids)
                        .order(created_at: :desc)
