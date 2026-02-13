@@ -179,12 +179,24 @@ class ItemsController < ApplicationController
     tag_ids = params[:tag_ids]&.reject(&:blank?)&.map(&:to_i)
 
     if tag_ids.blank?
-      redirect_to editing_tags_page_items_path, alert: t('forms.flash.no_tags_selected') 
+      respond_to do |format|
+        format.turbo_stream {
+          flash[:alert] = t('forms.flash.no_tags_selected')
+          render turbo_stream: turbo_stream.update('flash', partial: 'layouts/notification')
+        }
+        format.html { redirect_to editing_tags_page_items_path, alert: t('forms.flash.no_tags_selected') }
+      end
       return
     end
 
     if item_ids.blank?
-      redirect_to editing_tags_page_items_path, alert: t('forms.flash.no_items_selected')
+      respond_to do |format|
+        format.turbo_stream {
+          flash[:alert] = t('forms.flash.no_items_selected')
+          render turbo_stream: turbo_stream.update('flash', partial: 'layouts/notification')
+        }
+        format.html { redirect_to editing_tags_page_items_path, alert: t('forms.flash.no_items_selected') }
+      end
       return
     end
 
@@ -236,12 +248,24 @@ class ItemsController < ApplicationController
     tag_ids = params[:tag_ids]&.reject(&:blank?)&.map(&:to_i)
 
     if item_ids.blank?
-      redirect_to editing_tags_page_items_path, alert: t('forms.flash.no_items_selected')
+      respond_to do |format|
+        format.turbo_stream {
+          flash[:alert] = t('forms.flash.no_items_selected')
+          render turbo_stream: turbo_stream.update('flash', partial: 'layouts/notification')
+        }
+        format.html { redirect_to editing_tags_page_items_path, alert: t('forms.flash.no_items_selected') }
+      end
       return
     end
 
     if tag_ids.blank?
-      redirect_to editing_tags_page_items_path, alert: t('forms.flash.no_tags_selected') 
+      respond_to do |format|
+        format.turbo_stream {
+          flash[:alert] = t('forms.flash.no_tags_selected')
+          render turbo_stream: turbo_stream.update('flash', partial: 'layouts/notification')
+        }
+        format.html { redirect_to editing_tags_page_items_path, alert: t('forms.flash.no_tags_selected') }
+      end
       return
     end
 

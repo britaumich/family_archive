@@ -48,6 +48,11 @@
 
           <!-- Items Selection Panel -->
           <div class="col-md-8" data-controller="toggle" data-toggle-select-text-value="<%= t('views.items.index.select_all') %>" data-toggle-unselect-text-value="<%= t('views.items.index.unselect_all') %>">
+            <!-- Error message div -->
+            <div class="alert alert-danger mb-3" style="display: none;" data-toggle-target="error" role="alert">
+              <!-- Error message will be inserted here by JavaScript -->
+            </div>
+            
             <div class="card">
               <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0"><%= t('views.items.editing_tags_page.select_items') %></h5>
