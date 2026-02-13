@@ -6,7 +6,7 @@
       </div>
 
       <%= turbo_frame_tag "filters-list" do %>
-        <%= render 'tag_filters', form_url: editing_tags_page_items_path, clear_url: editing_tags_page_items_path %>
+        <%= render 'tag_filters', form_url: editing_tags_page_items_path, clear_url: editing_tags_page_items_path, use_turbo_frames: false %>
       <% end %>
 
       <%= form_tag bulk_assign_tags_items_path, method: :patch do %>

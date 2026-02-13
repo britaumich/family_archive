@@ -148,6 +148,16 @@ class ItemsController < ApplicationController
                                .transform_keys(&:name)
                                .sort
     @assignment_tags_without_type = Tag.where(tag_type: nil)
+    
+    respond_to do |format|
+      format.html
+      format.turbo_stream { 
+        render turbo_stream: [
+          turbo_stream.replace("filters-list", partial: "tag_filters", locals: { form_url: editing_tags_page_items_path, clear_url: editing_tags_page_items_path }),
+          turbo_stream.replace("items-list", partial: "editing_items_list")
+        ]
+      }
+    end
   end
 
   def bulk_assign_tags
