@@ -215,10 +215,26 @@ class ItemsController < ApplicationController
       end
     end
 
-    if assigned_count > 0
-      redirect_to editing_tags_page_items_path, notice: t('forms.flash.tags_assigned_to_items')
-    else
-      redirect_to editing_tags_page_items_path, notice: t('forms.flash.tags_already_assigned')
+    # Refresh items with updated tags
+    items = Item.where(id: item_ids).includes(:tags)
+    @items = items
+
+    respond_to do |format|
+      format.turbo_stream {
+        flash_message = assigned_count > 0 ? t('forms.flash.tags_assigned_to_items') : t('forms.flash.tags_already_assigned')
+        flash[:notice] = flash_message
+        render turbo_stream: [
+          turbo_stream.update("items-list", partial: "editing_items_list"),
+          turbo_stream.update('flash', partial: 'layouts/notification')
+        ]
+      }
+      format.html {
+        if assigned_count > 0
+          redirect_to editing_tags_page_items_path, notice: t('forms.flash.tags_assigned_to_items')
+        else
+          redirect_to editing_tags_page_items_path, notice: t('forms.flash.tags_already_assigned')
+        end
+      }
     end
   end
 
@@ -266,10 +282,26 @@ class ItemsController < ApplicationController
       end
     end
 
-    if removed_count > 0
-      redirect_to editing_tags_page_items_path, notice: t('forms.flash.tags_removed_from_items')
-    else
-      redirect_to editing_tags_page_items_path, notice: t('forms.flash.no_tags_removed')
+    # Refresh items with updated tags
+    items = Item.where(id: item_ids).includes(:tags)
+    @items = items
+
+    respond_to do |format|
+      format.turbo_stream {
+        flash_message = removed_count > 0 ? t('forms.flash.tags_removed_from_items') : t('forms.flash.no_tags_removed')
+        flash[:notice] = flash_message
+        render turbo_stream: [
+          turbo_stream.update("items-list", partial: "editing_items_list"),
+          turbo_stream.update('flash', partial: 'layouts/notification')
+        ]
+      }
+      format.html {
+        if removed_count > 0
+          redirect_to editing_tags_page_items_path, notice: t('forms.flash.tags_removed_from_items')
+        else
+          redirect_to editing_tags_page_items_path, notice: t('forms.flash.no_tags_removed')
+        end
+      }
     end
   end
 
