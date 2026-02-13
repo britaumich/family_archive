@@ -1,0 +1,68 @@
+<div class="card-body" style="max-height: 600px; overflow-y: auto;">
+  <% if @items.any? %>
+    <div class="row g-3">
+      <% @items.each do |item| %>
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="card">
+            <div class="position-relative">
+              <!-- Checkbox for item selection -->
+              <div class="position-absolute top-0 start-0 p-2">
+                <%= check_box_tag "item_ids[]", item.id, false, class: "form-check-input border-2 custom-checkbox", style: "transform: scale(1.5); background-color: rgba(255,255,255,0.9);", data: { toggle_target: "checkbox" } %>
+              </div>
+              <% if item.file.attached? %>
+                <% if item.file.content_type.start_with?('image/') %>
+                  <%= image_tag item.file, 
+                      class: "card-img-top", 
+                      style: "height: 150px; object-fit: cover;",
+                      alt: "Item #{item.id}" %>
+                <% elsif item.file.content_type.start_with?('video/') %>
+                  <video class="card-img-top" style="height: 150px; object-fit: cover;">
+                    <%= content_tag :source, "", src: url_for(item.file), type: item.file.content_type %>
+                  </video>
+                <% else %>
+                  <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 150px;">
+                    <i class="bi bi-file-text fs-3 text-muted"></i>
+                  </div>
+                <% end %>
+              <% else %>
+                <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 150px;">
+                  <i class="bi bi-image fs-3 text-muted"></i>
+                </div>
+              <% end %>
+            </div>
+            
+            <div class="card-body p-2">
+              <small class="text-muted d-block">
+                <%= t('forms.labels.type') %>: <%= item.item_type.humanize %>
+              </small>
+              <% if item.caption.present? %>
+                <small class="text-truncate d-block">
+                  <%= truncate(strip_tags(item.caption), length: 50) %>
+                </small>
+              <% end %>
+              
+              <% if item.tags.any? %>
+                <div class="mt-1">
+                <p><%= item.tags.count %></p>
+                  <% item.tags.each do |tag| %>
+                    <span class="badge bg-secondary me-1" style="font-size: 0.7em;">
+                      <%= tag.name %>
+                    </span>
+                  <% end %>
+                </div>
+              <% end %>
+              
+              <div class="mt-2">
+                <%= link_to t('forms.buttons.view_details'), item_path(item), class: "btn btn-primary btn-sm w-100", target: "_blank" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-muted text-center py-4">
+      <%= t('views.items.no_items_yet') %>
+    </p>
+  <% end %>
+</div>

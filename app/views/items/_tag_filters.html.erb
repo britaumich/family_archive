@@ -1,6 +1,6 @@
 <!-- Filter by tags -->
 <% 
-  form_url = local_assigns.fetch(:form_url, items_path)
+  form_url = local_assigns.fetch(:form_url, editing_tags_page_items_path)
   clear_url = local_assigns.fetch(:clear_url, items_path)
   card_wrapper = local_assigns.fetch(:card_wrapper, false)
 %>
@@ -13,7 +13,7 @@
     <div class="card-body">
 <% end %>
 
-<%= form_with url: form_url, method: :get, local: true, class: "mb-4" do |form| %>
+<%= form_with url: form_url, method: :get, local: false, data: { turbo_frame: "items-list" }, class: "mb-4" do |form| %>
   <div class="row">
     <div class="col-12">
       <h5><%= t('forms.labels.filter_by_tags') %></h5>
