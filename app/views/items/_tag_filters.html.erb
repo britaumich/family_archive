@@ -48,9 +48,13 @@
               <% end %>
               
               <!-- Display selected tags for this type -->
-              <div id="badges-for-<%= tag_type&.id || 'no-type' %>">
+              <% if use_turbo_frames %>
+                <div id="badges-for-<%= tag_type&.id || 'no-type' %>">
+                  <%= render 'tag_type_badges', tag_type: tag_type %>
+                </div>
+              <% else %>
                 <%= render 'tag_type_badges', tag_type: tag_type %>
-              </div>
+              <% end %>
             </div>
           </div>
         <% end %>
@@ -80,9 +84,13 @@
   <div class="mt-3">
     <%= form.submit t('forms.buttons.apply_filters'), class: "btn btn-primary" %>
     <%= link_to t('forms.buttons.clear_filters'), clear_url, class: "btn btn-outline-secondary" %>
-    <div id="filter-badges">
+    <% if use_turbo_frames %>
+      <div id="filter-badges">
+        <%= render 'filter_badges' %>
+      </div>
+    <% else %>
       <%= render 'filter_badges' %>
-    </div>
+    <% end %>
   </div>
 <% end %>
 
