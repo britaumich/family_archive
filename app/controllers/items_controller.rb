@@ -153,10 +153,22 @@ class ItemsController < ApplicationController
     respond_to do |format|
       format.html
       format.turbo_stream { 
-        render turbo_stream: [
-          turbo_stream.replace("filters-list", partial: "tag_filters", locals: { form_url: editing_tags_page_items_path, clear_url: editing_tags_page_items_path }),
-          turbo_stream.replace("items-list", partial: "editing_items_list")
+        Rails.logger.info "DEBUG: Selected tags in turbo_stream: #{@selected_tags.map(&:name)}"
+        Rails.logger.info "DEBUG: Items count in turbo_stream: #{@items.count}"
+        
+        # Build turbo_stream updates for each tag type's badges
+        turbo_updates = [
+          turbo_stream.update("filter-badges", partial: "filter_badges"),
+          turbo_stream.update("items-list", partial: "editing_items_list")
         ]
+        
+        # Add updates for each tag type's individual badges
+        @tags_by_type.each do |tag_type, tags|
+          badge_id = "badges-for-#{tag_type&.id || 'no-type'}"
+          turbo_updates << turbo_stream.update(badge_id, partial: "tag_type_badges", locals: { tag_type: tag_type })
+        end
+        
+        render turbo_stream: turbo_updates
       }
     end
   end

@@ -1,0 +1,9 @@
+<% if @selected_tags.any? %>
+  <span class="ms-3 text-muted">
+    <%= t('forms.labels.filtered_by') %>:
+    <% @selected_tags.each do |tag| %>
+      <span class="badge bg-primary me-1"><%= tag.name %></span>
+    <% end %>
+    (<%= params[:filter_type] == "all" ? t('forms.labels.must_have_all') : t('forms.labels.any_of_these') %>)
+  </span>
+<% end %>
