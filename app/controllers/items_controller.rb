@@ -9,7 +9,7 @@ class ItemsController < ApplicationController
     # Filter by multiple tags if specified
     if params[:tags].present?
       tag_ids = params[:tags].reject(&:blank?).map(&:to_i)
-      @selected_tags = Tag.where(id: tag_ids)
+      @selected_tags = Tag.includes(:items).where(id: tag_ids)
 
       if tag_ids.any?
         # AND logic: items must have ALL selected tags
@@ -109,11 +109,10 @@ class ItemsController < ApplicationController
     @tags = Tag.includes(:tag_type).order('tag_types.name ASC NULLS LAST, tags.name ASC')
     @tags_by_type = @tags.group_by(&:tag_type)
     @selected_tags = []
-
     # Filter by multiple tags if specified
     if params[:tags].present?
       tag_ids = params[:tags].reject(&:blank?).map(&:to_i)
-      @selected_tags = Tag.where(id: tag_ids)
+      @selected_tags = Tag.includes(:items).where(id: tag_ids)
 
       if tag_ids.any?
         # AND logic: items must have ALL selected tags
@@ -129,10 +128,12 @@ class ItemsController < ApplicationController
                        .order(created_at: :desc)
         else
           # OR logic (default): items must have ANY of the selected tags
+          item_ids = Item.joins(:tags)
+                      .where(tags: { id: tag_ids })
+                      .distinct
+                      .pluck(:id)
           @items = Item.includes(:tags).with_attached_file
-                       .joins(:tags)
-                       .where(tags: { id: tag_ids })
-                       .distinct
+                       .where(id: item_ids)
                        .order(created_at: :desc)
         end
       else
@@ -148,6 +149,28 @@ class ItemsController < ApplicationController
                                .transform_keys(&:name)
                                .sort
     @assignment_tags_without_type = Tag.where(tag_type: nil)
+    
+    respond_to do |format|
+      format.html
+      format.turbo_stream { 
+        Rails.logger.info "DEBUG: Selected tags in turbo_stream: #{@selected_tags.map(&:name)}"
+        Rails.logger.info "DEBUG: Items count in turbo_stream: #{@items.count}"
+        
+        # Build turbo_stream updates for each tag type's badges
+        turbo_updates = [
+          turbo_stream.update("filter-badges", partial: "filter_badges"),
+          turbo_stream.update("items-list", partial: "editing_items_list")
+        ]
+        
+        # Add updates for each tag type's individual badges
+        @tags_by_type.each do |tag_type, tags|
+          badge_id = "badges-for-#{tag_type&.id || 'no-type'}"
+          turbo_updates << turbo_stream.update(badge_id, partial: "tag_type_badges", locals: { tag_type: tag_type })
+        end
+        
+        render turbo_stream: turbo_updates
+      }
+    end
   end
 
   def bulk_assign_tags
@@ -155,37 +178,38 @@ class ItemsController < ApplicationController
     item_ids = params[:item_ids]&.reject(&:blank?)&.map(&:to_i)
     tag_ids = params[:tag_ids]&.reject(&:blank?)&.map(&:to_i)
 
-    if item_ids.blank?
-      redirect_to editing_tags_page_items_path, alert: t('forms.flash.no_items_selected')
-      return
-    end
-
     if tag_ids.blank?
-      redirect_to editing_tags_page_items_path, alert: t('forms.flash.no_tags_selected') 
+      respond_to do |format|
+        format.turbo_stream {
+          flash[:alert] = t('forms.flash.no_tags_selected')
+          render turbo_stream: turbo_stream.update('flash', partial: 'layouts/notification')
+        }
+        format.html { redirect_to editing_tags_page_items_path, alert: t('forms.flash.no_tags_selected') }
+      end
       return
     end
 
-    # Find items and authorize each, preload tags to avoid N+1
-    items = Item.where(id: item_ids).includes(:tags)
-    items.each { |item| authorize item, :edit? }
-    
-    # Validate that the provided tag IDs exist and load them once
-    valid_tag_ids = Tag.where(id: tag_ids).pluck(:id)
-    
-    if valid_tag_ids.empty?
-      redirect_to editing_tags_page_items_path, alert: t('forms.flash.invalid_tags_selected')
+    if item_ids.blank?
+      respond_to do |format|
+        format.turbo_stream {
+          flash[:alert] = t('forms.flash.no_items_selected')
+          render turbo_stream: turbo_stream.update('flash', partial: 'layouts/notification')
+        }
+        format.html { redirect_to editing_tags_page_items_path, alert: t('forms.flash.no_items_selected') }
+      end
       return
     end
+
+    # Find items, preload tags to avoid N+1
+    items = Item.where(id: item_ids).includes(:tags)
     
     # Load all candidate tags once
-    candidate_tags = Tag.where(id: valid_tag_ids).index_by(&:id)
-    
+    candidate_tags = Tag.where(id: tag_ids).index_by(&:id)
     assigned_count = 0
     items.each do |item|
       # Use preloaded tags to avoid additional queries
       existing_tag_ids = item.tags.map(&:id)
-      new_tag_ids = valid_tag_ids - existing_tag_ids
-      
+      new_tag_ids = tag_ids - existing_tag_ids
       if new_tag_ids.any?
         # Get new tags from the preloaded hash
         new_tags = new_tag_ids.map { |id| candidate_tags[id] }.compact
@@ -194,10 +218,27 @@ class ItemsController < ApplicationController
       end
     end
 
-    if assigned_count > 0
-      redirect_to editing_tags_page_items_path, notice: t('forms.flash.tags_assigned_to_items')
-    else
-      redirect_to editing_tags_page_items_path, notice: t('forms.flash.tags_already_assigned')
+    # Refresh items with updated tags
+    items = Item.where(id: item_ids).includes(:tags)
+    @items = items
+    @selected_item_ids = item_ids
+
+    respond_to do |format|
+      format.turbo_stream {
+        flash_message = assigned_count > 0 ? t('forms.flash.tags_assigned_to_items') : t('forms.flash.tags_already_assigned')
+        flash[:notice] = flash_message
+        render turbo_stream: [
+          turbo_stream.update("items-list", partial: "editing_items_list", locals: { selected_item_ids: @selected_item_ids }),
+          turbo_stream.update('flash', partial: 'layouts/notification')
+        ]
+      }
+      format.html {
+        if assigned_count > 0
+          redirect_to editing_tags_page_items_path, notice: t('forms.flash.tags_assigned_to_items')
+        else
+          redirect_to editing_tags_page_items_path, notice: t('forms.flash.tags_already_assigned')
+        end
+      }
     end
   end
 
@@ -207,35 +248,38 @@ class ItemsController < ApplicationController
     tag_ids = params[:tag_ids]&.reject(&:blank?)&.map(&:to_i)
 
     if item_ids.blank?
-      redirect_to editing_tags_page_items_path, alert: t('forms.flash.no_items_selected')
+      respond_to do |format|
+        format.turbo_stream {
+          flash[:alert] = t('forms.flash.no_items_selected')
+          render turbo_stream: turbo_stream.update('flash', partial: 'layouts/notification')
+        }
+        format.html { redirect_to editing_tags_page_items_path, alert: t('forms.flash.no_items_selected') }
+      end
       return
     end
 
     if tag_ids.blank?
-      redirect_to editing_tags_page_items_path, alert: t('forms.flash.no_tags_selected') 
+      respond_to do |format|
+        format.turbo_stream {
+          flash[:alert] = t('forms.flash.no_tags_selected')
+          render turbo_stream: turbo_stream.update('flash', partial: 'layouts/notification')
+        }
+        format.html { redirect_to editing_tags_page_items_path, alert: t('forms.flash.no_tags_selected') }
+      end
       return
     end
 
-    # Find items and authorize each, preload tags to avoid N+1
+    # Find items, preload tags to avoid N+1
     items = Item.where(id: item_ids).includes(:tags)
-    items.each { |item| authorize item, :edit? }
-    
-    # Validate that the provided tag IDs exist and load them once
-    valid_tag_ids = Tag.where(id: tag_ids).pluck(:id)
-    
-    if valid_tag_ids.empty?
-      redirect_to editing_tags_page_items_path, alert: t('forms.flash.invalid_tags_selected')
-      return
-    end
     
     # Load all candidate tags once
-    candidate_tags = Tag.where(id: valid_tag_ids).index_by(&:id)
+    candidate_tags = Tag.where(id: tag_ids).index_by(&:id)
     
     removed_count = 0
     items.each do |item|
       # Use preloaded tags to avoid additional queries
       existing_tag_ids = item.tags.map(&:id)
-      tags_to_remove_ids = valid_tag_ids & existing_tag_ids
+      tags_to_remove_ids = tag_ids & existing_tag_ids
       
       if tags_to_remove_ids.any?
         # Get tags to remove from the preloaded hash
@@ -245,10 +289,27 @@ class ItemsController < ApplicationController
       end
     end
 
-    if removed_count > 0
-      redirect_to editing_tags_page_items_path, notice: t('forms.flash.tags_removed_from_items')
-    else
-      redirect_to editing_tags_page_items_path, notice: t('forms.flash.no_tags_removed')
+    # Refresh items with updated tags
+    items = Item.where(id: item_ids).includes(:tags)
+    @items = items
+    @selected_item_ids = item_ids
+
+    respond_to do |format|
+      format.turbo_stream {
+        flash_message = removed_count > 0 ? t('forms.flash.tags_removed_from_items') : t('forms.flash.no_tags_removed')
+        flash[:notice] = flash_message
+        render turbo_stream: [
+          turbo_stream.update("items-list", partial: "editing_items_list", locals: { selected_item_ids: @selected_item_ids }),
+          turbo_stream.update('flash', partial: 'layouts/notification')
+        ]
+      }
+      format.html {
+        if removed_count > 0
+          redirect_to editing_tags_page_items_path, notice: t('forms.flash.tags_removed_from_items')
+        else
+          redirect_to editing_tags_page_items_path, notice: t('forms.flash.no_tags_removed')
+        end
+      }
     end
   end
 
@@ -302,7 +363,7 @@ class ItemsController < ApplicationController
     end
     
     # Find tags that are currently assigned to the item
-    existing_tag_ids = valid_tag_ids & @item.tag_ids
+    existing_tag_ids = tag_ids & @item.tag_ids
     
     if existing_tag_ids.any?
       # Only load and remove the existing tags
@@ -314,7 +375,74 @@ class ItemsController < ApplicationController
     end
   end
 
+  def apply_filters_to_edit_tags
+    authorize Item, :editing_tags_page?
+    
+    apply_current_filters
+
+    respond_to do |format|
+      format.turbo_stream { render turbo_stream: turbo_stream.replace("items-list", partial: "editing_items_list") }
+      format.html { redirect_to editing_tags_page_items_path(params.permit(:tags, :filter_type)) }
+    end
+  end
+
   private
+
+  def apply_current_filters
+    @tags = Tag.includes(:tag_type).order('tag_types.name ASC NULLS LAST, tags.name ASC')
+    @tags_by_type = @tags.group_by(&:tag_type)
+    @selected_tags = []
+
+    # Filter by multiple tags if specified
+    if params[:tags].present?
+      tag_ids = params[:tags].reject(&:blank?).map(&:to_i)
+      @selected_tags = Tag.includes(:items).where(id: tag_ids)
+
+      if tag_ids.any?
+        # AND logic: items must have ALL selected tags
+        if params[:filter_type] == 'all'
+          # Use subquery to find items with all required tags
+          item_ids = Item.joins(:tags)
+                         .where(tags: { id: tag_ids })
+                         .group('items.id')
+                         .having('COUNT(DISTINCT tags.id) = ?', tag_ids.length)
+                         .pluck('items.id')
+        else
+          # OR logic (default): items must have ANY of the selected tags
+          # Get item IDs that match the filter
+          item_ids = Item.joins(:tags)
+                         .where(tags: { id: tag_ids })
+                         .distinct
+                         .pluck(:id)
+        end
+        
+        # Load the filtered items without includes to avoid tag filtering
+        @items = Item.where(id: item_ids)
+                     .with_attached_file
+                     .order(created_at: :desc)
+        
+        # Load all tags for each item separately to avoid filtering
+        @items = @items.map do |item|
+          item.association(:tags).reset
+          item
+        end
+        
+        # Preload tags for all items at once
+        ActiveRecord::Associations::Preloader.new.preload(@items, :tags)
+      else
+        @items = Item.includes(:tags).with_attached_file.order(created_at: :desc)
+      end
+    else
+      @items = Item.includes(:tags).with_attached_file.order(created_at: :desc)
+    end
+    
+    # Also prepare tags organized by type for assignment
+    @assignment_tags_by_type = Tag.joins(:tag_type).includes(:tag_type)
+                               .group_by(&:tag_type)
+                               .transform_keys(&:name)
+                               .sort
+    @assignment_tags_without_type = Tag.where(tag_type: nil)
+  end
 
   def set_item
     @item = Item.find(params.expect(:id))
