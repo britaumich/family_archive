@@ -266,3 +266,11 @@ en:
               taken: "has already been taken."
               blank: "can't be blank."
               cannot_delete_tag_type_with_associated_tags: "cannot be deleted because it has associated tags."
+        admin_user:
+          attributes:
+            email:
+              taken: "has already been taken."
+              blank: "can't be blank."
+            role:
+              blank: "can't be blank."
+          one_admin_user_must_exist: "At least one admin user must exist."
