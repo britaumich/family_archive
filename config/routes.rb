@@ -26,6 +26,6 @@ Rails.application.routes.draw do
     resources :admin_users, except: [:show]
 
     # Defines the root path route ("/")
-    root 'home#about'
+    root 'items#index'
   end
 end

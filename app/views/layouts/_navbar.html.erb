@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-um-blue">
   <div class="container-fluid" style="--bs-focus-ring-color:#E5E5E5;" >
-    <%= link_to root_path, class: "a-nav focus-ring border-0 rounded-2" do %>
+    <%= link_to about_path, class: "a-nav focus-ring border-0 rounded-2" do %>
       <div id="Logo" class="d-flex align-items-center">
         <%= image_tag 'family.jpg', alt: 'Family Archive Logo', class: 'logo-brand' %>
         <div class="nav-title h-100">
@@ -14,21 +14,8 @@
     <!-- this is regular navbar-->
     <div class="collapse navbar-collapse d-none d-md-block">
       <% if authenticated? %>
-        <div class="nav-item dropdown navbar_dropdown_item h-100 px-2 rounded-0 border-0">
-          <a class="nav-link h-100 d-flex align-items-center fs-5 focus-ring border-0 rounded-2" style="--bs-focus-ring-color:#E5E5E5;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <%= t('menu.navbar.main') %>
-          </a>
-          <ul class="dropdown-menu bg-primary rounded-0 navbar_dropdown_item">
-            <li>
-              <%= link_to t('menu.navbar.tags'), tags_path, class: 'dropdown-item navbar_dropdown_item' %>
-            </li>
-            <li>
-              <%= link_to t('menu.navbar.tag_types'), tag_types_path, class: 'dropdown-item navbar_dropdown_item' %>
-            </li>
-            <li>
-              <%= link_to t('menu.navbar.items'), items_path, class: 'dropdown-item navbar_dropdown_item' %>
-            </li>
-          </ul>
+        <div class="nav-item dropdown navbar_dropdown_item h-100 px-2 rounded-0 border-0" style="--bs-focus-ring-color:#E5E5E5;">
+          <%= link_to t('menu.navbar.items'), items_path, class: 'nav-link h-100 d-flex align-items-center fs-5 focus-ring border-0 rounded-2' %>
         </div>
         <% if policy(AdminUser).index? %>
           <div class="nav-item dropdown navbar_dropdown_item h-100 px-2 rounded-0 border-0">
@@ -44,6 +31,12 @@
               </li>
               <li>
                 <%= link_to t('menu.navbar.admin_users'), admin_users_path, class: 'dropdown-item navbar_dropdown_item' %>
+              </li>
+              <li>
+                <%= link_to t('menu.navbar.tags'), tags_path, class: 'dropdown-item navbar_dropdown_item' %>
+              </li>
+              <li>
+                <%= link_to t('menu.navbar.tag_types'), tag_types_path, class: 'dropdown-item navbar_dropdown_item' %>
               </li>
             </ul>
           </div>
