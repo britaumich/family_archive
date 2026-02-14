@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
     Current.session&.user
   end
 
-    def pundit_user
+  def pundit_user
     { user: current_user, role: current_role }
   end
   
