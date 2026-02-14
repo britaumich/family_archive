@@ -57,6 +57,7 @@ module Authentication
         # Set role based on admin_user table
         admin_user = AdminUser.find_by(email: user.email_address)
         session[:role] = admin_user&.role || 'viewer'
+        # role changes require re-authentication.
       end
     end
 
