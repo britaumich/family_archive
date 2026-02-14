@@ -11,6 +11,10 @@ class ApplicationController < ActionController::Base
   def current_user
     Current.session&.user
   end
+
+  def pundit_user
+    { user: current_user, role: current_role }
+  end
   
   def user_not_authorized
     locale = params[:locale] || I18n.default_locale

@@ -37,6 +37,8 @@ en:
     about: "About"
     admins: "Admin Users"
     upload_files: "Upload Files"
+    pictures: "Pictures"
+    select_pictures_by_tags: "Select Pictures by Tags"
   auth:
     sign_in: "Sign in"
     sign_out: "Sign Out"
@@ -166,7 +168,7 @@ en:
       start_building_archive: "Start building your family archive by uploading your first files"
       upload_first_file: "Upload First File"
       index:
-        items_list: "Items"
+        pictures: "Pictures"
         bulk_assign_tags: "Editing Tags"
         select_all: "Select All"
         unselect_all: "Unselect All"
@@ -224,7 +226,7 @@ en:
       main: "Main"
       tags: "Tags"
       tag_types: "Tag Types"
-      items: "Items"
+      items: "Pictures"
       admin: "Admin"
       admin_users: "Admin Users"
       upload_files: "Upload Files"
@@ -249,6 +251,7 @@ en:
         name: "Name"
       admin_user:
         email: "Email Address"
+        role: "Role"
       user:
         email_address: "Email Address"
     errors:
@@ -263,3 +266,11 @@ en:
               taken: "has already been taken."
               blank: "can't be blank."
               cannot_delete_tag_type_with_associated_tags: "cannot be deleted because it has associated tags."
+        admin_user:
+          attributes:
+            email:
+              taken: "has already been taken."
+              blank: "can't be blank."
+            role:
+              blank: "can't be blank."
+          one_admin_user_must_exist: "At least one admin user must exist."

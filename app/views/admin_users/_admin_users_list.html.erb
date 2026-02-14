@@ -7,6 +7,7 @@
       <thead class="table-group-divider">
         <tr>
           <th><%= t('activerecord.attributes.admin_user.email') %></th>
+          <th><%= t('activerecord.attributes.admin_user.role') %></th>
           <td><%= t('forms.buttons.edit') %></td>
           <td><%= t('forms.buttons.delete') %></td>
         </tr>
@@ -16,6 +17,9 @@
           <tr class="tag_tbody_tr">
             <td class="tag_tbody_td">
               <%= admin_user.email %>
+            </td>
+            <td class="tag_tbody_td">
+              <%= t("admin_user.roles.#{admin_user.role}") %>
             </td>
             <td class="tag_tbody_td">
               <%= link_to edit_admin_user_path(admin_user), data: { turbo_frame: "_top" }, aria: { label: "#{dom_id(admin_user)}_edit" } do%>

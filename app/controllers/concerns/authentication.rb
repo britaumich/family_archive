@@ -3,7 +3,7 @@ module Authentication
 
   included do
     before_action :require_authentication
-    helper_method :authenticated?
+    helper_method :authenticated?, :current_role
   end
 
   class_methods do
@@ -15,6 +15,10 @@ module Authentication
   private
     def authenticated?
       resume_session
+    end
+
+    def current_role
+      session[:role] || 'viewer'
     end
 
     def require_authentication
@@ -47,9 +51,13 @@ module Authentication
     end
 
     def start_new_session_for(user)
-      user.sessions.create!(user_agent: request.user_agent, ip_address: request.remote_ip).tap do |session|
-        Current.session = session
-        cookies.signed.permanent[:session_id] = { value: session.id, httponly: true, same_site: :lax }
+      user.sessions.create!(user_agent: request.user_agent, ip_address: request.remote_ip).tap do |user_session|
+        Current.session = user_session
+        cookies.signed.permanent[:session_id] = { value: user_session.id, httponly: true, same_site: :lax }
+        # Set role based on admin_user table
+        admin_user = AdminUser.find_by(email: user.email_address)
+        session[:role] = admin_user&.role || 'viewer'
+        # role changes require re-authentication.
       end
     end
 

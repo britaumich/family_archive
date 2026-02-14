@@ -1,5 +1,6 @@
 class AdminUsersController < ApplicationController
   before_action :set_admin_user, only: %i[ edit update destroy ]
+  before_action :set_roles, only: %i[ index new create edit update ]
 
   # GET /admin_users or /admin_users.json
   def index
@@ -70,8 +71,12 @@ class AdminUsersController < ApplicationController
       authorize @admin_user
     end
 
+    def set_roles
+      @roles = AdminUser.roles.keys
+    end
+
     # Only allow a list of trusted parameters through.
     def admin_user_params
-      params.expect(admin_user: [ :email ])
+      params.expect(admin_user: [ :email, :role ])
     end
 end
