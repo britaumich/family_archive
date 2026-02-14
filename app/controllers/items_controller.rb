@@ -25,10 +25,12 @@ class ItemsController < ApplicationController
                        .order(created_at: :desc)
         else
           # OR logic (default): items must have ANY of the selected tags
+          item_ids = Item.joins(:tags)
+                      .where(tags: { id: tag_ids })
+                      .distinct
+                      .pluck(:id)
           @items = Item.includes(:tags).with_attached_file
-                       .joins(:tags)
-                       .where(tags: { id: tag_ids })
-                       .distinct
+                       .where(id: item_ids)
                        .order(created_at: :desc)
         end
       else
