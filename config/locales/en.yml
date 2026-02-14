@@ -249,6 +249,7 @@ en:
         name: "Name"
       admin_user:
         email: "Email Address"
+        role: "Role"
       user:
         email_address: "Email Address"
     errors:

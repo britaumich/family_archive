@@ -4,11 +4,14 @@
 #
 #  id         :bigint           not null, primary key
 #  email      :string           not null
+#  role       :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
 class AdminUser < ApplicationRecord
   before_destroy :one_admin_user_should_exist
+
+  enum :role, [:admin, :editor], prefix: true, scopes: true
 
   normalizes :email, with: ->(e) { e.strip.downcase }
   

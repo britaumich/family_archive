@@ -250,6 +250,7 @@ ru:
         name: "Название"
       admin_user:
         email: "Адрес электронной почты"
+        role: "Роль"
       user:
         email_address: "Адрес электронной почты"
     errors:
