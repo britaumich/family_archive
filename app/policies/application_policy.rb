@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 class ApplicationPolicy
-  attr_reader :user, :record
+  attr_reader :user, :role, :record
 
-  def initialize(user, record)
-    @user = user
+  def initialize(context, record)
+    @user = context[:user]
+    @role = context[:role]
     @record = record
   end
 
@@ -44,17 +45,13 @@ class ApplicationPolicy
 
   def admin_user?
     return false unless user
-    email = user.email_address
-    cache_key = "admin_user_status:#{email}"
-    Rails.cache.fetch(cache_key, expires_in: 1.hour) do
-      Rails.logger.debug "********************************** policy: checking admin user status for #{email}"
-      AdminUser.exists?(email: email)
-    end
+    @role == 'admin'
   end
 
   class Scope
-    def initialize(user, scope)
-      @user = user
+    def initialize(context, scope)
+      @user = context[:user]
+      @role = context[:role]
       @scope = scope
     end
 
