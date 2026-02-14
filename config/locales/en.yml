@@ -37,6 +37,8 @@ en:
     about: "About"
     admins: "Admin Users"
     upload_files: "Upload Files"
+    pictures: "Pictures"
+    select_pictures_by_tags: "Select Pictures by Tags"
   auth:
     sign_in: "Sign in"
     sign_out: "Sign Out"
@@ -166,7 +168,7 @@ en:
       start_building_archive: "Start building your family archive by uploading your first files"
       upload_first_file: "Upload First File"
       index:
-        items_list: "Items"
+        pictures: "Pictures"
         bulk_assign_tags: "Editing Tags"
         select_all: "Select All"
         unselect_all: "Unselect All"
@@ -224,7 +226,7 @@ en:
       main: "Main"
       tags: "Tags"
       tag_types: "Tag Types"
-      items: "Items"
+      items: "Pictures"
       admin: "Admin"
       admin_users: "Admin Users"
       upload_files: "Upload Files"

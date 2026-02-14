@@ -37,6 +37,8 @@ ru:
     about: "О нас"
     admins: "Администраторы"
     upload_files: "Загрузить файлы"
+    pictures: "Фотографии"
+    select_pictures_by_tags: "Выбрать фотографии по тегам"
   auth:
     sign_in: "Войти"
     sign_out: "Выйти"
@@ -168,7 +170,7 @@ ru:
       start_building_archive: "Начните создавать свой семейный архив, загрузив первые файлы"
       upload_first_file: "Загрузить первый файл"
       index:
-        items_list: "Файлы"
+        pictures: "Фотографии"
         bulk_assign_tags: "Редактирование тегов у файлов"
         select_all: "Выбрать все"
         unselect_all: "Отменить выбор"
@@ -223,7 +225,7 @@ ru:
       main: "Основное"
       tags: "Теги"
       tag_types: "Типы тегов"
-      items: "Файлы"
+      items: "Фотографии"
       admin: "Админ"
       admin_users: "Администраторы"
       upload_files: "Загрузить файлы"
