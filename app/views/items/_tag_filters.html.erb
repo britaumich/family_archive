@@ -27,34 +27,36 @@
       <div class="row g-3">
         <% @tags_by_type.each do |tag_type, tags| %>
           <div class="col-xl-4 col-lg-6 col-md-12">
-            <div class="mb-3">
-              <h6 class="text-muted">
-                <%= tag_type ? tag_type.translated_name : t('forms.labels.no_tag_type') %>
-              </h6>
-              <% if tag_type&.name&.downcase == 'year' %>
-                <!-- Year tags as dropdown -->
-                <div class="mb-2">
-                  <%= form.collection_select :tags, tags, :id, :name, 
-                      { prompt: t('forms.labels.select_year'), selected: @selected_tags.pluck(:id) },
-                      { multiple: true, class: "form-select", style: "width: 100%; max-width: 300px;" } %>
+            <div class="card h-100">
+              <div class="card-header">
+                <h6 class="mb-0 text-muted">
+                  <%= tag_type ? tag_type.translated_name : t('forms.labels.no_tag_type') %>
+                </h6>
+              </div>
+              <div class="card-body">
+                <!-- All tag types as checkboxes -->
+                <div class="tag-checkboxes" style="max-height: 200px; overflow-y: auto;">
+                  <% tags.each do |tag| %>
+                    <div class="form-check">
+                      <%= form.check_box :tags, 
+                          { multiple: true, checked: @selected_tags.include?(tag), id: "tag_#{tag.id}" }, 
+                          tag.id, "" %>
+                      <%= form.label "tag_#{tag.id}", tag.name, class: "form-check-label" %>
+                    </div>
+                  <% end %>
                 </div>
-              <% else %>
-                <!-- All other tag types as dropdown -->
-                <div class="mb-2">
-                  <%= form.collection_select :tags, tags, :id, :name, 
-                      { prompt: "#{t('forms.labels.select')} #{tag_type ? tag_type.translated_name : t('forms.labels.no_tag_type')}", selected: @selected_tags.pluck(:id) },
-                      { multiple: true, class: "form-select", style: "width: 100%; max-width: 300px;" } %>
-                </div>
-              <% end %>
-              
-              <!-- Display selected tags for this type -->
-              <% if use_turbo_frames %>
-                <div id="badges-for-<%= tag_type&.id || 'no-type' %>">
-                  <%= render 'tag_type_badges', tag_type: tag_type %>
-                </div>
-              <% else %>
-                <%= render 'tag_type_badges', tag_type: tag_type %>
-              <% end %>
+                
+                <!-- Display selected tags for this type -->
+                <% if use_turbo_frames %>
+                  <div id="badges-for-<%= tag_type&.id || 'no-type' %>" class="mt-2">
+                    <%= render 'tag_type_badges', tag_type: tag_type %>
+                  </div>
+                <% else %>
+                  <div class="mt-2">
+                    <%= render 'tag_type_badges', tag_type: tag_type %>
+                  </div>
+                <% end %>
+              </div>
             </div>
           </div>
         <% end %>
