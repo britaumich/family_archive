@@ -13,8 +13,7 @@
               <a href="<%= url_for(item.file) %>" 
                  data-lightbox="gallery" 
                  data-gallery="items-gallery"
-                 data-title="<%= item.caption.present? ? strip_tags(item.caption) : "Item #{item.id}" %>"
-                 data-description="Type: <%= item.item_type.humanize %><br>Uploaded: <%= item.created_at.strftime("%B %d, %Y") %>">
+                 data-title="<%= item.caption.present? ? strip_tags(item.caption) : "" %>">
                 <%= image_tag item.file, 
                     class: "card-img-top lightbox-image", 
                     style: "height: 250px; object-fit: cover;",
@@ -29,8 +28,7 @@
                 <a href="<%= url_for(item.file) %>" 
                    data-lightbox="gallery" 
                    data-gallery="items-gallery"
-                   data-title="<%= item.caption.present? ? strip_tags(item.caption) : "Video #{item.id}" %>"
-                   data-description="Type: <%= item.item_type.humanize %><br>Uploaded: <%= item.created_at.strftime("%B %d, %Y") %>"
+                   data-title="<%= item.caption.present? ? strip_tags(item.caption) : "" %>"
                    class="stretched-link"></a>
               </div>
             <% else %>
@@ -50,14 +48,6 @@
           <% end %>
           
           <div class="card-body d-flex flex-column">
-            <div class="mb-2">
-              <small class="text-muted"><%= t('forms.labels.type') %>: <%= item.item_type.humanize %></small>
-            </div>
-            
-            <div class="mb-2">
-              <small class="text-muted"><%= t('forms.labels.uploaded') %>: <%= item.created_at.strftime("%B %d, %Y at %I:%M %p") %></small>
-            </div>
-            
             <!-- Caption -->
             <% if item.caption.present? %>
               <div class="mb-2">
