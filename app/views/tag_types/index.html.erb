@@ -1,4 +1,8 @@
 <div class="container-fluid">
+  <div id="flash">
+    <%= render "layouts/notification" %>
+  </div>
+  
   <h1><%= t('page_titles.tag_type_list') %></h1>
   <div id="search bar">
     <%= form_with url: tag_types_path, method: :get, local: true,
@@ -19,7 +23,9 @@
 
   <% if policy(TagType).create? %>
     <div>
-      <%= render "form", tag_type: @tag_type %>
+      <%= turbo_frame_tag 'new_tag_type' do %>  
+        <%= render "form", tag_type: @tag_type %>
+      <% end %>
     </div>
   <% end %>
   <div class="mt-2">
