@@ -53,7 +53,7 @@ en:
     invalid_credentials: "Invalid email or password."
     rate_limit_exceeded: "Too many login attempts. Please try again later."
     role:
-      admin: "Admin"
+      admin: "Administrator"
       editor: "Editor"
   forms:
     cancel: "Cancel"
@@ -230,7 +230,6 @@ en:
       tags: "Tags"
       tag_types: "Tag Types"
       items: "Pictures"
-      admin: "Admin"
       admin_users: "Admin Users"
       upload_files: "Upload Files"
       bulk_assign_tags: "Bulk Assign Tags"
@@ -239,7 +238,6 @@ en:
   text:
     admin_users: "Admin Users"
     New: "New"
-    Admin: "Admin"
     "Editing Admin": "Editing Admin"
     "Are you sure?": "Are you sure?"
   error:

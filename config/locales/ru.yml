@@ -229,7 +229,6 @@ ru:
       tags: "Теги"
       tag_types: "Типы тегов"
       items: "Фотографии"
-      admin: "Админ"
       admin_users: "Администраторы"
       upload_files: "Загрузить файлы"
       bulk_assign_tags: "Редактирование тегов"
