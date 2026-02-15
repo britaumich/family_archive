@@ -12,7 +12,6 @@ class TagType < ApplicationRecord
   has_many :tags
   before_destroy :ensure_no_tags
   validates :name, presence: true, uniqueness: true
-  validate :at_least_one_translation_present
 
   # JSON-based translations
   def name_for_locale(locale = I18n.locale)
@@ -48,12 +47,6 @@ class TagType < ApplicationRecord
   end
 
   private
-
-  def at_least_one_translation_present
-    if name_en.blank? && name_ru.blank?
-      errors.add(:base, I18n.t('activerecord.errors.models.tag_type.at_least_one_translation_required'))
-    end
-  end
 
   def ensure_no_tags
     if tags.exists?
