@@ -104,9 +104,7 @@
     <div class="col-lg-4">
       <!-- Action Buttons -->
       <div class="d-grid gap-2 mb-4">
-        <%= link_to edit_item_path(@item), class: "btn btn-warning" do %>
-          <%= t('forms.buttons.edit') %>
-        <% end %>
+        <%= link_to t('forms.buttons.edit'), edit_item_path(@item), class: "btn btn-warning" if policy(@item).edit? %>
         <% if policy(@item).destroy? %>
           <%= link_to item_path(@item), 
               class: "btn btn-danger", 
