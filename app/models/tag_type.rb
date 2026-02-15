@@ -35,7 +35,7 @@ class TagType < ApplicationRecord
   def name_en=(value)
     set_translation('en', value)
     # Keep the original name field in sync with English for backward compatibility
-    self.name = value if value.present?
+    self.name = value
   end
 
   def name_ru
