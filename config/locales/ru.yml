@@ -256,8 +256,9 @@ ru:
       admin_user:
         email: "Адрес электронной почты"
         role: "Роль"
-        role/admin: "Администратор"
-        role/editor: "Редактор"
+        role_values:
+          admin: "Администратор"
+          editor: "Редактор"
       user:
         email_address: "Адрес электронной почты"
     errors:

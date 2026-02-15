@@ -255,8 +255,9 @@ en:
       admin_user:
         email: "Email Address"
         role: "Role"
-        role/admin: "Administrator"
-        role/editor: "Editor"
+        role_values:
+          admin: "Administrator"
+          editor: "Editor"
       user:
         email_address: "Email Address"
     errors:
