@@ -43,9 +43,9 @@ export default class extends Controller {
     }
     
     // Also check if any tags are selected
-    const tagSelects = this.form.querySelectorAll('select[name="tag_ids[]"]')
-    const hasSelectedTags = Array.from(tagSelects).some(select => {
-      return Array.from(select.selectedOptions).some(option => option.value !== "")
+    const tagCheckboxes = this.form.querySelectorAll('input[type="checkbox"][name="tag_ids[]"]')
+    const hasSelectedTags = Array.from(tagCheckboxes).some(checkbox => {
+      return checkbox.checked && checkbox.value !== ""
     })
     
     if (!hasSelectedTags) {

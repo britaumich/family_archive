@@ -46,8 +46,7 @@ class ItemsController < ApplicationController
     # Prepare tags organized by type for assignment
     @assignment_tags_by_type = Tag.joins(:tag_type).includes(:tag_type)
                                .group_by(&:tag_type)
-                               .transform_keys(&:name)
-                               .sort
+                               .sort_by { |tag_type, _| tag_type&.translated_name || '' }
     authorize @item
   end
 
@@ -148,8 +147,7 @@ class ItemsController < ApplicationController
     # Also prepare tags organized by type for assignment
     @assignment_tags_by_type = Tag.joins(:tag_type).includes(:tag_type)
                                .group_by(&:tag_type)
-                               .transform_keys(&:name)
-                               .sort
+                               .sort_by { |tag_type, _| tag_type&.translated_name || '' }
     @assignment_tags_without_type = Tag.where(tag_type: nil)
     
     respond_to do |format|
@@ -441,8 +439,7 @@ class ItemsController < ApplicationController
     # Also prepare tags organized by type for assignment
     @assignment_tags_by_type = Tag.joins(:tag_type).includes(:tag_type)
                                .group_by(&:tag_type)
-                               .transform_keys(&:name)
-                               .sort
+                               .sort_by { |tag_type, _| tag_type&.translated_name || '' }
     @assignment_tags_without_type = Tag.where(tag_type: nil)
   end
 

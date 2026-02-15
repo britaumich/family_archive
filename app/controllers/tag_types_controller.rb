@@ -5,7 +5,10 @@ class TagTypesController < ApplicationController
   def index
     @tag_type = TagType.new
     @tag_types = if params[:search].present?
-                   TagType.where('name ILIKE :search', search: "%#{params[:search]}%").order(:name)
+                   TagType.where(
+                     "name_translations ->> 'en' ILIKE :search OR name_translations ->> 'ru' ILIKE :search",
+                     search: "%#{params[:search]}%"
+                   ).order(:name)
                  else
                    TagType.order(:name)
                  end
@@ -29,8 +32,16 @@ class TagTypesController < ApplicationController
       flash.now[:notice] = t('forms.flash.tag_type_created')
       @tag_type = TagType.new
       @tag_types = TagType.order(:name)
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to tag_types_path, notice: t('forms.flash.tag_type_created') }
+      end
     else
-      render :new, status: :unprocessable_entity
+      @tag_types = TagType.order(:name)
+      respond_to do |format|
+        format.turbo_stream { render :create, status: :unprocessable_entity }
+        format.html { render :index, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -38,7 +49,7 @@ class TagTypesController < ApplicationController
   def update
     respond_to do |format|
       if @tag_type.update(tag_type_params)
-        format.html { redirect_to @tag_type, notice: t('forms.flash.tag_type_updated'), status: :see_other }
+        format.html { redirect_to tag_types_path, notice: t('forms.flash.tag_type_updated'), status: :see_other }
         format.json { render :show, status: :ok, location: @tag_type }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -55,7 +66,15 @@ class TagTypesController < ApplicationController
       flash.now[:notice] = t('forms.flash.tag_type_deleted')
     else
       @tag_types = TagType.all.order(:name)
-      flash.now[:notice] = t('forms.flash.error_deleting_tag_type')
+      # Get error message before creating new instance
+      error_msg = @tag_type.errors.full_messages.to_sentence
+      error_msg = t('forms.flash.cannot_delete_tag_type_with_tags') if error_msg.blank?
+      @tag_type = TagType.new
+      flash.now[:alert] = t('forms.flash.error_deleting_tag_type', error_message: error_msg)
+    end
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to tag_types_path }
     end
   end
 
@@ -68,6 +87,6 @@ class TagTypesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def tag_type_params
-    params.expect(tag_type: [:name])
+    params.expect(tag_type: [:name, :name_en, :name_ru])
   end
 end

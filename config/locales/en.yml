@@ -111,6 +111,7 @@ en:
       upload_files: "Upload Files"
       upload: "Upload"
       create: "Create"
+      update: "Update"
       assign: "Assign"
       select_all: "Select All"
       unselect_all: "Unselect All"
@@ -127,7 +128,7 @@ en:
       tag_type_deleted: "Tag type was successfully deleted."
       cannot_delete_tag_type_with_tags: "Cannot delete tag type because it has associated tags."
       error_deleting_tag: "Error deleting tag."
-      error_deleting_tag_type: "Error deleting tag type."
+      error_deleting_tag_type: "Error deleting tag type: %{error_message}"
       tags_assigned_to_type: "Selected tags were successfully assigned to the tag type."
       no_tags_selected: "Please select at least one tag to assign."
       unauthorized: "You are not authorized to perform this action."
@@ -160,16 +161,12 @@ en:
   tags:
     edit:
       title: "Editing Tag"
-      update: "Update"
   tag_types:
     edit:
       title: "Editing Tag Type"
-      update: "Update"
   views:
     items:
-      no_items_yet: "No items yet"
-      start_building_archive: "Start building your family archive by uploading your first files"
-      upload_first_file: "Upload First File"
+      no_items_yet: "No pictures yet"
       index:
         pictures: "Pictures"
         bulk_assign_tags: "Editing Tags"
@@ -270,6 +267,7 @@ en:
               taken: "has already been taken."
               blank: "can't be blank."
               cannot_delete_tag_type_with_associated_tags: "cannot be deleted because it has associated tags."
+          at_least_one_translation_required: "At least one translation (English or Russian) must be present"
         admin_user:
           attributes:
             email:

@@ -35,7 +35,7 @@
               </td>
             <td class="tag_tbody_td">
               <% if tag.tag_type %>
-                <span class="badge bg-secondary"><%= tag.tag_type.name %></span>
+                <span class="badge bg-secondary"><%= tag.tag_type.translated_name %></span>
               <% else %>
                 <span class="text-muted"><%= t('forms.labels.no_tag_type') %></span>
               <% end %>
