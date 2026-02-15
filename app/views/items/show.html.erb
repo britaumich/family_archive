@@ -129,24 +129,14 @@
         <div class="card-body">
           <%= form_tag assign_tags_item_path(@item), method: :patch do %>
             <% if @assignment_tags_by_type.any? %>
-              <% @assignment_tags_by_type.each do |tag_type_name, tags| %>
+              <% @assignment_tags_by_type.each do |tag_type, tags| %>
                 <div class="mb-3">
-                  <h6 class="text-muted"><%= tag_type_name %></h6>
-                  <% if tag_type_name&.downcase == 'year' %>
-                    <!-- Year tags as dropdown -->
-                    <div class="mb-2">
-                      <%= select_tag "tag_ids[]", 
-                          options_from_collection_for_select(tags, :id, :name), 
-                          { include_blank: t('forms.labels.select_year'), multiple: true, class: "form-select", style: "width: 100%; max-width: 300px;" } %>
-                    </div>
-                  <% else %>
-                    <!-- All other tag types as dropdown -->
-                    <div class="mb-2">
-                      <%= select_tag "tag_ids[]", 
-                          options_from_collection_for_select(tags, :id, :name), 
-                          { include_blank: "#{t('forms.labels.select')} #{tag_type_name}", multiple: true, class: "form-select", style: "width: 100%; max-width: 300px;" } %>
-                    </div>
-                  <% end %>
+                  <h6 class="text-muted"><%= tag_type ? tag_type.translated_name : t('forms.labels.no_tag_type') %></h6>                  
+                  <div class="mb-2">
+                    <%= select_tag "tag_ids[]", 
+                        options_from_collection_for_select(tags, :id, :name), 
+                        { include_blank: "#{t('forms.labels.select')} #{tag_type ? tag_type.translated_name : t('forms.labels.no_tag_type')}", multiple: true, class: "form-select", style: "width: 100%; max-width: 300px;" } %>
+                  </div>
                 </div>
               <% end %>
               <div class="mt-3">

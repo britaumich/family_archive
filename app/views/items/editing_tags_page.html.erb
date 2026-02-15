@@ -21,11 +21,11 @@
                 <!-- Hidden field to ensure tag_ids parameter is always present -->
                 <%= hidden_field_tag "tag_ids[]", "" %>
                 <% if @assignment_tags_by_type.any? %>
-                  <% @assignment_tags_by_type.each do |tag_type_name, tags| %>
+                  <% @assignment_tags_by_type.each do |tag_type, tags| %>
                     <div class="mb-3">
                       <div class="card">
                         <div class="card-header">
-                          <h6 class="mb-0 text-muted"><%= tag_type_name %></h6>
+                          <h6 class="mb-0 text-muted"><%= tag_type ? tag_type.translated_name : t('forms.labels.no_tag_type') %></h6>
                         </div>
                         <div class="card-body">
                           <!-- All tag types as checkboxes -->
