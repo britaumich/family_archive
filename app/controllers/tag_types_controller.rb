@@ -33,7 +33,8 @@ class TagTypesController < ApplicationController
       @tag_type = TagType.new
       @tag_types = TagType.order(:name)
     else
-      render :new, status: :unprocessable_entity
+      @tag_types = TagType.order(:name)
+      render :index, status: :unprocessable_entity
     end
   end
 
@@ -71,6 +72,6 @@ class TagTypesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def tag_type_params
-    params.expect(tag_type: [:name])
+    params.expect(tag_type: [:name, :name_en, :name_ru])
   end
 end
