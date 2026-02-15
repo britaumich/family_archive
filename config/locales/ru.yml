@@ -168,9 +168,7 @@ ru:
       title: "Редактирование типа тега"
   views:
     items:
-      no_items_yet: "Пока нет файлов"
-      start_building_archive: "Начните создавать свой семейный архив, загрузив первые файлы"
-      upload_first_file: "Загрузить первый файл"
+      no_items_yet: "Пока нет фотографий"
       index:
         pictures: "Фотографии"
         bulk_assign_tags: "Редактирование тегов у файлов"

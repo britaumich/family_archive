@@ -166,9 +166,7 @@ en:
       title: "Editing Tag Type"
   views:
     items:
-      no_items_yet: "No items yet"
-      start_building_archive: "Start building your family archive by uploading your first files"
-      upload_first_file: "Upload First File"
+      no_items_yet: "No pictures yet"
       index:
         pictures: "Pictures"
         bulk_assign_tags: "Editing Tags"
