@@ -52,6 +52,9 @@ ru:
     not_authorized: "У вас нет прав для доступа к этой странице."
     invalid_credentials: "Неверный адрес электронной почты или пароль."
     rate_limit_exceeded: "Слишком много попыток входа. Пожалуйста, попробуйте позже."
+    role:
+      admin: "Администратор"
+      editor: "Редактор"
   forms:
     cancel: "Отмена"
     buttons:
@@ -226,7 +229,6 @@ ru:
       tags: "Теги"
       tag_types: "Типы тегов"
       items: "Фотографии"
-      admin: "Админ"
       admin_users: "Администраторы"
       upload_files: "Загрузить файлы"
       bulk_assign_tags: "Редактирование тегов"
@@ -253,6 +255,9 @@ ru:
       admin_user:
         email: "Адрес электронной почты"
         role: "Роль"
+        role_values:
+          admin: "Администратор"
+          editor: "Редактор"
       user:
         email_address: "Адрес электронной почты"
     errors:
