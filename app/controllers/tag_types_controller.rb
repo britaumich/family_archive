@@ -6,7 +6,7 @@ class TagTypesController < ApplicationController
     @tag_type = TagType.new
     @tag_types = if params[:search].present?
                    TagType.where(
-                     "name ILIKE :search OR name_translations ->> 'en' ILIKE :search OR name_translations ->> 'ru' ILIKE :search",
+                     "name_translations ->> 'en' ILIKE :search OR name_translations ->> 'ru' ILIKE :search",
                      search: "%#{params[:search]}%"
                    ).order(:name)
                  else
