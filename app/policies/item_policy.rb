@@ -20,7 +20,7 @@ class ItemPolicy  < ApplicationPolicy
   end
 
   def update?
-    admin_user?
+    admin_user? || editor_user?
   end
 
   def edit?

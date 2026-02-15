@@ -48,6 +48,11 @@ class ApplicationPolicy
     @role == 'admin'
   end
 
+  def editor_user?
+    return false unless user
+    @role == 'editor'
+  end
+
   class Scope
     def initialize(context, scope)
       @user = context[:user]

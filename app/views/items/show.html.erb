@@ -105,20 +105,21 @@
       <!-- Action Buttons -->
       <div class="d-grid gap-2 mb-4">
         <%= link_to edit_item_path(@item), class: "btn btn-warning" do %>
-          <i class="fas fa-edit me-2"></i><%= t('forms.buttons.edit') %>
+          <%= t('forms.buttons.edit') %>
         <% end %>
-        
-        <%= link_to item_path(@item), 
-            class: "btn btn-danger", 
-            data: { 
-              turbo_confirm: t('views.items.show.delete_confirmation'),
-              turbo_method: :delete
-            } do %>
-          <i class="fas fa-trash me-2"></i><%= t('forms.buttons.delete') %>
+        <% if policy(@item).destroy? %>
+          <%= link_to item_path(@item), 
+              class: "btn btn-danger", 
+              data: { 
+                turbo_confirm: t('views.items.show.delete_confirmation'),
+                turbo_method: :delete
+              } do %>
+            <%= t('forms.buttons.delete') %>
+          <% end %>
         <% end %>
         
         <%= link_to items_path, class: "btn btn-secondary" do %>
-          <i class="fas fa-arrow-left me-2"></i><%= t('forms.buttons.back_to_items') %>
+          <%= t('forms.buttons.back_to_items') %>
         <% end %>
       </div>
 

@@ -15,6 +15,8 @@ module ApplicationHelper
   def display_user_with_role(user)
     if is_admin_user?(user)
       "#{user.email_address} (Admin)"
+    elsif is_editor_user?(user)
+      "#{user.email_address} (Editor)"
     else
       user.email_address
     end
@@ -23,5 +25,10 @@ module ApplicationHelper
   def is_admin_user?(user)
     return false unless user
     current_role == 'admin'
+  end
+
+  def is_editor_user?(user)
+    return false unless user
+    current_role == 'editor'
   end
 end
