@@ -131,11 +131,24 @@
             <% if @assignment_tags_by_type.any? %>
               <% @assignment_tags_by_type.each do |tag_type, tags| %>
                 <div class="mb-3">
-                  <h6 class="text-muted"><%= tag_type ? tag_type.translated_name : t('forms.labels.no_tag_type') %></h6>                  
-                  <div class="mb-2">
-                    <%= select_tag "tag_ids[]", 
-                        options_from_collection_for_select(tags, :id, :name), 
-                        { include_blank: "#{t('forms.labels.select')} #{tag_type ? tag_type.translated_name : t('forms.labels.no_tag_type')}", multiple: true, class: "form-select", style: "width: 100%; max-width: 300px;" } %>
+                  <div class="card">
+                    <div class="card-header">
+                      <h6 class="mb-0 text-muted"><%= tag_type ? tag_type.translated_name : t('forms.labels.no_tag_type') %></h6>
+                    </div>
+                    <div class="card-body">
+                      <div class="tag-checkboxes" style="max-height: 150px; overflow-y: auto;">
+                        <% tags.each do |tag| %>
+                          <div class="form-check">
+                            <%= check_box_tag "tag_ids[]", tag.id, 
+                                @item.tags.include?(tag), 
+                                { 
+                                  id: "assign_tag_#{tag.id}"
+                                } %>
+                            <%= label_tag "assign_tag_#{tag.id}", tag.name, class: "form-check-label" %>
+                          </div>
+                        <% end %>
+                      </div>
+                    </div>
                   </div>
                 </div>
               <% end %>
@@ -161,10 +174,16 @@
             <%= form_tag remove_tags_item_path(@item), method: :patch do %>
               <div class="mb-3">
                 <h6 class="text-muted"><%= t('views.items.show.current_tags') %></h6>
-                <div class="mb-2">
-                  <%= select_tag "tag_ids[]", 
-                      options_from_collection_for_select(@item.tags, :id, :name), 
-                      { include_blank: t('views.items.show.select_tags_to_remove'), multiple: true, class: "form-select", style: "width: 100%; max-width: 300px;" } %>
+                <div class="tag-checkboxes" style="max-height: 150px; overflow-y: auto;">
+                  <% @item.tags.each do |tag| %>
+                    <div class="form-check">
+                      <%= check_box_tag "tag_ids[]", tag.id, false, 
+                          { 
+                            id: "remove_tag_#{tag.id}"
+                          } %>
+                      <%= label_tag "remove_tag_#{tag.id}", tag.name, class: "form-check-label" %>
+                    </div>
+                  <% end %>
                 </div>
               </div>
               <div class="mt-3">
