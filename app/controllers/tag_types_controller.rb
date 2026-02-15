@@ -1,5 +1,5 @@
 class TagTypesController < ApplicationController
-  before_action :set_tag_type, only: %i[show edit update destroy]
+  before_action :set_tag_type, only: %i[edit update destroy]
 
   # GET /tag_types or /tag_types.json
   def index
