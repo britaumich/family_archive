@@ -15,7 +15,7 @@ class AddTranslationColumnsToTagTypes < ActiveRecord::Migration[8.1]
       end
     end
     
-    # Add validations
+    # Add indexes for query performance
     add_index :tag_types, :name_en
     add_index :tag_types, :name_ru
   end
