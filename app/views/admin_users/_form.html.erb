@@ -14,7 +14,7 @@
     <%= form.label :email, class: "form-label" %>
     <%= form.text_field :email, class: "form-control", required: true %>
     <%= form.label :role, class: "form-label mt-3" %>
-    <%= form.select :role, @roles.map{ |key| [key.titleize, key] }, { include_blank: t('forms.labels.select'), required: true }, class: "form-select" %>
+    <%= form.select :role, @roles.map{ |key| [I18n.t("activerecord.attributes.admin_user.role/#{key}"), key] }, { include_blank: t('forms.labels.select'), required: true }, class: "form-select" %>
 
   </div>
 

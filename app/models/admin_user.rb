@@ -18,6 +18,10 @@ class AdminUser < ApplicationRecord
   validates :email, presence: true, uniqueness: { case_sensitive: false }, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :role, presence: true
 
+  def human_role_name
+    I18n.t("activerecord.attributes.admin_user.role/#{role}")
+  end
+
   private
 
   def one_admin_user_should_exist

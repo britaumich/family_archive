@@ -52,6 +52,9 @@ en:
     not_authorized: "You are not authorized to access this page."
     invalid_credentials: "Invalid email or password."
     rate_limit_exceeded: "Too many login attempts. Please try again later."
+    role:
+      admin: "Admin"
+      editor: "Editor"
   forms:
     cancel: "Cancel"
     buttons:
@@ -252,6 +255,8 @@ en:
       admin_user:
         email: "Email Address"
         role: "Role"
+        role/admin: "Administrator"
+        role/editor: "Editor"
       user:
         email_address: "Email Address"
     errors:

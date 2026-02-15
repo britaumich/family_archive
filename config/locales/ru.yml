@@ -52,6 +52,9 @@ ru:
     not_authorized: "У вас нет прав для доступа к этой странице."
     invalid_credentials: "Неверный адрес электронной почты или пароль."
     rate_limit_exceeded: "Слишком много попыток входа. Пожалуйста, попробуйте позже."
+    role:
+      admin: "Администратор"
+      editor: "Редактор"
   forms:
     cancel: "Отмена"
     buttons:
@@ -253,6 +256,8 @@ ru:
       admin_user:
         email: "Адрес электронной почты"
         role: "Роль"
+        role/admin: "Администратор"
+        role/editor: "Редактор"
       user:
         email_address: "Адрес электронной почты"
     errors:
