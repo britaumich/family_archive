@@ -36,9 +36,6 @@
             </div>
             
             <div class="card-body p-2">
-              <small class="text-muted d-block">
-                <%= t('forms.labels.type') %>: <%= item.item_type.humanize %>
-              </small>
               <% if item.caption.present? %>
                 <small class="text-truncate d-block">
                   <%= truncate(strip_tags(item.caption), length: 50) %>
@@ -47,7 +44,6 @@
               
               <% if item.tags.any? %>
                 <div class="mt-1">
-                <p><%= item.tags.count %></p>
                   <% item.tags.each do |tag| %>
                     <span class="badge bg-secondary me-1" style="font-size: 0.7em;">
                       <%= tag.name %>
