@@ -50,6 +50,7 @@ class TagType < ApplicationRecord
 
   def ensure_no_tags
     if tags.exists?
+      errors.add(:base, I18n.t('activerecord.errors.models.tag_type.attributes.name.cannot_delete_tag_type_with_associated_tags'))
       throw(:abort)
     end
   end

@@ -32,9 +32,16 @@ class TagTypesController < ApplicationController
       flash.now[:notice] = t('forms.flash.tag_type_created')
       @tag_type = TagType.new
       @tag_types = TagType.order(:name)
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to tag_types_path, notice: t('forms.flash.tag_type_created') }
+      end
     else
       @tag_types = TagType.order(:name)
-      render :index, status: :unprocessable_entity
+      respond_to do |format|
+        format.turbo_stream { render :create, status: :unprocessable_entity }
+        format.html { render :index, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -59,7 +66,12 @@ class TagTypesController < ApplicationController
       flash.now[:notice] = t('forms.flash.tag_type_deleted')
     else
       @tag_types = TagType.all.order(:name)
-      flash.now[:notice] = t('forms.flash.error_deleting_tag_type')
+      @tag_type = TagType.new
+      flash.now[:alert] = t('forms.flash.error_deleting_tag_type')
+    end
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to tag_types_path }
     end
   end
 
