@@ -66,8 +66,11 @@ class TagTypesController < ApplicationController
       flash.now[:notice] = t('forms.flash.tag_type_deleted')
     else
       @tag_types = TagType.all.order(:name)
+      # Get error message before creating new instance
+      error_msg = @tag_type.errors.full_messages.to_sentence
+      error_msg = t('forms.flash.cannot_delete_tag_type_with_tags') if error_msg.blank?
       @tag_type = TagType.new
-      flash.now[:alert] = t('forms.flash.error_deleting_tag_type')
+      flash.now[:alert] = t('forms.flash.error_deleting_tag_type', error_message: error_msg)
     end
     respond_to do |format|
       format.turbo_stream

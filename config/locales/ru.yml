@@ -130,7 +130,7 @@ ru:
       tag_type_deleted: "Тип тега успешно удален."
       cannot_delete_tag_type_with_tags: "Невозможно удалить тип тега, поскольку к нему привязаны теги."
       error_deleting_tag: "Ошибка при удалении тега."
-      error_deleting_tag_type: "Ошибка при удалении типа тега."
+      error_deleting_tag_type: "Ошибка при удалении типа тега: %{error_message}"
       tags_assigned_to_type: "Выбранные теги успешно назначены к типу тега."
       no_tags_selected: "Пожалуйста, выберите хотя бы один тег для назначения."
       unauthorized: "У вас нет прав для выполнения этого действия."
