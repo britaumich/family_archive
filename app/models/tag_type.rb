@@ -51,7 +51,7 @@ class TagType < ApplicationRecord
 
   def at_least_one_translation_present
     if name_en.blank? && name_ru.blank?
-      errors.add(:base, "At least one translation (English or Russian) must be present")
+      errors.add(:base, I18n.t('activerecord.errors.models.tag_type.at_least_one_translation_required'))
     end
   end
 

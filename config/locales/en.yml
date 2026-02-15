@@ -267,6 +267,7 @@ en:
               taken: "has already been taken."
               blank: "can't be blank."
               cannot_delete_tag_type_with_associated_tags: "cannot be deleted because it has associated tags."
+          at_least_one_translation_required: "At least one translation (English or Russian) must be present"
         admin_user:
           attributes:
             email:
