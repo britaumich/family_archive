@@ -111,6 +111,7 @@ en:
       upload_files: "Upload Files"
       upload: "Upload"
       create: "Create"
+      update: "Update"
       assign: "Assign"
       select_all: "Select All"
       unselect_all: "Unselect All"
@@ -160,11 +161,9 @@ en:
   tags:
     edit:
       title: "Editing Tag"
-      update: "Update"
   tag_types:
     edit:
       title: "Editing Tag Type"
-      update: "Update"
   views:
     items:
       no_items_yet: "No items yet"

@@ -11,10 +11,17 @@
       </div>
     <% end %>
     <div>
-      <%= form.label :name, t('forms.labels.create_tag_type'), class: "nowrap" %>
+      <%= form.label :name_en, t('forms.labels.create_tag_type') + ' (English)', class: "nowrap" %>
+      <div class="d-flex flex-row justify-content-start align-items-center gap-3 mb-2">
+        <%= form.text_field :name_en, placeholder: t('forms.placeholders.name') + ' (English)', class: "w-50", required: true %>
+      </div>
+      <%= form.label :name_ru, t('forms.labels.create_tag_type') + ' (Russian)', class: "nowrap" %>
       <div class="d-flex flex-row justify-content-start align-items-center gap-3">
-        <%= form.text_field :name, placeholder: t('forms.placeholders.name'), class: "w-50" %>
-        <%= form.submit t('forms.buttons.create') %>
+        <%= form.text_field :name_ru, placeholder: t('forms.placeholders.name') + ' (Russian)', class: "w-50" %>
+        <div class="d-flex flex-row justify-content-start align-items-center gap-3">
+          <%= form.submit tag_type.persisted? ? t('forms.buttons.update') : t('forms.buttons.create') %>
+          <%= link_to t('forms.cancel'), tags_path, class: "link_to" %>
+        </div>
       </div>
     </div>
   <% end %>

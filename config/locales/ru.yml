@@ -113,6 +113,7 @@ ru:
       upload_files: "Загрузить файлы"
       upload: "Загрузить"
       create: "Создать"
+      update: "Обновить"
       assign: "Назначить"
       select_all: "Выбрать все"
       unselect_all: "Отменить выбор"
@@ -162,11 +163,9 @@ ru:
   tags:
     edit:
       title: "Редактирование тега"
-      update: "Обновить"
   tag_types:
     edit:
       title: "Редактирование типа тега"
-      update: "Обновить"
   views:
     items:
       no_items_yet: "Пока нет файлов"

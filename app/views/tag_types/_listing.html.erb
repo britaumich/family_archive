@@ -16,10 +16,10 @@
         <% @tag_types.each do |tag_type| %>
           <tr class="tag_type_tbody_tr">
             <td class="tag_type_tbody_td">
-              <%= tag_type.name %>
+              <%= tag_type.translated_name %>
             </td>
             <td class="tag_type_tbody_td">
-              <span class="badge bg-light text-dark"><%= tag_type.tags.count %></span>
+              <%= tag_type.tags.count %></span>
             </td>
             <td class="tag_type_tbody_td">
               <%= link_to edit_tag_type_path(tag_type), data: { turbo_frame: "_top" }, aria: { label: "#{dom_id(tag_type)}_edit" } do%>
