@@ -223,7 +223,7 @@ en:
     new: "New"
     navbar:
       title: "Family Archive"
-      main: "Main"
+      admin: "Admin"
       tags: "Tags"
       tag_types: "Tag Types"
       items: "Pictures"
