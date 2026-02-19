@@ -386,7 +386,7 @@ class ItemsController < ApplicationController
     apply_current_filters
 
     respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.replace("items-list", partial: "editing_items_list") }
+      format.turbo_stream { render turbo_stream: turbo_stream.update("items-list", partial: "editing_items_list") }
       format.html { redirect_to editing_tags_page_items_path(params.permit(:tags, :filter_type)) }
     end
   end
