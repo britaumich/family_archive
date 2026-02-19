@@ -44,10 +44,7 @@ class ItemsController < ApplicationController
 
   def show
     # Prepare tags organized by type for assignment
-    @assignment_tags_by_type = Tag.joins(:tag_type).includes(:tag_type)
-                               .order('tags.name')
-                               .group_by(&:tag_type)
-                               .sort_by { |tag_type, _| tag_type&.translated_name || '' }
+    set_assignment_tags_by_type
     authorize @item
   end
 
@@ -146,10 +143,7 @@ class ItemsController < ApplicationController
     end
     
     # Also prepare tags organized by type for assignment
-    @assignment_tags_by_type = Tag.joins(:tag_type).includes(:tag_type)
-                               .order('tags.name')
-                               .group_by(&:tag_type)
-                               .sort_by { |tag_type, _| tag_type&.translated_name || '' }
+    set_assignment_tags_by_type
     @assignment_tags_without_type = Tag.where(tag_type: nil)
     
     respond_to do |format|
@@ -161,7 +155,8 @@ class ItemsController < ApplicationController
         # Build turbo_stream updates for each tag type's badges
         turbo_updates = [
           turbo_stream.update("filter-badges", partial: "filter_badges"),
-          turbo_stream.update("items-list", partial: "editing_items_list")
+          turbo_stream.update("items-list", partial: "editing_items_list"),
+          turbo_stream.replace('tags-selection-panel', partial: 'tag_selection_panel')
         ]
         
         # Add updates for each tag type's individual badges
@@ -224,6 +219,9 @@ class ItemsController < ApplicationController
     items = Item.where(id: item_ids).includes(:tags)
     @items = items
     @selected_item_ids = item_ids
+    
+    # Prepare tags organized by type for assignment panel
+    set_assignment_tags_by_type
 
     respond_to do |format|
       format.turbo_stream {
@@ -231,7 +229,8 @@ class ItemsController < ApplicationController
         flash[:notice] = flash_message
         render turbo_stream: [
           turbo_stream.update("items-list", partial: "editing_items_list", locals: { selected_item_ids: @selected_item_ids }),
-          turbo_stream.update('flash', partial: 'layouts/notification')
+          turbo_stream.update('flash', partial: 'layouts/notification'),
+          turbo_stream.replace('tags-selection-panel', partial: 'tag_selection_panel')
         ]
       }
       format.html {
@@ -295,6 +294,9 @@ class ItemsController < ApplicationController
     items = Item.where(id: item_ids).includes(:tags)
     @items = items
     @selected_item_ids = item_ids
+    
+    # Prepare tags organized by type for assignment panel
+    set_assignment_tags_by_type
 
     respond_to do |format|
       format.turbo_stream {
@@ -302,7 +304,8 @@ class ItemsController < ApplicationController
         flash[:notice] = flash_message
         render turbo_stream: [
           turbo_stream.update("items-list", partial: "editing_items_list", locals: { selected_item_ids: @selected_item_ids }),
-          turbo_stream.update('flash', partial: 'layouts/notification')
+          turbo_stream.update('flash', partial: 'layouts/notification'),
+          turbo_stream.replace('tags-selection-panel', partial: 'tag_selection_panel')
         ]
       }
       format.html {
@@ -383,7 +386,7 @@ class ItemsController < ApplicationController
     apply_current_filters
 
     respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.replace("items-list", partial: "editing_items_list") }
+      format.turbo_stream { render turbo_stream: turbo_stream.update("items-list", partial: "editing_items_list") }
       format.html { redirect_to editing_tags_page_items_path(params.permit(:tags, :filter_type)) }
     end
   end
@@ -439,11 +442,15 @@ class ItemsController < ApplicationController
     end
     
     # Also prepare tags organized by type for assignment
+    set_assignment_tags_by_type
+    @assignment_tags_without_type = Tag.where(tag_type: nil)
+  end
+
+  def set_assignment_tags_by_type
     @assignment_tags_by_type = Tag.joins(:tag_type).includes(:tag_type)
                                .order('tags.name')
                                .group_by(&:tag_type)
                                .sort_by { |tag_type, _| tag_type&.translated_name || '' }
-    @assignment_tags_without_type = Tag.where(tag_type: nil)
   end
 
   def set_item

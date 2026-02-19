@@ -21,28 +21,7 @@
                 <!-- Hidden field to ensure tag_ids parameter is always present -->
                 <%= hidden_field_tag "tag_ids[]", "" %>
                 <% if @assignment_tags_by_type.any? %>
-                  <% @assignment_tags_by_type.each do |tag_type, tags| %>
-                    <div class="mb-3">
-                      <div class="card">
-                        <div class="card-header">
-                          <h6 class="mb-0 text-muted"><%= tag_type ? tag_type.translated_name : t('forms.labels.no_tag_type') %></h6>
-                        </div>
-                        <div class="card-body">
-                          <!-- All tag types as checkboxes -->
-                          <div class="tag-checkboxes" style="max-height: 200px; overflow-y: auto;">
-                            <% tags.each do |tag| %>
-                              <div class="form-check">
-                                <%= check_box_tag "tag_ids[]", tag.id, false, { 
-                                    id: "assign_tag_#{tag.id}"
-                                } %>
-                                <%= label_tag "assign_tag_#{tag.id}", tag.name, class: "form-check-label" %>
-                              </div>
-                            <% end %>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  <% end %>
+                  <%= render 'tag_selection_panel' %>
                 <% else %>
                   <p class="text-muted"><%= t('forms.messages.no_tags_found') %></p>
                 <% end %>
