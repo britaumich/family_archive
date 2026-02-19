@@ -44,10 +44,7 @@ class ItemsController < ApplicationController
 
   def show
     # Prepare tags organized by type for assignment
-    @assignment_tags_by_type = Tag.joins(:tag_type).includes(:tag_type)
-                               .order('tags.name')
-                               .group_by(&:tag_type)
-                               .sort_by { |tag_type, _| tag_type&.translated_name || '' }
+    set_assignment_tags_by_type
     authorize @item
   end
 
@@ -146,10 +143,7 @@ class ItemsController < ApplicationController
     end
     
     # Also prepare tags organized by type for assignment
-    @assignment_tags_by_type = Tag.joins(:tag_type).includes(:tag_type)
-                               .order('tags.name')
-                               .group_by(&:tag_type)
-                               .sort_by { |tag_type, _| tag_type&.translated_name || '' }
+    set_assignment_tags_by_type
     @assignment_tags_without_type = Tag.where(tag_type: nil)
     
     respond_to do |format|
@@ -227,10 +221,7 @@ class ItemsController < ApplicationController
     @selected_item_ids = item_ids
     
     # Prepare tags organized by type for assignment panel
-    @assignment_tags_by_type = Tag.joins(:tag_type).includes(:tag_type)
-                               .order('tags.name')
-                               .group_by(&:tag_type)
-                               .sort_by { |tag_type, _| tag_type&.translated_name || '' }
+    set_assignment_tags_by_type
 
     respond_to do |format|
       format.turbo_stream {
@@ -305,10 +296,7 @@ class ItemsController < ApplicationController
     @selected_item_ids = item_ids
     
     # Prepare tags organized by type for assignment panel
-    @assignment_tags_by_type = Tag.joins(:tag_type).includes(:tag_type)
-                               .order('tags.name')
-                               .group_by(&:tag_type)
-                               .sort_by { |tag_type, _| tag_type&.translated_name || '' }
+    set_assignment_tags_by_type
 
     respond_to do |format|
       format.turbo_stream {
@@ -454,11 +442,15 @@ class ItemsController < ApplicationController
     end
     
     # Also prepare tags organized by type for assignment
+    set_assignment_tags_by_type
+    @assignment_tags_without_type = Tag.where(tag_type: nil)
+  end
+
+  def set_assignment_tags_by_type
     @assignment_tags_by_type = Tag.joins(:tag_type).includes(:tag_type)
                                .order('tags.name')
                                .group_by(&:tag_type)
                                .sort_by { |tag_type, _| tag_type&.translated_name || '' }
-    @assignment_tags_without_type = Tag.where(tag_type: nil)
   end
 
   def set_item
