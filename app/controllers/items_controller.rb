@@ -156,7 +156,7 @@ class ItemsController < ApplicationController
         turbo_updates = [
           turbo_stream.update("filter-badges", partial: "filter_badges"),
           turbo_stream.update("items-list", partial: "editing_items_list"),
-          turbo_stream.update('tags-selection-panel', partial: 'tag_selection_panel')
+          turbo_stream.replace('tags-selection-panel', partial: 'tag_selection_panel')
         ]
         
         # Add updates for each tag type's individual badges
@@ -230,7 +230,7 @@ class ItemsController < ApplicationController
         render turbo_stream: [
           turbo_stream.update("items-list", partial: "editing_items_list", locals: { selected_item_ids: @selected_item_ids }),
           turbo_stream.update('flash', partial: 'layouts/notification'),
-          turbo_stream.update('tags-selection-panel', partial: 'tag_selection_panel')
+          turbo_stream.replace('tags-selection-panel', partial: 'tag_selection_panel')
         ]
       }
       format.html {
@@ -305,7 +305,7 @@ class ItemsController < ApplicationController
         render turbo_stream: [
           turbo_stream.update("items-list", partial: "editing_items_list", locals: { selected_item_ids: @selected_item_ids }),
           turbo_stream.update('flash', partial: 'layouts/notification'),
-          turbo_stream.update('tags-selection-panel', partial: 'tag_selection_panel')
+          turbo_stream.replace('tags-selection-panel', partial: 'tag_selection_panel')
         ]
       }
       format.html {
