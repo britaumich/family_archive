@@ -284,7 +284,6 @@ ru:
             role:
               blank: "не может быть пустым."
           one_admin_user_must_exist: "Должен существовать хотя бы один администратор."
-          helpers:
   helpers:
     page_entries_info:
       one_page:
