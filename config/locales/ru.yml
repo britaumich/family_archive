@@ -167,6 +167,12 @@ ru:
     edit:
       title: "Редактирование типа тега"
   views:
+    pagination:
+      first: "&laquo; Первая"
+      last: "Последная &raquo;"
+      previous: "&lsaquo; Предыдущая"
+      next: "Следующая &rsaquo;"
+      truncate: "..."
     items:
       no_items_yet: "Пока нет фотографий"
       index:
@@ -278,3 +284,12 @@ ru:
             role:
               blank: "не может быть пустым."
           one_admin_user_must_exist: "Должен существовать хотя бы один администратор."
+  helpers:
+    page_entries_info:
+      one_page:
+        display_entries:
+          zero: "Не найдено ни одной фотографии"
+          one: "Найдена <b>1</b> фотография"
+          other: "Найдены <b>все</b> фотографии - <b>%{count}</b>"
+      more_pages:
+        display_entries: "Показаны <b>%{first}&nbsp;-&nbsp;%{last}</b> из <b>%{total}</b> фотографий"

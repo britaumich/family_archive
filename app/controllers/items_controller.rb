@@ -20,7 +20,7 @@ class ItemsController < ApplicationController
                          .group('items.id')
                          .having('COUNT(DISTINCT tags.id) = ?', tag_ids.length)
                          .pluck('items.id')
-          @items = Item.includes(:tags).with_attached_file
+          items = Item.includes(:tags).with_attached_file
                        .where(id: item_ids)
                        .order(created_at: :desc)
         else
@@ -29,16 +29,17 @@ class ItemsController < ApplicationController
                       .where(tags: { id: tag_ids })
                       .distinct
                       .pluck(:id)
-          @items = Item.includes(:tags).with_attached_file
+          items = Item.includes(:tags).with_attached_file
                        .where(id: item_ids)
                        .order(created_at: :desc)
         end
       else
-        @items = Item.includes(:tags).with_attached_file.order(created_at: :desc)
+        items = Item.includes(:tags).with_attached_file.order(created_at: :desc)
       end
     else
-      @items = Item.includes(:tags).with_attached_file.order(created_at: :desc)
+      items = Item.includes(:tags).with_attached_file.order(created_at: :desc)
     end
+    @items = items.page(params[:page])
     authorize @items
   end
 
