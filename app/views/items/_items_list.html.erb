@@ -2,7 +2,9 @@
   <div class="mb-3 d-flex align-items-center justify-content-between">
     <h2><%= t('views.items.index.pictures') %></h2>
   </div>
-    
+    <div class="my-2">
+      <%= page_entries_info @items %>
+    </div>
     <!-- Items Grid -->
     <div class="row g-4" data-controller="lightbox">
       <% @items.each do |item| %>
