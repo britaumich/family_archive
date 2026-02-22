@@ -445,7 +445,7 @@ class ItemsController < ApplicationController
   end
 
   def set_item
-    @item = Item.find(params.expect(:id))
+    @item = Item.includes(tags: :tag_type, file_attachment: :blob).find(params.expect(:id))
   end
 
   def item_params
