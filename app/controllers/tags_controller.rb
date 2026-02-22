@@ -6,11 +6,11 @@ class TagsController < ApplicationController
     @tag = Tag.new
     @tag_types = TagType.order(:name)
     @tags = if params[:search].present?
-              Tag.left_joins(:tag_type)
+              Tag.includes(:tag_type)
                  .where('tags.name ILIKE :search', search: "%#{params[:search]}%")
                  .order('tag_types.name ASC NULLS LAST, tags.name ASC')
             else
-              Tag.left_joins(:tag_type)
+              Tag.includes(:tag_type)
                  .order('tag_types.name ASC NULLS LAST, tags.name ASC')
             end
     authorize @tags
@@ -34,7 +34,7 @@ class TagsController < ApplicationController
     if @tag.save
       flash.now[:notice] = t('forms.flash.tag_created')
       @tag = Tag.new
-      @tags = Tag.left_joins(:tag_type)
+      @tags = Tag.includes(:tag_type)
                  .order('tag_types.name ASC NULLS LAST, tags.name ASC')
       @tag_types = TagType.order(:name)
     else

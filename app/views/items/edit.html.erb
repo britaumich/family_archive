@@ -67,9 +67,9 @@
             <div class="mb-4">
               <label class="form-label"><strong>Tags</strong></label>
               <div class="border rounded p-3" style="max-height: 300px; overflow-y: auto;">
-                <% if @tags.any? %>
+                <% if @tags_by_type.any? %>
                   <div class="row">
-                    <% @tags.each do |tag| %>
+                    <% @tags_by_type.each do |tag| %>
                       <div class="col-md-6 col-lg-4 mb-2">
                         <div class="form-check">
                           <%= check_box_tag 'tag_ids[]', tag.id, @item.tags.include?(tag), 

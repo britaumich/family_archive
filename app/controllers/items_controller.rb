@@ -2,8 +2,7 @@ class ItemsController < ApplicationController
   before_action :set_item, only: %i[show edit update destroy assign_tags remove_tags]
 
   def index
-    @tags = Tag.includes(:tag_type).order('tag_types.name ASC NULLS LAST, tags.name ASC')
-    @tags_by_type = @tags.group_by(&:tag_type)
+    @tags_by_type = set_tags_by_type
     @selected_tags = []
 
     # Filter by multiple tags if specified
@@ -46,7 +45,7 @@ class ItemsController < ApplicationController
 
   def show
     # Prepare tags organized by type for assignment
-    set_assignment_tags_by_type
+    @tags_by_type =set_tags_by_type
     authorize @item
   end
 
@@ -107,8 +106,8 @@ class ItemsController < ApplicationController
   def editing_tags_page
     authorize Item, :editing_tags_page?
     
-    @tags = Tag.includes(:tag_type).order('tag_types.name ASC NULLS LAST, tags.name ASC')
-    @tags_by_type = @tags.group_by(&:tag_type)
+    # @tags = Tag.includes(:tag_type).order('tag_types.name ASC NULLS LAST, tags.name ASC')
+    @tags_by_type = set_tags_by_type
     @selected_tags = []
     # Filter by multiple tags if specified
     if params[:tags].present?
@@ -124,7 +123,7 @@ class ItemsController < ApplicationController
                          .group('items.id')
                          .having('COUNT(DISTINCT tags.id) = ?', tag_ids.length)
                          .pluck('items.id')
-          @items = Item.includes(:tags).with_attached_file
+          items = Item.includes(:tags)
                        .where(id: item_ids)
                        .order(created_at: :desc)
         else
@@ -133,19 +132,19 @@ class ItemsController < ApplicationController
                       .where(tags: { id: tag_ids })
                       .distinct
                       .pluck(:id)
-          @items = Item.includes(:tags).with_attached_file
+          items = Item.includes(:tags)
                        .where(id: item_ids)
                        .order(created_at: :desc)
         end
       else
-        @items = Item.includes(:tags).with_attached_file.order(created_at: :desc)
+        items = Item.includes(:tags).order(created_at: :desc).limit(15)
       end
     else
-      @items = Item.includes(:tags).with_attached_file.order(created_at: :desc)
+      items = Item.includes(:tags).order(created_at: :desc).limit(15)
     end
-    
+    @items = items.includes(:file_attachment)
     # Also prepare tags organized by type for assignment
-    set_assignment_tags_by_type
+    @tags_by_type = set_tags_by_type
     @assignment_tags_without_type = Tag.where(tag_type: nil)
     
     respond_to do |format|
@@ -223,7 +222,7 @@ class ItemsController < ApplicationController
     @selected_item_ids = item_ids
     
     # Prepare tags organized by type for assignment panel
-    set_assignment_tags_by_type
+    @tags_by_type = set_tags_by_type
 
     respond_to do |format|
       format.turbo_stream {
@@ -298,7 +297,7 @@ class ItemsController < ApplicationController
     @selected_item_ids = item_ids
     
     # Prepare tags organized by type for assignment panel
-    set_assignment_tags_by_type
+    @tags_by_type = set_tags_by_type
 
     respond_to do |format|
       format.turbo_stream {
@@ -396,8 +395,8 @@ class ItemsController < ApplicationController
   private
 
   def apply_current_filters
-    @tags = Tag.includes(:tag_type).order('tag_types.name ASC NULLS LAST, tags.name ASC')
-    @tags_by_type = @tags.group_by(&:tag_type)
+    # @tags = Tag.includes(:tag_type).order('tag_types.name ASC NULLS LAST, tags.name ASC')
+    @tags_by_type = set_tags_by_type
     @selected_tags = []
 
     # Filter by multiple tags if specified
@@ -444,16 +443,16 @@ class ItemsController < ApplicationController
     end
     
     # Also prepare tags organized by type for assignment
-    set_assignment_tags_by_type
-    @assignment_tags_without_type = Tag.where(tag_type: nil)
+    @tags_by_type = set_tags_by_type
+    @tags_without_type = Tag.where(tag_type: nil)
   end
 
-  def set_assignment_tags_by_type
-    @assignment_tags_by_type = Tag.joins(:tag_type).includes(:tag_type)
-                               .order('tags.name')
-                               .group_by(&:tag_type)
-                               .sort_by { |tag_type, _| tag_type&.translated_name || '' }
-  end
+  def set_tags_by_type
+    Tag.includes(:tag_type)
+      .order('tags.name')
+      .group_by(&:tag_type)
+      .sort_by { |tag_type, _| tag_type&.translated_name || '' }
+end
 
   def set_item
     @item = Item.find(params.expect(:id))

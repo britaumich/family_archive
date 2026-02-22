@@ -20,7 +20,7 @@
               <div class="card-body">
                 <!-- Hidden field to ensure tag_ids parameter is always present -->
                 <%= hidden_field_tag "tag_ids[]", "" %>
-                <% if @assignment_tags_by_type.any? %>
+                <% if @tags_by_type.any? %>
                   <%= render 'tag_selection_panel' %>
                 <% else %>
                   <p class="text-muted"><%= t('forms.messages.no_tags_found') %></p>
