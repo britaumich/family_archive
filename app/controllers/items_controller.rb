@@ -45,7 +45,7 @@ class ItemsController < ApplicationController
 
   def show
     # Prepare tags organized by type for assignment
-    @tags_by_type =set_tags_by_type
+    @tags_by_type = set_tags_by_type
     authorize @item
   end
 
@@ -112,7 +112,7 @@ class ItemsController < ApplicationController
     # Filter by multiple tags if specified
     if params[:tags].present?
       tag_ids = params[:tags].reject(&:blank?).map(&:to_i)
-      @selected_tags = Tag.where(id: tag_ids)
+      @selected_tags = Tag.includes(:tag_type).where(id: tag_ids)
 
       if tag_ids.any?
         # AND logic: items must have ALL selected tags
