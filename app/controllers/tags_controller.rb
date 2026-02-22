@@ -6,11 +6,11 @@ class TagsController < ApplicationController
     @tag = Tag.new
     @tag_types = TagType.order(:name)
     @tags = if params[:search].present?
-              Tag.includes(:tag_type)
+              Tag.left_outer_joins(:tag_type).includes(:tag_type)
                  .where('tags.name ILIKE :search', search: "%#{params[:search]}%")
                  .order('tag_types.name ASC NULLS LAST, tags.name ASC')
             else
-              Tag.includes(:tag_type)
+              Tag.left_outer_joins(:tag_type).includes(:tag_type)
                  .order('tag_types.name ASC NULLS LAST, tags.name ASC')
             end
     authorize @tags
