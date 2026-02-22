@@ -34,7 +34,7 @@ class TagsController < ApplicationController
     if @tag.save
       flash.now[:notice] = t('forms.flash.tag_created')
       @tag = Tag.new
-      @tags = Tag.includes(:tag_type)
+      @tags = Tag.left_outer_joins(:tag_type).includes(:tag_type)
                  .order('tag_types.name ASC NULLS LAST, tags.name ASC')
       @tag_types = TagType.order(:name)
     else
