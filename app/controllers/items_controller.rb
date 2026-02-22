@@ -38,7 +38,7 @@ class ItemsController < ApplicationController
     else
       items = Item.includes(:tags).order(created_at: :desc)
     end
-    @items = items.includes(:file_attachment).page(params[:page])
+    @items = items.includes(file_attachment: :blob).page(params[:page])
     
     authorize @items
   end
@@ -142,7 +142,7 @@ class ItemsController < ApplicationController
     else
       items = Item.includes(:tags).order(created_at: :desc).limit(15)
     end
-    @items = items.includes(:file_attachment)
+    @items = items.includes(file_attachment: :blob)
     # Also prepare tags organized by type for assignment
     @tags_by_type = set_tags_by_type
     @assignment_tags_without_type = Tag.where(tag_type: nil)
@@ -200,7 +200,7 @@ class ItemsController < ApplicationController
 
     # Find items, preload tags to avoid N+1
     items = Item.where(id: item_ids).includes(:tags)
-    
+    items = items.includes(file_attachment: :blob)
     # Load all candidate tags once
     candidate_tags = Tag.where(id: tag_ids).index_by(&:id)
     assigned_count = 0
@@ -217,7 +217,7 @@ class ItemsController < ApplicationController
     end
 
     # Refresh items with updated tags
-    items = Item.where(id: item_ids).includes(:tags)
+    items = Item.where(id: item_ids).includes(:tags, file_attachment: :blob)
     @items = items
     @selected_item_ids = item_ids
     
@@ -272,7 +272,7 @@ class ItemsController < ApplicationController
     end
 
     # Find items, preload tags to avoid N+1
-    items = Item.where(id: item_ids).includes(:tags)
+    items = Item.where(id: item_ids).includes(:tags, file_attachment: :blob)
     
     # Load all candidate tags once
     candidate_tags = Tag.where(id: tag_ids).index_by(&:id)
@@ -292,7 +292,7 @@ class ItemsController < ApplicationController
     end
 
     # Refresh items with updated tags
-    items = Item.where(id: item_ids).includes(:tags)
+    items = Item.where(id: item_ids).includes(:tags, file_attachment: :blob)
     @items = items
     @selected_item_ids = item_ids
     
