@@ -22,7 +22,11 @@ if defined?(Bullet)
   # if Rails.env.test?
   # end
   
-  # Add safelist for loan requests - requestable preparation association
-  # Bullet.add_safelist type: :n_plus_one_query, class_name: "Requestable", association: :preparation
-  
+  # Suppress ActiveStorage warnings - these are handled efficiently by Rails
+  begin
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "ActiveStorage::Attachment", association: :blob
+  rescue => e
+    Rails.logger.warn "Bullet safelist error: #{e.message}" if defined?(Rails.logger)
+  end
+
 end
