@@ -452,7 +452,7 @@ class ItemsController < ApplicationController
       .order('tags.name')
       .group_by(&:tag_type)
       .sort_by { |tag_type, _| tag_type&.translated_name || '' }
-end
+  end
 
   def set_item
     @item = Item.find(params.expect(:id))
