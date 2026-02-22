@@ -143,9 +143,6 @@ class ItemsController < ApplicationController
       items = Item.includes(:tags).order(created_at: :desc).limit(15)
     end
     @items = items.includes(file_attachment: :blob)
-    # Also prepare tags organized by type for assignment
-    @tags_by_type = set_tags_by_type
-    @assignment_tags_without_type = Tag.where(tag_type: nil)
     
     respond_to do |format|
       format.html
