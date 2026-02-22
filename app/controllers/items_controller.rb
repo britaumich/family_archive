@@ -106,7 +106,6 @@ class ItemsController < ApplicationController
   def editing_tags_page
     authorize Item, :editing_tags_page?
     
-    # @tags = Tag.includes(:tag_type).order('tag_types.name ASC NULLS LAST, tags.name ASC')
     @tags_by_type = set_tags_by_type
     @selected_tags = []
     # Filter by multiple tags if specified
