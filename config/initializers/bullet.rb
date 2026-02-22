@@ -2,7 +2,7 @@
 if defined?(Bullet)
   Bullet.enable        = true
   # Bullet.alert         = Rails.env.development?
-  Bullet.alert = true # Disable browser alerts (can be annoying)
+  Bullet.alert = false # Disable browser alerts (can be annoying)
   Bullet.console = true # Print in server console
   Bullet.rails_logger = true # Add to Rails.logger
   Bullet.bullet_logger = true # Log to bullet.log file
