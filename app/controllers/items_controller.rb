@@ -195,12 +195,11 @@ class ItemsController < ApplicationController
     end
 
     # Find items, preload tags to avoid N+1
-    items = Item.where(id: item_ids).includes(:tags)
-    items = items.includes(file_attachment: :blob)
+    @items = Item.where(id: item_ids).includes(:tags, file_attachment: :blob)
     # Load all candidate tags once
     candidate_tags = Tag.where(id: tag_ids).index_by(&:id)
     assigned_count = 0
-    items.each do |item|
+    @items.each do |item|
       # Use preloaded tags to avoid additional queries
       existing_tag_ids = item.tags.map(&:id)
       new_tag_ids = tag_ids - existing_tag_ids
@@ -213,8 +212,6 @@ class ItemsController < ApplicationController
     end
 
     # Refresh items with updated tags
-    items = Item.where(id: item_ids).includes(:tags, file_attachment: :blob)
-    @items = items
     @selected_item_ids = item_ids
     
     # Prepare tags organized by type for assignment panel
@@ -268,13 +265,13 @@ class ItemsController < ApplicationController
     end
 
     # Find items, preload tags to avoid N+1
-    items = Item.where(id: item_ids).includes(:tags, file_attachment: :blob)
+    @items = Item.where(id: item_ids).includes(:tags, file_attachment: :blob)
     
     # Load all candidate tags once
     candidate_tags = Tag.where(id: tag_ids).index_by(&:id)
     
     removed_count = 0
-    items.each do |item|
+    @items.each do |item|
       # Use preloaded tags to avoid additional queries
       existing_tag_ids = item.tags.map(&:id)
       tags_to_remove_ids = tag_ids & existing_tag_ids
@@ -288,8 +285,6 @@ class ItemsController < ApplicationController
     end
 
     # Refresh items with updated tags
-    items = Item.where(id: item_ids).includes(:tags, file_attachment: :blob)
-    @items = items
     @selected_item_ids = item_ids
     
     # Prepare tags organized by type for assignment panel
