@@ -391,7 +391,6 @@ class ItemsController < ApplicationController
   private
 
   def apply_current_filters
-    # @tags = Tag.includes(:tag_type).order('tag_types.name ASC NULLS LAST, tags.name ASC')
     @tags_by_type = set_tags_by_type
     @selected_tags = []
 
