@@ -438,7 +438,6 @@ class ItemsController < ApplicationController
     end
     
     # Also prepare tags organized by type for assignment
-    @tags_by_type = set_tags_by_type
     @tags_without_type = Tag.where(tag_type: nil)
   end
 
