@@ -8,25 +8,24 @@ if defined?(Bullet)
   Bullet.bullet_logger = true # Log to bullet.log file
   Bullet.add_footer = Rails.env.development? # Add footer with detected issues
   Bullet.raise         = Rails.env.test? # raise an error if n+1 query occurs
-  
+
   # Disable specific checks if needed
   # Bullet.unused_eager_loading_enable = false
   # Bullet.counter_cache_enable = false
-  
+
   # Only show N+1 queries (most important)
   Bullet.n_plus_one_query_enable = true
   Bullet.unused_eager_loading_enable = true
   Bullet.counter_cache_enable = true
-  
+
   # Add safelists for test environment only - associations are actually used but test data creates false warnings
   # if Rails.env.test?
   # end
-  
+
   # Suppress ActiveStorage warnings - these are handled efficiently by Rails
   begin
     Bullet.add_safelist type: :unused_eager_loading, class_name: "ActiveStorage::Attachment", association: :blob
   rescue => e
     Rails.logger.warn "Bullet safelist error: #{e.message}" if defined?(Rails.logger)
   end
-
 end
