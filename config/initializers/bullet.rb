@@ -25,6 +25,7 @@ if defined?(Bullet)
   # Suppress ActiveStorage warnings - these are handled efficiently by Rails
   begin
     Bullet.add_safelist type: :unused_eager_loading, class_name: "ActiveStorage::Attachment", association: :blob
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "Item", association: :tags
   rescue => e
     Rails.logger.warn "Bullet safelist error: #{e.message}" if defined?(Rails.logger)
   end
