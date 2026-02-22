@@ -50,7 +50,7 @@ class ItemsController < ApplicationController
   end
 
   def edit
-    @tags = Tag.order(:name)
+    @tags_by_type = set_tags_by_type
     authorize @item
   end
 
@@ -67,7 +67,7 @@ class ItemsController < ApplicationController
       end
       redirect_to @item, notice: t('forms.flash.item_updated')
     else
-      @tags = Tag.order(:name)
+      @tags_by_type = set_tags_by_type
       render :edit
     end
   end
