@@ -17,7 +17,7 @@
 #  fk_rails_...  (tag_type_id => tag_types.id)
 #
 class Tag < ApplicationRecord
-  belongs_to :tag_type, optional: true
+  belongs_to :tag_type, optional: true, counter_cache: true
   has_many :tagables
   has_many :items, through: :tagables
 

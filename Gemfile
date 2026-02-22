@@ -63,6 +63,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 8.0.0'
   gem 'rubocop-rails-omakase', require: false
   gem 'webdrivers', '= 5.3.0'
+  gem 'bullet', '~> 8.1'
 end
 
 group :development do

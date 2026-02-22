@@ -2,7 +2,7 @@
   <h1><%= t('page_titles.select_pictures_by_tags') %></h1>
   
 
-  <% if @tags.any? %>
+  <% if @tags_by_type.any? %>
     <%= render 'tag_filters', form_url: items_path, clear_url: items_path %>
   <% end %>
   <% if @items.any? %>
