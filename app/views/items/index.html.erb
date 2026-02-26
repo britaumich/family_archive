@@ -5,15 +5,25 @@
   <% if @tags_by_type.any? %>
     <%= render 'tag_filters', form_url: items_path, clear_url: items_path %>
   <% end %>
-  <% if @items.any? %>
-    <%= render 'items_list' %>
-    <div class="d-flex justify-content-center mt-4">
-      <%= paginate @items %>
-    </div>
-  <% else %>
-    <div class="text-center py-5">
-      <i class="bi bi-images fs-1 text-muted mb-3"></i>
-      <h3 class="text-muted"><%= t('views.items.no_items_yet') %></h3>
-    </div>
+  <%= form_with url: items_path, method: :get, turbo: true,
+    data: { controller: "autosubmit",
+            autosubmit_target: "form",
+            turbo_frame: "all_items"
+            } do %>
+    <label for="per">Items per page:</label>
+    <%= select_tag :per, options_for_select([25, 50, 100, 150, 200], params[:per]), "data-action": "autosubmit#submitForm" %>
+  <% end %>
+  <%= turbo_frame_tag "all_items" do %>
+    <% if @items.any? %>
+      <%= render 'items_list' %>
+      <div class="d-flex justify-content-center mt-4">
+        <%= paginate @items %>
+      </div>
+    <% else %>
+      <div class="text-center py-5">
+        <i class="bi bi-images fs-1 text-muted mb-3"></i>
+        <h3 class="text-muted"><%= t('views.items.no_items_yet') %></h3>
+      </div>
+    <% end %>
   <% end %>
 </div>

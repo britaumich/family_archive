@@ -38,7 +38,7 @@ class ItemsController < ApplicationController
     else
       items = Item.includes(:tags).order(created_at: :desc)
     end
-    @items = items.includes(file_attachment: :blob).page(params[:page])
+    @items = items.includes(file_attachment: :blob).page(params[:page]).per(params[:per].presence || Kaminari.config.default_per_page)
     
     authorize @items
   end
