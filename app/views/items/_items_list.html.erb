@@ -72,7 +72,7 @@
             <% end %>
             
             <div class="mt-auto">
-              <%= link_to t('forms.buttons.view_details'), item_path(item), class: "btn btn-primary btn-sm" %>
+              <%= link_to t('forms.buttons.view_details'), item_path(item), data: { turbo_frame: "_top" }, class: "btn btn-primary btn-sm" %>
             </div>
           </div>
         </div>

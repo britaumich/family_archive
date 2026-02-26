@@ -95,6 +95,7 @@ en:
       select_item_type: "Select Item Type:"
       select_tags: "Select Tags:"
       upload_instructions: "Add some instructions"
+      items_per_page: "Items per Page"
       item_types:
         photo: "Photo"
         video: "Video"

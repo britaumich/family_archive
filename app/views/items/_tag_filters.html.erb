@@ -71,11 +71,11 @@
         </div>
         <div class="card-body">
           <div class="form-check mb-2">
-            <%= form.radio_button :filter_type, "any", checked: params[:filter_type] != "all", class: "form-check-input" %>
+            <%= form.radio_button :filter_type, "any", checked: params[:filter_type] == "any", class: "form-check-input" %>
             <%= form.label :filter_type_any, t('forms.labels.filter_type_any'), class: "form-check-label" %>
           </div>
           <div class="form-check">
-            <%= form.radio_button :filter_type, "all", checked: params[:filter_type] == "all", class: "form-check-input" %>
+            <%= form.radio_button :filter_type, "all", checked: params[:filter_type] != "any", class: "form-check-input" %>
             <%= form.label :filter_type_all, t('forms.labels.filter_type_all'), class: "form-check-label" %>
           </div>
         </div>
