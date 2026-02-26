@@ -97,6 +97,7 @@ ru:
       select_item_type: "Выберите тип элемента:"
       select_tags: "Выберите теги:"
       upload_instructions: "Добавьте инструкции"
+      items_per_page: "Количество фотографий на странице"
       item_types:
         photo: "Фотография"
         video: "Видео"
