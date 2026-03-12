@@ -1,5 +1,5 @@
 class ItemsController < ApplicationController
-  before_action :set_item, only: %i[show edit update destroy assign_tags remove_tags]
+  before_action :set_item, only: %i[show edit update destroy assign_tags remove_tags add_bestof]
 
   def index
     @tags_by_type = set_tags_by_type
@@ -383,6 +383,37 @@ class ItemsController < ApplicationController
     end
   end
 
+  def add_bestof
+    authorize @item
+    bestof_tag = Tag.find_by(name: 'bestof')
+    # unless bestof_tag.present?
+    #   redirect_to @item, alert: t('forms.flash.bestof_tag_not_found')
+    #   return
+    # end
+    
+    if @item.tags.exists?(name: 'bestof')
+      # Remove the bestof tag if it exists
+      @item.tags.delete(bestof_tag)
+    else
+      # Add the bestof tag if it doesn't exist
+      @item.tags << bestof_tag if bestof_tag
+    end
+    
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace(
+          "picture_#{@item.id}",
+          partial: "items/item_card",
+          locals: { item: @item }
+        )
+      end
+      format.html do
+        redirect_to @item
+      end
+    end
+  
+  end
+
   private
 
   def apply_current_filters
@@ -437,8 +468,10 @@ class ItemsController < ApplicationController
   end
 
   def set_tags_by_type
-    Tag.left_outer_joins(:tag_type)
+    Tag.left_outer_joins(:tag_type, :items)
       .includes(:tag_type)
+      .select('tags.*, COUNT(items.id) > 0 AS has_items')
+      .group('tags.id, tag_types.id')
       .order('tags.name')
       .group_by(&:tag_type)
       .sort_by { |tag_type, _| tag_type&.translated_name || '' }

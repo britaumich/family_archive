@@ -1,0 +1,79 @@
+<%= turbo_frame_tag "picture_#{item.id}" do %>
+  <div class="card h-100 shadow-sm">
+    <% if item.file.attached? %>
+      <% if item.file.content_type.start_with?('image/') %>
+        <a href="<%= url_for(item.file) %>" 
+          data-lightbox="gallery" 
+          data-gallery="items-gallery"
+          data-title="<%= item.caption.present? ? strip_tags(item.caption) : "" %>">
+          <%= image_tag item.file, 
+              class: "card-img-top lightbox-image", 
+              style: "height: 250px; object-fit: cover;",
+              alt: "Item #{item.id}" %>
+        </a>
+      <% elsif item.file.content_type.start_with?('video/') %>
+        <div class="position-relative">
+          <video class="card-img-top lightbox-image" style="height: 250px; object-fit: cover;" muted>
+            <%= content_tag :source, "", src: url_for(item.file), type: item.file.content_type %>
+            Your browser does not support the video tag.
+          </video>
+          <a href="<%= url_for(item.file) %>" 
+            data-lightbox="gallery" 
+            data-gallery="items-gallery"
+            data-title="<%= item.caption.present? ? strip_tags(item.caption) : "" %>"
+            class="stretched-link"></a>
+        </div>
+      <% else %>
+        <%= link_to item_path(item), class: "text-decoration-none" do %>
+          <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 250px;">
+            <i class="bi bi-file-text fs-1 text-muted"></i>
+          </div>
+        <% end %>
+      <% end %>
+    <% else %>
+      <%= link_to item_path(item), class: "text-decoration-none" do %>
+        <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 250px;">
+          <i class="bi bi-image fs-1 text-muted"></i>
+          <span class="text-muted"><%= t('forms.labels.no_file_attached') %></span>
+        </div>
+      <% end %>
+    <% end %>
+  
+    <div class="card-body d-flex flex-column">
+      <!-- Caption -->
+      <% if item.caption.present? %>
+        <div class="mb-2">
+          <p class="mb-0 text-truncate" title="caption">
+            <strong><%= t('forms.labels.caption') %>:</strong> <%= strip_tags(item.caption) %>
+          </p>
+        </div>
+      <% end %>
+      
+      <!-- Tags -->
+      <% if item.tags.any? %>
+        <div class="mb-2">
+          <h6 class="mb-1"><%= t('forms.labels.tags') %>:</h6>
+          <div class="d-flex flex-wrap gap-1">
+            <% item.tags.each do |tag| %>
+              <span class="badge bg-secondary"><%= tag.name %></span>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+      
+      <div class="mt-auto d-flex justify-content-between align-items-center">
+        <%= link_to t('forms.buttons.view_details'), item_path(item), data: { turbo_frame: "_top" }, class: "btn btn-primary btn-sm" %>
+        
+        <% has_bestof = item.tags.any? { |t| t.name == 'bestof' } %>
+        <%= button_to add_bestof_item_path(item),
+                      method: :patch,
+                      data: { turbo: true },
+                      class: "btn btn-sm #{has_bestof ? 'btn-warning' : 'btn-outline-warning'} d-flex align-items-center gap-1",
+                      title: (has_bestof ? t('forms.tooltips.remove_from_best_of') : t('forms.tooltips.add_to_best_of')) do %>
+          <i class="bi bi-<%= has_bestof ? 'star-fill' : 'star' %>"></i>
+          <%= t('forms.labels.best_of') %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
