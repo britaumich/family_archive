@@ -1,5 +1,5 @@
 class ItemsController < ApplicationController
-  before_action :set_item, only: %i[show edit update destroy assign_tags remove_tags]
+  before_action :set_item, only: %i[show edit update destroy assign_tags remove_tags add_bestof]
 
   def index
     @tags_by_type = set_tags_by_type
@@ -381,6 +381,14 @@ class ItemsController < ApplicationController
       format.turbo_stream { render turbo_stream: turbo_stream.update("items-list", partial: "editing_items_list") }
       format.html { redirect_to editing_tags_page_items_path(params.permit(:tags, :filter_type)) }
     end
+  end
+
+  def add_bestof
+    authorize @item
+    @item.tags << Tag.find_by(name: 'bestof') unless @item.tags.exists?(name: 'bestof')
+    render turbo_stream: (turbo_stream.replace("picture_#{@item.id}",
+                                                partial: "items/item_card",
+                                                locals: { item: @item }))
   end
 
   private

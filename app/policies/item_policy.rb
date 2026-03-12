@@ -55,6 +55,10 @@ class ItemPolicy  < ApplicationPolicy
     admin_user?
   end
 
+  def add_bestof?
+    true
+  end
+
   class Scope
     def initialize(user, scope)
       @user = user
