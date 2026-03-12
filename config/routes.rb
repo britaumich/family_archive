@@ -15,7 +15,7 @@ Rails.application.routes.draw do
       patch :bulk_remove_tags, on: :collection
       patch :assign_tags, on: :member
       patch :remove_tags, on: :member
-      post :add_bestof, on: :member
+      patch :add_bestof, on: :member
     end
     resources :tags do
       patch :bulk_assign, on: :collection

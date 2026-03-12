@@ -66,7 +66,7 @@
         
         <% has_bestof = item.tags.any? { |t| t.name == 'bestof' } %>
         <%= button_to add_bestof_item_path(item),
-                      method: :post,
+                      method: :patch,
                       data: { turbo: true },
                       class: "btn btn-sm #{has_bestof ? 'btn-warning' : 'btn-outline-warning'} d-flex align-items-center gap-1",
                       title: (has_bestof ? t('forms.tooltips.remove_from_best_of') : t('forms.tooltips.add_from_best_of')) do %>
