@@ -71,7 +71,7 @@
                       class: "btn btn-sm #{has_bestof ? 'btn-warning' : 'btn-outline-warning'} d-flex align-items-center gap-1",
                       title: (has_bestof ? t('forms.tooltips.remove_from_best_of') : t('forms.tooltips.add_to_best_of')) do %>
           <i class="bi bi-<%= has_bestof ? 'star-fill' : 'star' %>"></i>
-          <%= has_bestof ? t('forms.labels.best_of') : t('forms.labels.best_of') %>
+          <%= t('forms.labels.best_of') %>
         <% end %>
       </div>
     </div>
