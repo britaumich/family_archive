@@ -386,6 +386,10 @@ class ItemsController < ApplicationController
   def add_bestof
     authorize @item
     bestof_tag = Tag.find_by(name: 'bestof')
+    # unless bestof_tag.present?
+    #   redirect_to @item, alert: t('forms.flash.bestof_tag_not_found')
+    #   return
+    # end
     
     if @item.tags.exists?(name: 'bestof')
       # Remove the bestof tag if it exists
@@ -398,6 +402,7 @@ class ItemsController < ApplicationController
     render turbo_stream: (turbo_stream.replace("picture_#{@item.id}",
                                                 partial: "items/item_card",
                                                 locals: { item: @item }))
+  
   end
 
   private
