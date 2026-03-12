@@ -67,10 +67,10 @@
         <form action="<%= add_bestof_item_path(item) %>" method="post" data-turbo="true">
           <%= hidden_field_tag :id, item.id %>
           <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-          <% has_bestof = item.tags.exists?(name: 'bestof') %>
+          <% has_bestof = item.tags.any? { |t| t.name == 'bestof' } %>
           <button type="submit" 
                   class="btn btn-sm <%= has_bestof ? 'btn-warning' : 'btn-outline-warning' %> d-flex align-items-center gap-1"
-                  title="<%= has_bestof ? 'Remove from Best Of' : 'Add to Best Of' %>">
+                  title="<%= has_bestof ? t('forms.tooltips.remove_from_best_of') : t('forms.tooltips.add_to_best_of') %>">
             <i class="bi bi-<%= has_bestof ? 'star-fill' : 'star' %>"></i>
             <%= has_bestof ? t('forms.labels.best_of') : t('forms.labels.best_of') %>
           </button>

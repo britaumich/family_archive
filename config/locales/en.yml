@@ -160,6 +160,9 @@ en:
       prohibited this record from being saved: "prohibited this record from being saved"
     confirmation:
       are_you_sure: "Are you sure?"
+    tooltips:
+      add_to_best_of: "Add to Best Of"
+      remove_from_best_of: "Remove from Best Of"
   tags:
     edit:
       title: "Editing Tag"
