@@ -399,9 +399,18 @@ class ItemsController < ApplicationController
       @item.tags << bestof_tag if bestof_tag
     end
     
-    render turbo_stream: (turbo_stream.replace("picture_#{@item.id}",
-                                                partial: "items/item_card",
-                                                locals: { item: @item }))
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace(
+          "picture_#{@item.id}",
+          partial: "items/item_card",
+          locals: { item: @item }
+        )
+      end
+      format.html do
+        redirect_to @item
+      end
+    end
   
   end
 
