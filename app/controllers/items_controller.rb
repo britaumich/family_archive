@@ -385,7 +385,16 @@ class ItemsController < ApplicationController
 
   def add_bestof
     authorize @item
-    @item.tags << Tag.find_by(name: 'bestof') unless @item.tags.exists?(name: 'bestof')
+    bestof_tag = Tag.find_by(name: 'bestof')
+    
+    if @item.tags.exists?(name: 'bestof')
+      # Remove the bestof tag if it exists
+      @item.tags.delete(bestof_tag)
+    else
+      # Add the bestof tag if it doesn't exist
+      @item.tags << bestof_tag if bestof_tag
+    end
+    
     render turbo_stream: (turbo_stream.replace("picture_#{@item.id}",
                                                 partial: "items/item_card",
                                                 locals: { item: @item }))

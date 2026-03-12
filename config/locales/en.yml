@@ -68,6 +68,7 @@ en:
         one: "1 error"
         other: "%{count} errors"
     labels:
+      best_of: "Best Of"
       search_tag: "Search Tag by Name:"
       filter_by_tags: "Filter by Tags:"
       filter_type: "Filter Type:"
@@ -118,7 +119,7 @@ en:
       unselect_all: "Unselect All"
       apply_filters: "Apply Filters"
       clear_filters: "Clear Filters"
-      view_details: "View Details"
+      view_details: "Details"
       back_to_items: "Back to Items"
     flash:
       tag_created: "Tag was successfully created."

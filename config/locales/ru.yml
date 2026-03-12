@@ -70,6 +70,7 @@ ru:
         many: "%{count} ошибок"
         other: "%{count} ошибок"
     labels:
+      best_of: "Лучшaя"
       search_tag: "Поиск тега по названию:"
       filter_by_tags: "Фильтр по тегам:"
       filter_type: "Тип фильтра:"
