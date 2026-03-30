@@ -87,6 +87,6 @@ class TagTypesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def tag_type_params
-    params.expect(tag_type: [:name, :name_en, :name_ru])
+    params.expect(tag_type: [:name_en, :name_ru])
   end
 end
