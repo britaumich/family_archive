@@ -14,6 +14,9 @@ class TagType < ApplicationRecord
   before_destroy :ensure_no_tags
   validates :name, presence: true, uniqueness: true
 
+  # Keep name and name_translations['en'] in sync
+  before_validation :sync_name_with_english_translation
+
   # JSON-based translations
   def name_for_locale(locale = I18n.locale)
     name_translations&.dig(locale.to_s) || name_translations&.dig('en') || name
@@ -26,6 +29,12 @@ class TagType < ApplicationRecord
   def set_translation(locale, translation)
     self.name_translations ||= {}
     self.name_translations[locale.to_s] = translation
+  end
+
+  # Override name= to keep translations in sync
+  def name=(value)
+    super(value)
+    set_translation('en', value) if value.present?
   end
 
   # For forms and admin interface
@@ -48,6 +57,13 @@ class TagType < ApplicationRecord
   end
 
   private
+
+  # Safety net to ensure name and name_translations['en'] stay in sync
+  def sync_name_with_english_translation
+    if name.present? && (name_translations.blank? || name_translations['en'] != name)
+      set_translation('en', name)
+    end
+  end
 
   def ensure_no_tags
     if tags.exists?
