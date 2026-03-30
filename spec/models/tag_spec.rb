@@ -4,7 +4,7 @@
 #
 #  id                :bigint           not null, primary key
 #  name              :string
-#  name_translations :json
+#  name_translations :json             not null
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  tag_type_id       :bigint

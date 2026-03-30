@@ -85,7 +85,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_30_022031) do
   create_table "tags", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name"
-    t.json "name_translations", default: {}
+    t.json "name_translations", default: {}, null: false
     t.bigint "tag_type_id"
     t.datetime "updated_at", null: false
     t.index ["tag_type_id"], name: "index_tags_on_tag_type_id"

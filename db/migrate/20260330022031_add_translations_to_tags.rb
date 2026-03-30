@@ -1,6 +1,6 @@
 class AddTranslationsToTags < ActiveRecord::Migration[8.1]
   def change
-    add_column :tags, :name_translations, :json, default: {}
+    add_column :tags, :name_translations, :json, default: {}, null: false
 
     # Migrate existing names to English
     reversible do |dir|
