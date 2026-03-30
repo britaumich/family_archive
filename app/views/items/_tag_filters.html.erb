@@ -41,7 +41,7 @@
                       <%= form.check_box :tags, 
                           { multiple: true, checked: @selected_tags.include?(tag), id: "tag_#{tag.id}" }, 
                           tag.id, "" %>
-                      <%= form.label "tag_#{tag.id}", tag.name, 
+                      <%= form.label "tag_#{tag.id}", tag.translated_name, 
                           class: "form-check-label #{'text-info-blue' if tag.has_items}" %>
                     </div>
                   <% end %>

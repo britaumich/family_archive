@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_22_030636) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_30_022031) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -85,6 +85,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_22_030636) do
   create_table "tags", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name"
+    t.json "name_translations", default: {}
     t.bigint "tag_type_id"
     t.datetime "updated_at", null: false
     t.index ["tag_type_id"], name: "index_tags_on_tag_type_id"

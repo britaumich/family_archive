@@ -2,11 +2,12 @@
 #
 # Table name: tags
 #
-#  id          :bigint           not null, primary key
-#  name        :string
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  tag_type_id :bigint
+#  id                :bigint           not null, primary key
+#  name              :string
+#  name_translations :json
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  tag_type_id       :bigint
 #
 # Indexes
 #

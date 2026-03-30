@@ -102,6 +102,6 @@ class TagsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def tag_params
-    params.expect(tag: [:name, :tag_type_id])
+    params.expect(tag: [:name, :name_en, :name_ru, :tag_type_id])
   end
 end
