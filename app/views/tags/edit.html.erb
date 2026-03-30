@@ -13,7 +13,7 @@
   <% end %>
   <div>
     <%= form.label :name_en, t('activerecord.attributes.tag.name') + " (English):", class: "nowrap" %>
-    <%= form.text_field :name_en %>
+    <%= form.text_field :name_en, required: true %>
   </div>
   <div>
     <%= form.label :name_ru, t('activerecord.attributes.tag.name') + " (Russian):", class: "nowrap" %>
