@@ -4,14 +4,14 @@ class TagsController < ApplicationController
   # GET /tags or /tags.json
   def index
     @tag = Tag.new
-    @tag_types = TagType.order(:name)
+    @tag_types = TagType.order(Arel.sql("COALESCE(name_translations->>'#{I18n.locale}', name_translations->>'en', name)"))
     @tags = if params[:search].present?
               Tag.left_outer_joins(:tag_type).includes(:tag_type)
                  .where('tags.name ILIKE :search', search: "%#{params[:search]}%")
-                 .order('tag_types.name ASC NULLS LAST, tags.name ASC')
+                 .order(Arel.sql("COALESCE(tag_types.name_translations->>'#{I18n.locale}', tag_types.name_translations->>'en', tag_types.name) ASC NULLS LAST, COALESCE(tags.name_translations->>'#{I18n.locale}', tags.name_translations->>'en', tags.name) ASC"))
             else
               Tag.left_outer_joins(:tag_type).includes(:tag_type)
-                 .order('tag_types.name ASC NULLS LAST, tags.name ASC')
+                 .order(Arel.sql("COALESCE(tag_types.name_translations->>'#{I18n.locale}', tag_types.name_translations->>'en', tag_types.name) ASC NULLS LAST, COALESCE(tags.name_translations->>'#{I18n.locale}', tags.name_translations->>'en', tags.name) ASC"))
             end
     authorize @tags
   end
@@ -19,12 +19,12 @@ class TagsController < ApplicationController
   # GET /tags/new
   def new
     @tag = Tag.new
-    @tag_types = TagType.order(:name)
+    @tag_types = TagType.order(Arel.sql("COALESCE(name_translations->>'#{I18n.locale}', name_translations->>'en', name)"))
   end
 
   # GET /tags/1/edit
   def edit
-    @tag_types = TagType.order(:name)
+    @tag_types = TagType.order(Arel.sql("COALESCE(name_translations->>'#{I18n.locale}', name_translations->>'en', name)"))
   end
 
   # POST /tags or /tags.json
@@ -35,10 +35,10 @@ class TagsController < ApplicationController
       flash.now[:notice] = t('forms.flash.tag_created')
       @tag = Tag.new
       @tags = Tag.left_outer_joins(:tag_type).includes(:tag_type)
-                 .order('tag_types.name ASC NULLS LAST, tags.name ASC')
-      @tag_types = TagType.order(:name)
+                 .order(Arel.sql("COALESCE(tag_types.name_translations->>'#{I18n.locale}', tag_types.name_translations->>'en', tag_types.name) ASC NULLS LAST, COALESCE(tags.name_translations->>'#{I18n.locale}', tags.name_translations->>'en', tags.name) ASC"))
+      @tag_types = TagType.order(Arel.sql("COALESCE(name_translations->>'#{I18n.locale}', name_translations->>'en', name)"))
     else
-      @tag_types = TagType.order(:name)
+      @tag_types = TagType.order(Arel.sql("COALESCE(name_translations->>'#{I18n.locale}', name_translations->>'en', name)"))
       render :new, status: :unprocessable_entity
     end
   end
@@ -50,7 +50,7 @@ class TagsController < ApplicationController
         format.html { redirect_to tags_path, notice: t('forms.flash.tag_updated'), status: :see_other }
         format.json { render :show, status: :ok, location: @tag }
       else
-        @tag_types = TagType.order(:name)
+        @tag_types = TagType.order(Arel.sql("COALESCE(name_translations->>'#{I18n.locale}', name_translations->>'en', name)"))
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @tag.errors, status: :unprocessable_entity }
       end
@@ -61,14 +61,14 @@ class TagsController < ApplicationController
   def destroy
     if @tag.destroy
       @tags = Tag.left_joins(:tag_type)
-                 .order('tag_types.name ASC NULLS LAST, tags.name ASC')
+                 .order(Arel.sql("COALESCE(tag_types.name_translations->>'#{I18n.locale}', tag_types.name_translations->>'en', tag_types.name) ASC NULLS LAST, COALESCE(tags.name_translations->>'#{I18n.locale}', tags.name_translations->>'en', tags.name) ASC"))
       @tag = Tag.new
-      @tag_types = TagType.order(:name)
+      @tag_types = TagType.order(Arel.sql("COALESCE(name_translations->>'#{I18n.locale}', name_translations->>'en', name)"))
       flash.now[:notice] = t('forms.flash.tag_deleted')
     else
       @tags = Tag.left_joins(:tag_type)
-                 .order('tag_types.name ASC NULLS LAST, tags.name ASC')
-      @tag_types = TagType.order(:name)
+                 .order(Arel.sql("COALESCE(tag_types.name_translations->>'#{I18n.locale}', tag_types.name_translations->>'en', tag_types.name) ASC NULLS LAST, COALESCE(tags.name_translations->>'#{I18n.locale}', tags.name_translations->>'en', tags.name) ASC"))
+      @tag_types = TagType.order(Arel.sql("COALESCE(name_translations->>'#{I18n.locale}', name_translations->>'en', name)"))
       flash.now[:notice] = t('forms.flash.error_deleting_tag')
     end
     render :index
@@ -87,9 +87,9 @@ class TagsController < ApplicationController
     end
     
     @tag = Tag.new
-    @tag_types = TagType.order(:name)
+    @tag_types = TagType.order(Arel.sql("COALESCE(name_translations->>'#{I18n.locale}', name_translations->>'en', name)"))
     @tags = Tag.left_joins(:tag_type)
-                 .order('tag_types.name ASC NULLS LAST, tags.name ASC')
+                 .order(Arel.sql("COALESCE(tag_types.name_translations->>'#{I18n.locale}', tag_types.name_translations->>'en', tag_types.name) ASC NULLS LAST, COALESCE(tags.name_translations->>'#{I18n.locale}', tags.name_translations->>'en', tags.name) ASC"))
     render :index
   end
 
