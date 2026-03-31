@@ -21,7 +21,9 @@ class ItemsController < ApplicationController
                          .pluck('items.id')
           items = Item.includes(:tags)
                        .where(id: item_ids)
-                       .order(created_at: :desc)
+                       .left_joins(tags: :tag_type)
+                       .group('items.id')
+                       .order(Arel.sql("MAX(CASE WHEN tag_types.name = 'year' THEN tags.name END) DESC NULLS LAST, items.created_at DESC"))
         else
           # OR logic (default): items must have ANY of the selected tags
           item_ids = Item.joins(:tags)
@@ -30,13 +32,21 @@ class ItemsController < ApplicationController
                       .pluck(:id)
           items = Item.includes(:tags)
                        .where(id: item_ids)
-                       .order(created_at: :desc)
+                       .left_joins(tags: :tag_type)
+                       .group('items.id')
+                       .order(Arel.sql("MAX(CASE WHEN tag_types.name = 'year' THEN tags.name END) DESC NULLS LAST, items.created_at DESC"))
         end
       else
-        items = Item.includes(:tags).order(created_at: :desc)
+        items = Item.includes(:tags)
+                     .left_joins(tags: :tag_type)
+                     .group('items.id')
+                     .order(Arel.sql("MAX(CASE WHEN tag_types.name = 'year' THEN tags.name END) DESC NULLS LAST, items.created_at DESC"))
       end
     else
-      items = Item.includes(:tags).order(created_at: :desc)
+      items = Item.includes(:tags)
+                   .left_joins(tags: :tag_type)
+                   .group('items.id')
+                   .order(Arel.sql("MAX(CASE WHEN tag_types.name = 'year' THEN tags.name END) DESC NULLS LAST, items.created_at DESC"))
     end
     @items = items.includes(file_attachment: :blob).page(params[:page]).per(params[:per].presence || Kaminari.config.default_per_page)
     
