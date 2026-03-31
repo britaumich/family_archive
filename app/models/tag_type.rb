@@ -53,7 +53,11 @@ class TagType < ApplicationRecord
   end
 
   def name_ru=(value)
-    set_translation('ru', value) if value.present?
+    if value.present?
+      set_translation('ru', value)
+    else
+      self.name_translations&.delete('ru')
+    end
   end
 
   private
