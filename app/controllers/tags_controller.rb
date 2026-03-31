@@ -7,7 +7,7 @@ class TagsController < ApplicationController
     @tag_types = TagType.order(Arel.sql("COALESCE(name_translations->>'#{I18n.locale}', name_translations->>'en', name)"))
     @tags = if params[:search].present?
               Tag.left_outer_joins(:tag_type).includes(:tag_type)
-                 .where('tags.name ILIKE :search', search: "%#{params[:search]}%")
+                 .where("COALESCE(tags.name_translations->>'#{I18n.locale}', tags.name_translations->>'en', tags.name) ILIKE :search", search: "%#{params[:search]}%")
                  .order(Arel.sql("COALESCE(tag_types.name_translations->>'#{I18n.locale}', tag_types.name_translations->>'en', tag_types.name) ASC NULLS LAST, COALESCE(tags.name_translations->>'#{I18n.locale}', tags.name_translations->>'en', tags.name) ASC"))
             else
               Tag.left_outer_joins(:tag_type).includes(:tag_type)
