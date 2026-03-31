@@ -242,6 +242,9 @@ en:
     New: "New"
     "Editing Admin": "Editing Admin"
     "Are you sure?": "Are you sure?"
+  language:
+    en: "English"
+    ru: "Russian"
   error:
     one: "1 error"
     other: "%{count} errors"

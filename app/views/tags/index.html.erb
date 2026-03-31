@@ -7,7 +7,7 @@
           autosubmit_target: "form",
           turbo_frame: "tags_list"
         } do |form| %>
-      <%= form.label :search, t('forms.labels.search_tag'), style: "display: block"%>
+      <%= form.label :search, t('forms.labels.search_tag'), class: "body-bold-text" %>
       <div class="d-flex flex-row justify-content-start align-items-center gap-3">
       <%= form.text_field :search, value: params[:search], placeholder: t('forms.placeholders.name'), class: "w-50", data: { action: "input->autosubmit#search" } %>
       <a class="link_to" data-action="autosubmit#clearFilters">

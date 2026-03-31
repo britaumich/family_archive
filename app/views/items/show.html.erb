@@ -85,7 +85,7 @@
           <% if @item.tags.any? %>
             <div class="d-flex flex-wrap gap-2">
               <% @item.tags.each do |tag| %>
-                <%= link_to tag.name, items_path(tags: [tag.id]), 
+                <%= link_to tag.translated_name, items_path(tags: [tag.id]), 
                     class: "badge bg-primary text-decoration-none", 
                     style: "font-size: 0.85em; padding: 0.5em 0.75em;" %>
               <% end %>
@@ -144,7 +144,7 @@
                                 { 
                                   id: "assign_tag_#{tag.id}"
                                 } %>
-                            <%= label_tag "assign_tag_#{tag.id}", tag.name, class: "form-check-label" %>
+                            <%= label_tag "assign_tag_#{tag.id}", tag.translated_name, class: "form-check-label" %>
                           </div>
                         <% end %>
                       </div>
@@ -181,7 +181,7 @@
                           { 
                             id: "remove_tag_#{tag.id}"
                           } %>
-                      <%= label_tag "remove_tag_#{tag.id}", tag.name, class: "form-check-label" %>
+                      <%= label_tag "remove_tag_#{tag.id}", tag.translated_name, class: "form-check-label" %>
                     </div>
                   <% end %>
                 </div>

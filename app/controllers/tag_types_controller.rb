@@ -5,12 +5,11 @@ class TagTypesController < ApplicationController
   def index
     @tag_type = TagType.new
     @tag_types = if params[:search].present?
-                   TagType.where(
-                     "name_translations ->> 'en' ILIKE :search OR name_translations ->> 'ru' ILIKE :search",
-                     search: "%#{params[:search]}%"
-                   ).order(:name)
+                   search_term = "%#{params[:search]}%"
+                   search_clause = "(tag_types.name_translations->>'en' ILIKE ? OR tag_types.name_translations->>'ru' ILIKE ? OR tag_types.name ILIKE ?)"
+                   ordered_tag_types.where(search_clause, search_term, search_term, search_term)
                  else
-                   TagType.order(:name)
+                   ordered_tag_types
                  end
     authorize @tag_types
   end
@@ -31,13 +30,13 @@ class TagTypesController < ApplicationController
     if @tag_type.save
       flash.now[:notice] = t('forms.flash.tag_type_created')
       @tag_type = TagType.new
-      @tag_types = TagType.order(:name)
+      @tag_types = ordered_tag_types
       respond_to do |format|
         format.turbo_stream
         format.html { redirect_to tag_types_path, notice: t('forms.flash.tag_type_created') }
       end
     else
-      @tag_types = TagType.order(:name)
+      @tag_types = ordered_tag_types
       respond_to do |format|
         format.turbo_stream { render :create, status: :unprocessable_entity }
         format.html { render :index, status: :unprocessable_entity }
@@ -61,11 +60,11 @@ class TagTypesController < ApplicationController
   # DELETE /tag_types/1 or /tag_types/1.json
   def destroy
     if @tag_type.destroy
-      @tag_types = TagType.all.order(:name)
+      @tag_types = ordered_tag_types
       @tag_type = TagType.new
       flash.now[:notice] = t('forms.flash.tag_type_deleted')
     else
-      @tag_types = TagType.all.order(:name)
+      @tag_types = ordered_tag_types
       # Get error message before creating new instance
       error_msg = @tag_type.errors.full_messages.to_sentence
       error_msg = t('forms.flash.cannot_delete_tag_type_with_tags') if error_msg.blank?
@@ -87,6 +86,19 @@ class TagTypesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def tag_type_params
-    params.expect(tag_type: [:name, :name_en, :name_ru])
+    params.expect(tag_type: [:name_en, :name_ru])
+  end
+
+  # Safely get current locale with whitelist to prevent SQL injection
+  def safe_locale
+    allowed_locales = %w[en ru]
+    locale = I18n.locale.to_s
+    allowed_locales.include?(locale) ? locale : 'en'
+  end
+
+  # Get tag types ordered by translated name with safe locale interpolation
+  def ordered_tag_types
+    locale = safe_locale  # Already whitelisted, safe to interpolate
+    TagType.order(Arel.sql("COALESCE(name_translations->>'#{locale}', name_translations->>'en', name)"))
   end
 end

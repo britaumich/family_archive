@@ -4,14 +4,13 @@ class TagsController < ApplicationController
   # GET /tags or /tags.json
   def index
     @tag = Tag.new
-    @tag_types = TagType.order(:name)
+    @tag_types = ordered_tag_types
     @tags = if params[:search].present?
-              Tag.left_outer_joins(:tag_type).includes(:tag_type)
-                 .where('tags.name ILIKE :search', search: "%#{params[:search]}%")
-                 .order('tag_types.name ASC NULLS LAST, tags.name ASC')
+              search_term = "%#{params[:search]}%"
+              search_clause = "(tags.name_translations->>'en' ILIKE ? OR tags.name_translations->>'ru' ILIKE ? OR tags.name ILIKE ?)"
+              ordered_tags.where(search_clause, search_term, search_term, search_term)
             else
-              Tag.left_outer_joins(:tag_type).includes(:tag_type)
-                 .order('tag_types.name ASC NULLS LAST, tags.name ASC')
+              ordered_tags
             end
     authorize @tags
   end
@@ -19,12 +18,12 @@ class TagsController < ApplicationController
   # GET /tags/new
   def new
     @tag = Tag.new
-    @tag_types = TagType.order(:name)
+    @tag_types = ordered_tag_types
   end
 
   # GET /tags/1/edit
   def edit
-    @tag_types = TagType.order(:name)
+    @tag_types = ordered_tag_types
   end
 
   # POST /tags or /tags.json
@@ -34,11 +33,10 @@ class TagsController < ApplicationController
     if @tag.save
       flash.now[:notice] = t('forms.flash.tag_created')
       @tag = Tag.new
-      @tags = Tag.left_outer_joins(:tag_type).includes(:tag_type)
-                 .order('tag_types.name ASC NULLS LAST, tags.name ASC')
-      @tag_types = TagType.order(:name)
+      @tags = ordered_tags
+      @tag_types = ordered_tag_types
     else
-      @tag_types = TagType.order(:name)
+      @tag_types = ordered_tag_types
       render :new, status: :unprocessable_entity
     end
   end
@@ -50,7 +48,7 @@ class TagsController < ApplicationController
         format.html { redirect_to tags_path, notice: t('forms.flash.tag_updated'), status: :see_other }
         format.json { render :show, status: :ok, location: @tag }
       else
-        @tag_types = TagType.order(:name)
+        @tag_types = ordered_tag_types
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @tag.errors, status: :unprocessable_entity }
       end
@@ -60,15 +58,13 @@ class TagsController < ApplicationController
   # DELETE /tags/1 or /tags/1.json
   def destroy
     if @tag.destroy
-      @tags = Tag.left_joins(:tag_type)
-                 .order('tag_types.name ASC NULLS LAST, tags.name ASC')
+      @tags = ordered_tags
       @tag = Tag.new
-      @tag_types = TagType.order(:name)
+      @tag_types = ordered_tag_types
       flash.now[:notice] = t('forms.flash.tag_deleted')
     else
-      @tags = Tag.left_joins(:tag_type)
-                 .order('tag_types.name ASC NULLS LAST, tags.name ASC')
-      @tag_types = TagType.order(:name)
+      @tags = ordered_tags
+      @tag_types = ordered_tag_types
       flash.now[:notice] = t('forms.flash.error_deleting_tag')
     end
     render :index
@@ -87,9 +83,8 @@ class TagsController < ApplicationController
     end
     
     @tag = Tag.new
-    @tag_types = TagType.order(:name)
-    @tags = Tag.left_joins(:tag_type)
-                 .order('tag_types.name ASC NULLS LAST, tags.name ASC')
+    @tag_types = ordered_tag_types
+    @tags = ordered_tags
     render :index
   end
 
@@ -102,6 +97,26 @@ class TagsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def tag_params
-    params.expect(tag: [:name, :tag_type_id])
+    params.expect(tag: [:name_en, :name_ru, :tag_type_id])
+  end
+
+  # Safely get current locale with whitelist to prevent SQL injection
+  def safe_locale
+    allowed_locales = %w[en ru]
+    locale = I18n.locale.to_s
+    allowed_locales.include?(locale) ? locale : 'en'
+  end
+
+  # Get tag types ordered by translated name with safe locale interpolation
+  def ordered_tag_types
+    locale = safe_locale  # Already whitelisted, safe to interpolate
+    TagType.order(Arel.sql("COALESCE(name_translations->>'#{locale}', name_translations->>'en', name)"))
+  end
+
+  # Get tags ordered by translated name with safe locale interpolation
+  def ordered_tags
+    locale = safe_locale  # Already whitelisted, safe to interpolate
+    order_clause = Arel.sql("COALESCE(tag_types.name_translations->>'#{locale}', tag_types.name_translations->>'en', tag_types.name) ASC NULLS LAST, COALESCE(tags.name_translations->>'#{locale}', tags.name_translations->>'en', tags.name) ASC")
+    Tag.left_outer_joins(:tag_type).includes(:tag_type).order(order_clause)
   end
 end

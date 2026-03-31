@@ -1,7 +1,4 @@
 <div class="container-fluid">
-  <div id="flash">
-    <%= render "layouts/notification" %>
-  </div>
   
   <h1><%= t('page_titles.tag_type_list') %></h1>
   <div id="search bar">
@@ -11,7 +8,7 @@
           autosubmit_target: "form",
           turbo_frame: "tag_types_list"
         } do |form| %>
-      <%= form.label :search, t('forms.labels.search_tag_type'), style: "display: block"%>
+      <%= form.label :search, t('forms.labels.search_tag_type'), class: "body-bold-text" %>
       <div class="d-flex flex-row justify-content-start align-items-center gap-3">
       <%= form.text_field :search, value: params[:search], placeholder: t('forms.placeholders.name'), class: "w-50", data: { action: "input->autosubmit#search" } %>
       <a class="link_to" data-action="autosubmit#clearFilters">
