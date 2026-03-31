@@ -12,11 +12,11 @@
     </div>
   <% end %>
   <div>
-    <%= form.label :name_en, t('activerecord.attributes.tag.name') + " (English):", class: "nowrap" %>
+    <%= form.label :name_en, t('activerecord.attributes.tag.name') + " (" + t('language.en') + "):", class: "nowrap" %>
     <%= form.text_field :name_en, required: true %>
   </div>
   <div>
-    <%= form.label :name_ru, t('activerecord.attributes.tag.name') + " (Russian):", class: "nowrap" %>
+    <%= form.label :name_ru, t('activerecord.attributes.tag.name') + " (" + t('language.ru') + "):", class: "nowrap" %>
     <%= form.text_field :name_ru %>
   </div>
   <div>
