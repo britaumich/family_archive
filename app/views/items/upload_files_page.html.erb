@@ -31,7 +31,6 @@
                 <div class="form-check">
                   <%= check_box_tag "tag_ids[]", tag.id, false, id: "tag_#{tag.id}", class: "form-check-input" %>
                   <%= label_tag "tag_#{tag.id}", tag.translated_name, class: "form-check-label" %>
-                  <span class="badge bg-light text-dark ms-1"><%= tag.items.count %></span>
                 </div>
               </div>
             <% end %>
