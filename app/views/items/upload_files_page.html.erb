@@ -26,7 +26,12 @@
             <%= t('forms.labels.select_tags') %>
           </div>
           <div class="row g-2">
-            <% Tag.all.sort_by(&:translated_name).each do |tag| %>
+            <% 
+              safe_locale = %w[en ru].include?(I18n.locale.to_s) ? I18n.locale.to_s : 'en'
+              order_clause = Arel.sql("COALESCE(name_translations->>'#{safe_locale}', name_translations->>'en', name)")
+              tags = Tag.order(order_clause)
+            %>
+            <% tags.each do |tag| %>
               <div class="col-6 col-md-4 col-lg-3">
                 <div class="form-check">
                   <%= check_box_tag "tag_ids[]", tag.id, false, id: "tag_#{tag.id}", class: "form-check-input" %>
