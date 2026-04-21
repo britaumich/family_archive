@@ -13,6 +13,17 @@ class Item < ApplicationRecord
   has_many :tags, through: :tagables
 
   has_one_attached :file
+  
+  # Define thumb variants for different display sizes
+  def thumb_small
+    return nil unless file.attached? && file.variable?
+    file.variant(resize_to_limit: [300, 150])
+  end
+  
+  def thumb_medium
+    return nil unless file.attached? && file.variable?
+    file.variant(resize_to_limit: [400, 250])
+  end
 
   enum :item_type, %i[photo video document], prefix: true
 

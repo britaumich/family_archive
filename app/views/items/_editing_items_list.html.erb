@@ -1,4 +1,4 @@
-<div class="card-body" style="max-height: 1000px; overflow-y: auto;">
+<div class="card-body" style="max-height: 1500px; overflow-y: auto;">
   <% if @items.any? %>
     <div class="row g-3">
       <% @items.each do |item| %>
@@ -15,7 +15,7 @@
               </div>
               <% if item.file.attached? %>
                 <% if item.file.content_type.start_with?('image/') %>
-                  <%= image_tag item.file, 
+                  <%= image_tag item.thumb_small || item.file, 
                       class: "card-img-top", 
                       style: "height: 150px; object-fit: cover;",
                       alt: "Item #{item.id}" %>
