@@ -6,7 +6,7 @@
           data-lightbox="gallery" 
           data-gallery="items-gallery"
           data-title="<%= item.caption.present? ? strip_tags(item.caption) : "" %>">
-          <%= image_tag item.file, 
+          <%= image_tag item.thumb_medium, 
               class: "card-img-top lightbox-image", 
               style: "height: 250px; object-fit: cover;",
               alt: "Item #{item.id}" %>
