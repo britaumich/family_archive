@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class TagTypePolicy < ApplicationPolicy
+class FamilyPolicy < ApplicationPolicy
   attr_reader :user, :record
 
   def index?
