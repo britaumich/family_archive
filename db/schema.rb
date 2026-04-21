@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_30_022031) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_21_190402) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -49,6 +49,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_30_022031) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "families", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.json "name_translations", default: {}
+    t.integer "tags_count", default: 0, null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "items", force: :cascade do |t|
     t.string "caption"
     t.datetime "created_at", null: false
@@ -84,10 +92,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_30_022031) do
 
   create_table "tags", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.bigint "family_id"
     t.string "name"
     t.json "name_translations", default: {}, null: false
     t.bigint "tag_type_id"
     t.datetime "updated_at", null: false
+    t.index ["family_id"], name: "index_tags_on_family_id"
     t.index ["tag_type_id"], name: "index_tags_on_tag_type_id"
   end
 
@@ -104,5 +114,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_30_022031) do
   add_foreign_key "sessions", "users"
   add_foreign_key "tagables", "items"
   add_foreign_key "tagables", "tags"
+  add_foreign_key "tags", "families"
   add_foreign_key "tags", "tag_types"
 end

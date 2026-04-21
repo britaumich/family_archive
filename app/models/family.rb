@@ -1,35 +1,21 @@
 # == Schema Information
 #
-# Table name: tags
+# Table name: families
 #
 #  id                :bigint           not null, primary key
-#  name              :string
-#  name_translations :json             not null
+#  name              :string           not null
+#  name_translations :json
+#  tags_count        :integer          default(0), not null
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
-#  family_id         :bigint
-#  tag_type_id       :bigint
 #
-# Indexes
-#
-#  index_tags_on_family_id    (family_id)
-#  index_tags_on_tag_type_id  (tag_type_id)
-#
-# Foreign Keys
-#
-#  fk_rails_...  (family_id => families.id)
-#  fk_rails_...  (tag_type_id => tag_types.id)
-#
-class Tag < ApplicationRecord
-  belongs_to :tag_type, optional: true, counter_cache: true
-  belongs_to :family, optional: true, counter_cache: true
-  has_many :tagables
-  has_many :items, through: :tagables
-
-  validates :name, presence: true, uniqueness: true
-
+class Family < ApplicationRecord
+  has_many :tags
+  before_destroy :ensure_no_tags
   # Keep name and name_translations['en'] in sync
   before_validation :sync_name_with_english_translation
+
+  validates :name, presence: true, uniqueness: true
 
   # JSON-based translations
   def name_for_locale(locale = I18n.locale)
@@ -82,4 +68,12 @@ class Tag < ApplicationRecord
       set_translation('en', name)
     end
   end
+
+  def ensure_no_tags
+    if tags.exists?
+      errors.add(:base, I18n.t('activerecord.errors.models.family.attributes.name.cannot_delete_family_with_associated_tags'))
+      throw(:abort)
+    end
+  end
+  
 end
