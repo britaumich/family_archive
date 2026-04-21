@@ -1,0 +1,11 @@
+<%= turbo_stream.update "flash" do %>
+  <%= render "layouts/notification" %>
+<% end %>
+
+<%= turbo_stream.update "_families" do %>
+  <%= render "listing" %>
+<% end %>
+
+<%= turbo_stream.update "new_family" do %>
+  <%= render "form", family: @family %>
+<% end %>

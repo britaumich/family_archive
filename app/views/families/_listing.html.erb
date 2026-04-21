@@ -1,0 +1,40 @@
+<%= turbo_frame_tag 'families' do %>  
+  <div id="_families">
+  <% if @families.empty? %>
+    <%= t('forms.messages.no_families_found') %>
+  <% else %>
+    <table class="table text-center">
+      <thead class="table-group-divider">
+        <tr>
+          <th><%= t('activerecord.attributes.family.name') %></th>
+          <th><%= t('forms.labels.tag_count') %></th>
+          <td><%= t('forms.buttons.edit') %></td>
+          <td><%= t('forms.buttons.delete') %></td>
+        </tr>
+      </thead>
+      <tbody class="table-group-divider">
+        <% @families.each do |family| %>
+          <tr class="family_tbody_tr">
+            <td class="family_tbody_td">
+              <%= family.name %>
+            </td>
+            <td class="family_tbody_td">
+              <%= family.tags_count %>
+            </td>
+            <td class="family_tbody_td">
+              <%= link_to edit_family_path(family), data: { turbo_frame: "_top" }, aria: { label: "#{dom_id(family)}_edit" } do%>
+              <i class="bi bi-pencil-square text-primary"></i>
+              <% end %>
+            </td>
+            <td class="family_tbody_td">
+              <%= link_to family_path(family), data: { turbo_confirm: t('forms.confirmation.are_you_sure'), turbo_method: :delete}, aria: { label: "#{dom_id(family)}_delete" }  do %>
+              <i class="bi bi-trash-fill text-danger"></i>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+  </div>
+<% end %>

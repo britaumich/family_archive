@@ -5,11 +5,11 @@
   <% else %>
     <%= form_tag bulk_assign_tags_path, method: :patch, data: { turbo_frame: "tags" } do %>
       <div class="mb-3 d-flex align-items-center gap-3">
-        <%= select_tag :tag_type_id, 
-            options_from_collection_for_select(@tag_types, :id, :name), 
-            { prompt: t('forms.labels.assign_tag_type'), include_blank: true, 
+        <%= select_tag :family_id, 
+            options_from_collection_for_select(all_families, :id, :name), 
+            { prompt: t('forms.labels.select_family'), include_blank: true, 
               class: "form-select", style: "width: auto;" } %>
-        <%= submit_tag t('forms.buttons.assign'), class: "btn btn-primary btn-sm" %>
+        <%= submit_tag t('forms.buttons.assign_to_family'), class: "btn btn-primary btn-sm" %>
         <button type="button" class="btn btn-secondary btn-sm" data-toggle-target="button" data-action="click->toggle#toggle">
           <%= t('forms.buttons.select_all') %>
         </button>

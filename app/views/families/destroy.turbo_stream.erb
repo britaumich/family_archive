@@ -1,0 +1,7 @@
+<%= turbo_stream.update "flash" do %>
+  <%= render "layouts/notification" %>
+<% end %>
+
+<%= turbo_stream.update "families" do %>
+  <%= render "listing" %>
+<% end %>
