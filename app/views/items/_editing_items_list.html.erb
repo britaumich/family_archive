@@ -15,7 +15,7 @@
               </div>
               <% if item.file.attached? %>
                 <% if item.file.content_type.start_with?('image/') %>
-                  <%= image_tag item.thumb_small, 
+                  <%= image_tag item.thumb_small || item.file, 
                       class: "card-img-top", 
                       style: "height: 150px; object-fit: cover;",
                       alt: "Item #{item.id}" %>
