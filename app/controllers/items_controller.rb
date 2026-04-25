@@ -53,6 +53,10 @@ class ItemsController < ApplicationController
     authorize @items
   end
 
+  def family_pictures
+    fail
+  end
+
   def show
     # Prepare tags organized by type for assignment
     @tags_by_type = set_tags_by_type
