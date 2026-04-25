@@ -56,13 +56,6 @@ en:
       admin: "Administrator"
       editor: "Editor"
   forms:
-    cancel: "Cancel"
-    buttons:
-      back: "Back"
-      cancel: "Cancel"
-      assign_tags: "Assign Tags"
-      apply_filters: "Apply Filters"
-      clear_filters: "Clear Filters"
     errors:
       header:
         one: "1 error"
@@ -117,6 +110,8 @@ en:
       assign_to_family: "Assign to Family"
       select_all: "Select All"
       unselect_all: "Unselect All"
+      back: "Back"
+      assign_selected_tags: "Assign Selected Tags"
       apply_filters: "Apply Filters"
       clear_filters: "Clear Filters"
       view_details: "Details"
@@ -154,6 +149,7 @@ en:
       admin_user_deleted: "Admin user was successfully deleted."
       admin_user_could_not_be_deleted: "Admin user could not be deleted."
       registered_successfully: "Registered successfully."
+      tags_assigned_to_family: "Tags successfully assigned to family."
     messages:
       no_tags_found: "No Tags found"
       no_tag_types_found: "No Tag Types found"
@@ -169,6 +165,13 @@ en:
   tag_types:
     edit:
       title: "Editing Tag Type"
+  families:
+    edit:
+      title: "Editing Family"
+      assign_tags_title: "Assign Tags to Family"
+      currently_assigned_count: "Currently assigned: %{count} tag(s)"
+      currently_in_family: "Currently in: %{family}"
+      all_tags_removed: "All tags have been removed from this family"
   views:
     items:
       no_items_yet: "No pictures yet"

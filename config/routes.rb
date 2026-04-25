@@ -21,7 +21,9 @@ Rails.application.routes.draw do
       patch :bulk_assign, on: :collection
     end
     resources :tag_types, except: [:show]
-    resources :families, except: [:show]
+    resources :families, except: [:show] do
+      patch :assign_tags, on: :member
+    end
     resource :registration, only: [:new, :create]
     resource :session
     resources :passwords, param: :token

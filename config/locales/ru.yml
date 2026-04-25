@@ -56,13 +56,6 @@ ru:
       admin: "Администратор"
       editor: "Редактор"
   forms:
-    cancel: "Отмена"
-    buttons:
-      back: "Назад"
-      cancel: "Отмена"
-      assign_tags: "Назначить теги"
-      apply_filters: "Применить фильтры"
-      clear_filters: "Очистить фильтры"
     errors:
       header:
         one: "1 ошибка"
@@ -119,6 +112,8 @@ ru:
       assign_to_family: "Назначить семье"
       select_all: "Выбрать все"
       unselect_all: "Отменить выбор"
+      back: "Назад"
+      assign_selected_tags: "Назначить выбранные теги"
       apply_filters: "Применить фильтры"
       clear_filters: "Обнулить фильтры"
       view_details: "Подробнее"
@@ -156,6 +151,7 @@ ru:
       admin_user_deleted: "Администратор успешно удален."
       admin_user_could_not_be_deleted: "Администратор не может быть удален."
       registered_successfully: "Регистрация прошла успешно."
+      tags_assigned_to_family: "Теги назначены семье."
     messages:
       no_tags_found: "Теги не найдены."
       no_tag_types_found: "Типы тегов не найдены."
@@ -171,6 +167,13 @@ ru:
   tag_types:
     edit:
       title: "Редактирование типа тега"
+  families:
+    edit:
+      title: "Редактирование семьи"
+      assign_tags_title: "Назначить теги семье"
+      currently_assigned_count: "Назначено: %{count} тег(ов)"
+      currently_in_family: "Сейчас в семье: %{family}"
+      all_tags_removed: "Все теги удалены из этой семьи"
   views:
     pagination:
       first: "&laquo; Первая"

@@ -1,4 +1,4 @@
-<%= turbo_frame_tag 'families' do %>  
+<%= turbo_frame_tag 'families', data: { turbo_cache: false } do %>  
   <div id="_families">
   <% if @families.empty? %>
     <%= t('forms.messages.no_families_found') %>
@@ -8,6 +8,7 @@
         <tr>
           <th><%= t('activerecord.attributes.family.name') %></th>
           <th><%= t('forms.labels.tag_count') %></th>
+          <th><%= t('forms.labels.tags') %></th>
           <td><%= t('forms.buttons.edit') %></td>
           <td><%= t('forms.buttons.delete') %></td>
         </tr>
@@ -20,6 +21,20 @@
             </td>
             <td class="family_tbody_td">
               <%= family.tags_count %>
+            </td>
+            <td class="family_tbody_td">
+              <% if family.tags.any? %>
+                <% family.tags.includes(:tag_type).each do |tag| %>
+                  <span>
+                    <%= tag.translated_name %>
+                    <% if tag.tag_type %>
+                      <small>(<%= tag.tag_type.translated_name %>) | </small>
+                    <% end %>
+                  </span>
+                <% end %>
+              <% else %>
+                <span class="text-muted"><%= t('forms.messages.no_tags') %></span>
+              <% end %>
             </td>
             <td class="family_tbody_td">
               <%= link_to edit_family_path(family), data: { turbo_frame: "_top" }, aria: { label: "#{dom_id(family)}_edit" } do%>
