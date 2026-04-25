@@ -39,6 +39,7 @@ en:
     upload_files: "Upload Files"
     pictures: "Pictures"
     select_pictures_by_tags: "Select Pictures by Tags"
+    family_list: "Family List"
   auth:
     sign_in: "Sign in"
     sign_out: "Sign Out"
@@ -98,6 +99,7 @@ en:
         select_prompt: "Select Item Type"
     placeholders:
       name: "Name"
+      last_name: "Last Name"
     buttons:
       edit: "Edit"
       submit: "Save"
@@ -269,6 +271,8 @@ en:
           editor: "Editor"
       user:
         email_address: "Email Address"
+      family:
+        name: "Family Name"
     errors:
       models:
         user:

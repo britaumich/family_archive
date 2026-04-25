@@ -39,6 +39,7 @@ ru:
     upload_files: "Загрузить файлы"
     pictures: "Фотографии"
     select_pictures_by_tags: "Выбрать фотографии по тегам"
+    family_list: "Список семей"
   auth:
     sign_in: "Войти"
     sign_out: "Выйти"
@@ -100,6 +101,7 @@ ru:
         select_prompt: "Выберите тип элемента"    
     placeholders:
       name: "Название"
+      last_name: "Фамилия"
     buttons:
       edit: "Редактировать"
       submit: "Сохранить"
@@ -277,6 +279,8 @@ ru:
           editor: "Редактор"
       user:
         email_address: "Адрес электронной почты"
+      family:
+        name: "Фамилия"
     errors:
       models:
         user:
