@@ -90,6 +90,7 @@ en:
       select_tags: "Select Tags:"
       upload_instructions: "Add some instructions"
       items_per_page: "Items per Page"
+      assign_tag_type_to_selected_tags: "Assign Tag Type to Selected Tags"
       item_types:
         photo: "Photo"
         video: "Video"
@@ -107,7 +108,7 @@ en:
       upload: "Upload"
       create: "Create"
       update: "Update"
-      assign_to_family: "Assign to Family"
+      assign_to_selected_tags: "Assign to Selected Tags"
       select_all: "Select All"
       unselect_all: "Unselect All"
       back: "Back"

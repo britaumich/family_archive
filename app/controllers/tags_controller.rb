@@ -73,31 +73,11 @@ class TagsController < ApplicationController
   # PATCH /tags/bulk_assign
   def bulk_assign
     tag_ids = params[:tag_ids]&.reject(&:blank?)
-    family_id = params[:family_id].presence
-    
+    tag_type_id = params[:tag_type_id].presence
+
     if tag_ids&.any?
-      Tag.transaction do
-        # Get the tags to be updated and their current family_ids
-        tags_to_update = Tag.where(id: tag_ids).includes(:family)
-        old_family_ids = tags_to_update.group_by(&:family_id)
-        
-        # Update the family_id using update_all for performance
-        Tag.where(id: tag_ids).update_all(family_id: family_id)
-        
-        # Manually update counter caches
-        # Decrement counts for old families
-        old_family_ids.each do |old_family_id, tags|
-          next unless old_family_id # Skip if was previously nil
-          Family.update_counters(old_family_id, tags_count: -tags.count)
-        end
-        
-        # Increment count for new family
-        if family_id
-          Family.update_counters(family_id, tags_count: tag_ids.count)
-        end
-      end
-      
-      flash.now[:notice] = t('forms.flash.tags_assigned_to_family')
+      Tag.where(id: tag_ids).update_all(tag_type_id: tag_type_id)
+      flash.now[:notice] = t('forms.flash.tags_assigned_to_type')
     else
       flash.now[:alert] = t('forms.flash.no_tags_selected')
     end
