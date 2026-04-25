@@ -337,6 +337,22 @@ svg.wh6 {
   display: block;
 }
 
+/* Dropdown submenu styles for nested dropdowns */
+.dropdown-submenu {
+  position: relative;
+}
+
+.dropdown-submenu:hover > .dropdown-menu {
+  display: block;
+}
+
+.dropdown-submenu > .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: 0;
+  margin-left: 0;
+}
+
 .logo-brand {
   height: 100px; // Default height for navbar logo
   width: auto; // Maintain aspect ratio
