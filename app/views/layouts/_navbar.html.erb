@@ -22,8 +22,17 @@
             <li>
               <%= link_to t('menu.navbar.all_items'), items_path, class: 'dropdown-item navbar_dropdown_item' %>
             </li>
-            <li>
-              <%= link_to t('menu.navbar.families'), families_path, class: 'dropdown-item navbar_dropdown_item' %>
+            <li class="dropdown-submenu">
+              <a class="dropdown-item navbar_dropdown_item dropdown-toggle" href="#">
+                <%= t('menu.navbar.family_pictures') %>
+              </a>
+              <ul class="dropdown-menu bg-primary rounded-0 navbar_dropdown_item">
+                <% Family.all.each do |family| %>
+                  <li>
+                    <%= link_to family.translated_name, family_pictures_items_path(family), class: 'dropdown-item navbar_dropdown_item' %>
+                  </li>
+                <% end %>
+              </ul>
             </li>
           </ul>
         </div>
