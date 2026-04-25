@@ -484,8 +484,8 @@ class ItemsController < ApplicationController
   def set_tags_by_type
     Tag.left_outer_joins(:tag_type, :items)
       .includes(:tag_type)
-      .select('tags.*, COUNT(items.id) > 0 AS has_items')
       .group('tags.id, tag_types.id')
+      .having('COUNT(items.id) > 0')
       .order('tags.name')
       .group_by(&:tag_type)
       .sort_by { |tag_type, _| tag_type&.translated_name || '' }
