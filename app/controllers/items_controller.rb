@@ -54,7 +54,90 @@ class ItemsController < ApplicationController
   end
 
   def family_pictures
-    fail
+    @family = Family.find(params[:family_id])
+    @tags_by_type = set_tags_by_type
+    @selected_tags = []
+
+    # Get the family's tag IDs as the base filter
+    family_tag_ids = @family.tags.pluck(:id)
+    
+    # Combine with additional tag filters if specified
+    additional_tag_ids = params[:tags].present? ? params[:tags].reject(&:blank?).map(&:to_i) : []
+    
+    if additional_tag_ids.any?
+      @selected_tags = Tag.includes(:items).where(id: additional_tag_ids)
+      
+      # Combine family tags with additional filters
+      if params[:filter_type] == 'all'
+        # Must have ALL family tags AND all additional tags
+        combined_tag_ids = family_tag_ids + additional_tag_ids
+        item_ids = Item.joins(:tags)
+                       .where(tags: { id: combined_tag_ids })
+                       .group('items.id')
+                       .having('COUNT(DISTINCT tags.id) = ?', combined_tag_ids.length)
+                       .pluck('items.id')
+      else
+        # Must have ALL family tags AND any of the additional tags
+        family_items = Item.joins(:tags)
+                          .where(tags: { id: family_tag_ids })
+                          .group('items.id')
+                          .having('COUNT(DISTINCT tags.id) = ?', family_tag_ids.length)
+                          .pluck('items.id')
+        
+        additional_items = Item.joins(:tags)
+                              .where(tags: { id: additional_tag_ids })
+                              .distinct
+                              .pluck(:id)
+        
+        item_ids = family_items & additional_items
+      end
+    else
+      # Only filter by family tags
+      if family_tag_ids.any?
+        item_ids = Item.joins(:tags)
+                      .where(tags: { id: family_tag_ids })
+                      .group('items.id')
+                      .having('COUNT(DISTINCT tags.id) = ?', family_tag_ids.length)
+                      .pluck('items.id')
+      else
+        item_ids = []
+      end
+    end
+    
+    # Get ordered item IDs based on filtering logic
+    if item_ids.any?
+      ordered_item_ids = Item.where(id: item_ids)
+                            .left_joins(tags: :tag_type)
+                            .group('items.id')
+                            .order(Arel.sql("MAX(CASE WHEN tag_types.name = 'year' THEN tags.name END) DESC NULLS LAST, items.created_at DESC"))
+                            .pluck(:id)
+    else
+      # Show all items that have any of the family's tags (OR logic)
+      if family_tag_ids.any?
+        ordered_item_ids = Item.joins(:tags)
+                              .where(tags: { id: family_tag_ids })
+                              .left_joins(tags: :tag_type)
+                              .group('items.id')
+                              .order(Arel.sql("MAX(CASE WHEN tag_types.name = 'year' THEN tags.name END) DESC NULLS LAST, items.created_at DESC"))
+                              .pluck(:id)
+      else
+        # If family has no tags, show no items
+        ordered_item_ids = []
+      end
+    end
+    
+    # Load items with includes in the proper order
+    if ordered_item_ids.any?
+      items_hash = Item.includes(:tags, file_attachment: :blob).where(id: ordered_item_ids).index_by(&:id)
+      items = ordered_item_ids.map { |id| items_hash[id] }.compact
+      @items = Kaminari.paginate_array(items).page(params[:page]).per(params[:per].presence || Kaminari.config.default_per_page)
+    else
+      @items = Item.none.page(params[:page])
+    end
+    
+    authorize Item
+    
+    render 'index'
   end
 
   def show

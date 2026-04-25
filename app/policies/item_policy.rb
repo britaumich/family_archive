@@ -59,6 +59,10 @@ class ItemPolicy  < ApplicationPolicy
     true
   end
 
+  def family_pictures?
+    authenticated?
+  end
+
   class Scope
     def initialize(user, scope)
       @user = user
