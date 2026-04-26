@@ -48,7 +48,8 @@ class ItemsController < ApplicationController
                    .order(Arel.sql("MAX(CASE WHEN tag_types.name = 'year' THEN tags.name END) DESC NULLS LAST, items.created_at DESC"))
     end
     @items = items.includes(file_attachment: :blob).page(params[:page]).per(params[:per].presence || Kaminari.config.default_per_page)
-    @tags_by_type = set_tags_by_type
+    @tags_by_type_filters = set_tags_by_type(nil, only_used: true)
+
     authorize @items
   end
 
@@ -113,7 +114,7 @@ class ItemsController < ApplicationController
       
       # Get all tags associated with the selected items for the filter panel
       item_tag_ids = Item.joins(:tags).where(id: ordered_item_ids).pluck('tags.id').uniq
-      @tags_by_type = set_tags_by_type(item_tag_ids)
+      @tags_by_type = set_tags_by_type(item_tag_ids, only_used: true)
     else
       @items = Item.none.page(params[:page])
       @tags_by_type = {}
@@ -138,12 +139,12 @@ class ItemsController < ApplicationController
 
   def show
     # Prepare tags organized by type for assignment
-    @tags_by_type = set_tags_by_type
+    @tags_by_type = set_tags_by_type(nil, only_used: false)
     authorize @item
   end
 
   def edit
-    @tags_by_type = set_tags_by_type
+    @tags_by_type = set_tags_by_type(nil, only_used: false)
     authorize @item
   end
 
@@ -160,7 +161,7 @@ class ItemsController < ApplicationController
       end
       redirect_to @item, notice: t('forms.flash.item_updated')
     else
-      @tags_by_type = set_tags_by_type
+      @tags_by_type = set_tags_by_type(nil, only_used: false)
       render :edit
     end
   end
@@ -199,7 +200,8 @@ class ItemsController < ApplicationController
   def editing_tags_page
     authorize Item, :editing_tags_page?
     
-    @tags_by_type = set_tags_by_type
+    @tags_by_type_filters = set_tags_by_type(nil, only_used: true)
+    @tags_by_type = set_tags_by_type(nil, only_used: false)
     @selected_tags = []
     # Filter by multiple tags if specified
     if params[:tags].present?
@@ -308,7 +310,7 @@ class ItemsController < ApplicationController
     @selected_item_ids = item_ids
     
     # Prepare tags organized by type for assignment panel
-    @tags_by_type = set_tags_by_type
+    @tags_by_type = set_tags_by_type(nil, only_used: false)
 
     respond_to do |format|
       format.turbo_stream {
@@ -381,7 +383,7 @@ class ItemsController < ApplicationController
     @selected_item_ids = item_ids
     
     # Prepare tags organized by type for assignment panel
-    @tags_by_type = set_tags_by_type
+    @tags_by_type = set_tags_by_type(nil, only_used: false)
 
     respond_to do |format|
       format.turbo_stream {
@@ -510,7 +512,7 @@ class ItemsController < ApplicationController
   private
 
   def apply_current_filters
-    @tags_by_type = set_tags_by_type
+    @tags_by_type = set_tags_by_type(nil, only_used: true)
     @selected_tags = []
 
     # Filter by multiple tags if specified
@@ -560,16 +562,21 @@ class ItemsController < ApplicationController
     @tags_without_type = Tag.where(tag_type: nil)
   end
 
-  def set_tags_by_type(family_tag_ids = nil)
+  def set_tags_by_type(tag_ids = nil, only_used: false)
     query = Tag.left_outer_joins(:tag_type, :items)
                .includes(:tag_type)
                .group('tags.id, tag_types.id')
-               .having('COUNT(items.id) > 0')
                .order('tags.name')
     
     # Filter by specific tag IDs if provided
-    if family_tag_ids.present?
-      query = query.where(id: family_tag_ids)
+    if tag_ids.present?
+      query = query.where(id: tag_ids)
+    end
+    
+    # Only show tags that are actually used (for filtering contexts)
+    # For assignment contexts, show ALL tags including unused ones
+    if only_used
+      query = query.having('COUNT(items.id) > 0')
     end
     
     query.group_by(&:tag_type)
