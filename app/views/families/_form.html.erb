@@ -1,9 +1,9 @@
-<%= form_with(model: @family, data: { controller: "autosubmit", autosubmit_target: "form" }) do |form| %>
-  <% if @family.errors.any? %>
+<%= form_with(model: family, data: { controller: "autosubmit", autosubmit_target: "form" }) do |form| %>
+  <% if family.errors.any? %>
     <div class="text-danger">
-      <h2><%= t('forms.errors.header', count: @family.errors.count) %></h2>
+      <h2><%= t('forms.errors.header', count: family.errors.count) %></h2>
       <ul>
-        <% @family.errors.each do |error| %>
+        <% family.errors.each do |error| %>
           <li><%= error.full_message %></li>
         <% end %>
       </ul>
@@ -20,7 +20,7 @@
     </div>
 
     <div class="d-flex flex-row justify-content-start align-items-center gap-3">
-      <%= form.submit @family.persisted? ? t('forms.buttons.update') : t('forms.buttons.create') %>
+      <%= form.submit family.persisted? ? t('forms.buttons.update') : t('forms.buttons.create') %>
       <%= link_to t('forms.buttons.cancel'), families_path, class: "link_to" %>
     </div>
   </div>
