@@ -2,7 +2,7 @@
   <%= render "layouts/notification" %>
 <% end %>
 
-<%= turbo_stream.update "_families" do %>
+<%= turbo_stream.update "families" do %>
   <%= render "listing" %>
 <% end %>
 
