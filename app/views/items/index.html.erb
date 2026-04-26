@@ -3,9 +3,9 @@
   
 
   <% if @tags_by_type.any? %>
-    <%= render 'tag_filters', form_url: items_path, clear_url: items_path %>
+    <%= render 'tag_filters', form_url: @form_action || items_path, clear_url: @form_action || items_path %>
   <% end %>
-  <%= form_with url: items_path, method: :get, turbo: true,
+  <%= form_with url: @form_action || items_path, method: :get, turbo: true,
     data: { controller: "autosubmit",
             autosubmit_target: "form",
             turbo_frame: "all_items"
@@ -16,16 +16,6 @@
     </div>
   <% end %>
   <%= turbo_frame_tag "all_items" do %>
-    <% if @items.any? %>
-      <%= render 'items_list' %>
-      <div class="d-flex justify-content-center mt-4">
-        <%= paginate @items %>
-      </div>
-    <% else %>
-      <div class="text-center py-5">
-        <i class="bi bi-images fs-1 text-muted mb-3"></i>
-        <h3 class="text-muted"><%= t('views.items.no_items_yet') %></h3>
-      </div>
-    <% end %>
+    <%= render 'all_items_content' %>
   <% end %>
 </div>
