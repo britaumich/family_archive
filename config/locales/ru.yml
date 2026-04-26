@@ -256,6 +256,7 @@ ru:
       bulk_assign_tags: "Редактирование тегов"
       sign_out: "Выйти"
       about: "О нас"
+      family_pictures: "Семейные фотографии"
   text:
     admin_users: "Администраторы"
     New: "Новый"
