@@ -21,7 +21,7 @@
 
     <div class="d-flex flex-row justify-content-start align-items-center gap-3">
       <%= form.submit @family.persisted? ? t('forms.buttons.update') : t('forms.buttons.create') %>
-      <%= link_to t('forms.cancel'), families_path, class: "link_to" %>
+      <%= link_to t('forms.buttons.cancel'), families_path, class: "link_to" %>
     </div>
   </div>
 <% end %>
