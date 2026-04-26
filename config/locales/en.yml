@@ -256,6 +256,7 @@ en:
     New: "New"
     "Editing Admin": "Editing Admin"
     "Are you sure?": "Are you sure?"
+    'no_tags': "No tags"
   language:
     en: "English"
     ru: "Russian"
