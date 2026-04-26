@@ -114,10 +114,10 @@ class ItemsController < ApplicationController
       
       # Get all tags associated with the selected items for the filter panel
       item_tag_ids = Item.joins(:tags).where(id: ordered_item_ids).pluck('tags.id').uniq
-      @tags_by_type = set_tags_by_type(item_tag_ids, only_used: true)
+      @tags_by_type_filters = set_tags_by_type(item_tag_ids, only_used: true)
     else
       @items = Item.none.page(params[:page])
-      @tags_by_type = {}
+      @tags_by_type_filters = {}
     end
     
     authorize Item
