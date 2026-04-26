@@ -27,6 +27,10 @@ class FamilyPolicy < ApplicationPolicy
     admin_user?
   end
 
+  def assign_tags?
+    admin_user?
+  end
+
   class Scope < Scope
     def resolve
       scope.all
