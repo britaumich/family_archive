@@ -153,6 +153,11 @@ en:
       admin_user_could_not_be_deleted: "Admin user could not be deleted."
       registered_successfully: "Registered successfully."
       tags_assigned_to_family: "Tags successfully assigned to family."
+      family_created: "Family was successfully created."
+      family_updated: "Family was successfully updated."
+      family_deleted: "Family was successfully deleted."
+      cannot_delete_family_with_tags: "Cannot delete family because it has associated tags."
+      error_deleting_family: "Error deleting family."
     messages:
       no_tags_found: "No Tags found"
       no_tag_types_found: "No Tag Types found"

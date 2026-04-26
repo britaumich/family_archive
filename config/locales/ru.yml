@@ -155,6 +155,11 @@ ru:
       admin_user_could_not_be_deleted: "Администратор не может быть удален."
       registered_successfully: "Регистрация прошла успешно."
       tags_assigned_to_family: "Теги назначены семье."
+      family_created: "Семья создана."
+      family_updated: "Семья обновлена."
+      family_deleted: "Семья удалена."
+      cannot_delete_family_with_tags: "Невозможно удалить семью, поскольку к ней привязаны теги."
+      error_deleting_family: "Ошибка при удалении семьи."
     messages:
       no_tags_found: "Теги не найдены."
       no_tag_types_found: "Типы тегов не найдены."
