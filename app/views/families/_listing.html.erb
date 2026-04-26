@@ -24,7 +24,7 @@
             </td>
             <td class="family_tbody_td">
               <% if family.tags.any? %>
-                <% family.tags.includes(:tag_type).each do |tag| %>
+                <% family.tags.each do |tag| %>
                   <span>
                     <%= tag.translated_name %>
                     <% if tag.tag_type %>
