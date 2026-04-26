@@ -2,9 +2,9 @@
   <%= render 'items_list' %>
   <div class="d-flex justify-content-center mt-4">
     <% if @form_action %>
-      <%= paginate @items, params: params.permit!, url: @form_action %>
+      <%= paginate @items, params: request.query_parameters, url: @form_action %>
     <% else %>
-      <%= paginate @items %>
+      <%= paginate @items, params: request.query_parameters %>
     <% end %>
   </div>
 <% else %>
