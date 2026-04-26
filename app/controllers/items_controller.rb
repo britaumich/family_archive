@@ -47,7 +47,7 @@ class ItemsController < ApplicationController
                    .group('items.id')
                    .order(Arel.sql("MAX(CASE WHEN tag_types.name = 'year' THEN tags.name END) DESC NULLS LAST, items.created_at DESC"))
     end
-    @items = items.includes(file_attachment: :blob).page(params[:page]).per(params[:per].presence || Kaminari.config.default_per_page)
+    @items = items.includes(file_attachment: :blob).page(params[:page]).per(params[:per].presence || 25)
     @tags_by_type_filters = set_tags_by_type(nil, only_used: true)
 
     authorize @items
@@ -110,7 +110,7 @@ class ItemsController < ApplicationController
     if ordered_item_ids.any?
       items_hash = Item.includes(:tags, file_attachment: :blob).where(id: ordered_item_ids).index_by(&:id)
       items = ordered_item_ids.map { |id| items_hash[id] }.compact
-      @items = Kaminari.paginate_array(items).page(params[:page]).per(params[:per].presence || Kaminari.config.default_per_page)
+      @items = Kaminari.paginate_array(items).page(params[:page]).per(params[:per].presence || 25)
       
       # Get all tags associated with the selected items for the filter panel
       item_tag_ids = Item.joins(:tags).where(id: ordered_item_ids).pluck('tags.id').uniq
