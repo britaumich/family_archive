@@ -162,6 +162,7 @@ en:
       no_tags_found: "No Tags found"
       no_tag_types_found: "No Tag Types found"
       prohibited this record from being saved: "prohibited this record from being saved"
+      no_families_found: "No Families found"
     confirmation:
       are_you_sure: "Are you sure?"
     tooltips:

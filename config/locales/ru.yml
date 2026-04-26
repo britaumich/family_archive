@@ -164,6 +164,7 @@ ru:
       no_tags_found: "Теги не найдены."
       no_tag_types_found: "Типы тегов не найдены."
       prohibited this record from being saved: "- запись не может быть сохранена"
+      no_families_found: "Семьи не найдены."
     confirmation:
       are_you_sure: "Вы уверены?"
     tooltips:
