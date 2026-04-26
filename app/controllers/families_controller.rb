@@ -136,6 +136,7 @@ class FamiliesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_family
       @family = Family.find(params.expect(:id))
+      authorize @family
     end
 
     # Only allow a list of trusted parameters through.
