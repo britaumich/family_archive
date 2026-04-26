@@ -8,7 +8,7 @@
 
   <!-- Tags assignment form -->
   <%= turbo_frame_tag 'family_tags_list' do %>  
-    <div data-controller="toggle tag-filter" data-toggle-select-text-value="<%= t('forms.buttons.select_all') %>" data-toggle-unselect-text-value="<%= t('forms.buttons.unselect_all') %>">
+    <div data-controller="tag-filter">
       <% if @tags.empty? %>
         <p class="text-muted"><%= t('forms.messages.no_tags_found') %></p>
       <% else %>
@@ -47,8 +47,7 @@
                       <%= check_box_tag "tag_ids[]", tag.id, 
                           tag.family_id == @family.id, 
                           class: "form-check-input", 
-                          id: "tag_#{tag.id}",
-                          data: { toggle_target: "checkbox" } %>
+                          id: "tag_#{tag.id}" %>
                       <%= label_tag "tag_#{tag.id}", tag.translated_name, class: "form-check-label" %>
                       <% if tag.family_id && tag.family_id != @family.id %>
                         <small class="text-muted d-block">
