@@ -159,7 +159,7 @@ ru:
       family_updated: "Семья обновлена."
       family_deleted: "Семья удалена."
       cannot_delete_family_with_tags: "Невозможно удалить семью, поскольку к ней привязаны теги."
-      error_deleting_family: "Ошибка при удалении семьи."
+      error_deleting_family: "Ошибка при удалении семьи: %{error_message}."
     messages:
       no_tags_found: "Теги не найдены."
       no_tag_types_found: "Типы тегов не найдены."
@@ -308,6 +308,10 @@ ru:
             role:
               blank: "не может быть пустым."
           one_admin_user_must_exist: "Должен существовать хотя бы один администратор."
+        family:
+          attributes:
+            name:
+              cannot_delete_family_with_associated_tags: "не может быть удалена, потому что имеет связанные теги."
   helpers:
     page_entries_info:
       one_page:

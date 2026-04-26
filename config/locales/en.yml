@@ -157,7 +157,7 @@ en:
       family_updated: "Family was successfully updated."
       family_deleted: "Family was successfully deleted."
       cannot_delete_family_with_tags: "Cannot delete family because it has associated tags."
-      error_deleting_family: "Error deleting family."
+      error_deleting_family: "Error deleting family: %{error_message}."
     messages:
       no_tags_found: "No Tags found"
       no_tag_types_found: "No Tag Types found"
@@ -300,3 +300,7 @@ en:
             role:
               blank: "can't be blank."
           one_admin_user_must_exist: "At least one admin user must exist."
+        family:
+          attributes:
+            name:
+              cannot_delete_family_with_associated_tags: "cannot be deleted because it has associated tags."
