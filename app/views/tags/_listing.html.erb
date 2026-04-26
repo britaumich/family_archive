@@ -1,5 +1,5 @@
 <%= turbo_frame_tag 'tags' do %>  
-  <div id="tags" data-controller="toggle" data-toggle-select-text-value="<%= t('forms.buttons.select_all') %>" data-toggle-unselect-text-value="<%= t('forms.buttons.unselect_all') %>">
+  <div id="tags">
   <% if @tags.empty? %>
     <%= t('forms.messages.no_tags_found') %>
   <% else %>
@@ -28,7 +28,7 @@
           <% @tags.each do |tag| %>
             <tr class="tag_tbody_tr">
               <td class="tag_tbody_td">
-                <%= check_box_tag "tag_ids[]", tag.id, false, class: "form-check-input", data: { toggle_target: "checkbox" } %>
+                <%= check_box_tag "tag_ids[]", tag.id, false, class: "form-check-input" %>
               </td>
               <td class="tag_tbody_td">
                 <%= tag.translated_name %>
