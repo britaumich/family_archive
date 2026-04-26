@@ -2,7 +2,6 @@ class ItemsController < ApplicationController
   before_action :set_item, only: %i[show edit update destroy assign_tags remove_tags add_bestof]
 
   def index
-    @tags_by_type = set_tags_by_type
     @selected_tags = []
 
     # Filter by multiple tags if specified
@@ -49,18 +48,103 @@ class ItemsController < ApplicationController
                    .order(Arel.sql("MAX(CASE WHEN tag_types.name = 'year' THEN tags.name END) DESC NULLS LAST, items.created_at DESC"))
     end
     @items = items.includes(file_attachment: :blob).page(params[:page]).per(params[:per].presence || Kaminari.config.default_per_page)
-    
+    @tags_by_type_filters = set_tags_by_type(nil, only_used: true)
+
     authorize @items
+  end
+
+  def family_pictures
+    @family = Family.find(params[:family_id])
+    family_tag_ids = @family.tags.pluck(:id)
+    @selected_tags = []
+    
+    # First, get items that have any of the family's tags
+    if family_tag_ids.any?
+      base_item_ids = Item.joins(:tags)
+                         .where(tags: { id: family_tag_ids })
+                         .distinct
+                         .pluck(:id)
+    else
+      base_item_ids = []
+    end
+    
+    # Apply additional tag filters if specified
+    additional_tag_ids = params[:tags].present? ? params[:tags].reject(&:blank?).map(&:to_i) : []
+  
+    if additional_tag_ids.any?
+      @selected_tags = Tag.includes(:items).where(id: additional_tag_ids)
+      
+      # Filter base items by additional tags
+      if params[:filter_type] == 'all'
+        # Must have all additional tags - only within base items
+        additional_items_with_all = Item.joins(:tags)
+                                       .where(tags: { id: additional_tag_ids })
+                                       .group('items.id')
+                                       .having('COUNT(DISTINCT tags.id) = ?', additional_tag_ids.length)
+                                       .pluck('items.id')
+        item_ids = base_item_ids & additional_items_with_all
+      else
+        # Must have any additional tags (OR logic) - only within base items
+        additional_items_with_any = Item.joins(:tags)
+                                       .where(tags: { id: additional_tag_ids })
+                                       .distinct
+                                       .pluck(:id)
+        item_ids = base_item_ids & additional_items_with_any
+      end
+    else
+      item_ids = base_item_ids
+    end
+    
+    # Get ordered item IDs
+    if item_ids.any?
+      ordered_item_ids = Item.where(id: item_ids)
+                            .left_joins(tags: :tag_type)
+                            .group('items.id')
+                            .order(Arel.sql("MAX(CASE WHEN tag_types.name = 'year' THEN tags.name END) DESC NULLS LAST, items.created_at DESC"))
+                            .pluck(:id)
+    else
+      ordered_item_ids = []
+    end
+    
+    # Load items with includes in the proper order
+    if ordered_item_ids.any?
+      items_hash = Item.includes(:tags, file_attachment: :blob).where(id: ordered_item_ids).index_by(&:id)
+      items = ordered_item_ids.map { |id| items_hash[id] }.compact
+      @items = Kaminari.paginate_array(items).page(params[:page]).per(params[:per].presence || Kaminari.config.default_per_page)
+      
+      # Get all tags associated with the selected items for the filter panel
+      item_tag_ids = Item.joins(:tags).where(id: ordered_item_ids).pluck('tags.id').uniq
+      @tags_by_type_filters = set_tags_by_type(item_tag_ids, only_used: true)
+    else
+      @items = Item.none.page(params[:page])
+      @tags_by_type_filters = {}
+    end
+    
+    authorize Item
+    
+    # Set form action for the view to use
+    @form_action = family_pictures_items_path(@family)
+    
+    # Handle both HTML and Turbo Stream requests
+    respond_to do |format|
+      format.html { render 'index' }
+      format.turbo_stream { 
+        render turbo_stream: [
+          turbo_stream.update("filter-badges", partial: "filter_badges"),
+          turbo_stream.update("all_items", partial: "all_items_content")
+        ]
+      }
+    end
   end
 
   def show
     # Prepare tags organized by type for assignment
-    @tags_by_type = set_tags_by_type
+    @tags_by_type = set_tags_by_type(nil, only_used: false)
     authorize @item
   end
 
   def edit
-    @tags_by_type = set_tags_by_type
+    @tags_by_type = set_tags_by_type(nil, only_used: false)
     authorize @item
   end
 
@@ -77,7 +161,7 @@ class ItemsController < ApplicationController
       end
       redirect_to @item, notice: t('forms.flash.item_updated')
     else
-      @tags_by_type = set_tags_by_type
+      @tags_by_type = set_tags_by_type(nil, only_used: false)
       render :edit
     end
   end
@@ -116,7 +200,8 @@ class ItemsController < ApplicationController
   def editing_tags_page
     authorize Item, :editing_tags_page?
     
-    @tags_by_type = set_tags_by_type
+    @tags_by_type_filters = set_tags_by_type(nil, only_used: true)
+    @tags_by_type = set_tags_by_type(nil, only_used: false)
     @selected_tags = []
     # Filter by multiple tags if specified
     if params[:tags].present?
@@ -225,7 +310,7 @@ class ItemsController < ApplicationController
     @selected_item_ids = item_ids
     
     # Prepare tags organized by type for assignment panel
-    @tags_by_type = set_tags_by_type
+    @tags_by_type = set_tags_by_type(nil, only_used: false)
 
     respond_to do |format|
       format.turbo_stream {
@@ -298,7 +383,7 @@ class ItemsController < ApplicationController
     @selected_item_ids = item_ids
     
     # Prepare tags organized by type for assignment panel
-    @tags_by_type = set_tags_by_type
+    @tags_by_type = set_tags_by_type(nil, only_used: false)
 
     respond_to do |format|
       format.turbo_stream {
@@ -427,7 +512,7 @@ class ItemsController < ApplicationController
   private
 
   def apply_current_filters
-    @tags_by_type = set_tags_by_type
+    @tags_by_type = set_tags_by_type(nil, only_used: true)
     @selected_tags = []
 
     # Filter by multiple tags if specified
@@ -477,14 +562,25 @@ class ItemsController < ApplicationController
     @tags_without_type = Tag.where(tag_type: nil)
   end
 
-  def set_tags_by_type
-    Tag.left_outer_joins(:tag_type, :items)
-      .includes(:tag_type)
-      .select('tags.*, COUNT(items.id) > 0 AS has_items')
-      .group('tags.id, tag_types.id')
-      .order('tags.name')
-      .group_by(&:tag_type)
-      .sort_by { |tag_type, _| tag_type&.translated_name || '' }
+  def set_tags_by_type(tag_ids = nil, only_used: false)
+    query = Tag.left_outer_joins(:tag_type, :items)
+               .includes(:tag_type)
+               .group('tags.id, tag_types.id')
+               .order('tags.name')
+    
+    # Filter by specific tag IDs if provided
+    if tag_ids.present?
+      query = query.where(id: tag_ids)
+    end
+    
+    # Only show tags that are actually used (for filtering contexts)
+    # For assignment contexts, show ALL tags including unused ones
+    if only_used
+      query = query.having('COUNT(items.id) > 0')
+    end
+    
+    query.group_by(&:tag_type)
+         .sort_by { |tag_type, _| tag_type&.translated_name || '' }
   end
 
   def set_item

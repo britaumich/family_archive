@@ -14,8 +14,27 @@
     <!-- this is regular navbar-->
     <div class="collapse navbar-collapse d-none d-md-block">
       <% if authenticated? %>
-        <div class="nav-item dropdown navbar_dropdown_item h-100 px-2 rounded-0 border-0" style="--bs-focus-ring-color:#E5E5E5;">
-          <%= link_to t('menu.navbar.items'), items_path, class: 'nav-link h-100 d-flex align-items-center fs-5 focus-ring border-0 rounded-2' %>
+        <div class="nav-item dropdown navbar_dropdown_item h-100 px-2 rounded-0 border-0">
+          <a class="nav-link h-100 d-flex align-items-center fs-5 focus-ring border-0 rounded-2" style="--bs-focus-ring-color:#E5E5E5;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <%= t('menu.navbar.items') %>
+          </a>
+          <ul class="dropdown-menu bg-primary rounded-0 navbar_dropdown_item">
+            <li>
+              <%= link_to t('menu.navbar.all_items'), items_path, class: 'dropdown-item navbar_dropdown_item' %>
+            </li>
+            <li class="dropdown-submenu">
+              <a class="dropdown-item navbar_dropdown_item dropdown-toggle" href="#">
+                <%= t('menu.navbar.family_pictures') %>
+              </a>
+              <ul class="dropdown-menu bg-primary rounded-0 navbar_dropdown_item">
+                <% all_families.each do |family| %>
+                  <li>
+                    <%= link_to family.translated_name, family_pictures_items_path(family), class: 'dropdown-item navbar_dropdown_item' %>
+                  </li>
+                <% end %>
+              </ul>
+            </li>
+          </ul>
         </div>
         <% if policy(AdminUser).index? %>
           <div class="nav-item dropdown navbar_dropdown_item h-100 px-2 rounded-0 border-0">
@@ -37,6 +56,9 @@
               </li>
               <li>
                 <%= link_to t('menu.navbar.tag_types'), tag_types_path, class: 'dropdown-item navbar_dropdown_item' %>
+              </li>
+              <li>
+                <%= link_to t('menu.navbar.families'), families_path, class: 'dropdown-item navbar_dropdown_item' %>
               </li>
             </ul>
           </div>

@@ -25,7 +25,7 @@
     <!-- Tag Types Grid -->
     <div class="col-lg-9 col-md-8">
       <div class="row g-3">
-        <% @tags_by_type.each do |tag_type, tags| %>
+        <% @tags_by_type_filters.each do |tag_type, tags| %>
           <div class="col-xl-4 col-lg-6 col-md-12">
             <div class="card h-100">
               <div class="card-header">
@@ -42,7 +42,7 @@
                           { multiple: true, checked: @selected_tags.include?(tag), id: "tag_#{tag.id}" }, 
                           tag.id, "" %>
                       <%= form.label "tag_#{tag.id}", tag.translated_name, 
-                          class: "form-check-label #{'text-info-blue' if tag.has_items}" %>
+                          class: "form-check-label" %>
                     </div>
                   <% end %>
                 </div>

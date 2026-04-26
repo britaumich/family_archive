@@ -74,7 +74,7 @@ class TagsController < ApplicationController
   def bulk_assign
     tag_ids = params[:tag_ids]&.reject(&:blank?)
     tag_type_id = params[:tag_type_id].presence
-    
+
     if tag_ids&.any?
       Tag.where(id: tag_ids).update_all(tag_type_id: tag_type_id)
       flash.now[:notice] = t('forms.flash.tags_assigned_to_type')

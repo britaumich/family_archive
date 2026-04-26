@@ -1,0 +1,27 @@
+<%= form_with(model: family, data: { controller: "autosubmit", autosubmit_target: "form" }) do |form| %>
+  <% if family.errors.any? %>
+    <div class="text-danger">
+      <h2><%= t('forms.errors.header', count: family.errors.count) %></h2>
+      <ul>
+        <% family.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div>
+    <%= form.label :name_en, t('activerecord.attributes.family.name') + ' (' + t('language.en') + ')', class: "nowrap" %>
+    <div class="d-flex flex-row justify-content-start align-items-center gap-3">
+      <%= form.text_field :name_en, placeholder: t('forms.placeholders.last_name') + ' (' + t('language.en') + ')', class: "w-25", required: true %>
+    </div>
+    <%= form.label :name_ru, t('activerecord.attributes.family.name') + ' (' + t('language.ru') + ')', class: "nowrap" %>
+    <div class="d-flex flex-row justify-content-start align-items-center gap-3 mb-2">
+      <%= form.text_field :name_ru, placeholder: t('forms.placeholders.last_name') + ' (' + t('language.ru') + ')', class: "w-25" %>
+    </div>
+
+    <div class="d-flex flex-row justify-content-start align-items-center gap-3">
+      <%= form.submit family.persisted? ? t('forms.buttons.update') : t('forms.buttons.create') %>
+      <%= link_to t('forms.buttons.cancel'), families_path, class: "link_to" %>
+    </div>
+  </div>
+<% end %>

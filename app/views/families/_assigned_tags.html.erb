@@ -1,0 +1,15 @@
+<div class="mb-3">
+  <span class="text-muted"><%= t('families.edit.currently_assigned_count', count: family.tags.count) %></span>
+  <% if family.tags.any? %>
+    <div class="mt-2">
+      <% family.tags.includes(:tag_type).order(:name).each do |tag| %>
+        <span class="badge bg-success me-1 mb-1">
+          <%= tag.translated_name %>
+          <% if tag.tag_type %>
+            <small class="text-light">(<%= tag.tag_type.translated_name %>)</small>
+          <% end %>
+        </span>
+      <% end %>
+    </div>
+  <% end %>
+</div>

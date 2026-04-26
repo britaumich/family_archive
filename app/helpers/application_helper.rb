@@ -29,4 +29,8 @@ module ApplicationHelper
     return false unless user
     current_role == 'editor'
   end
+
+  def all_families
+    @all_families ||= Family.order(:name)
+  end
 end

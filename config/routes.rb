@@ -16,11 +16,15 @@ Rails.application.routes.draw do
       patch :assign_tags, on: :member
       patch :remove_tags, on: :member
       patch :add_bestof, on: :member
+      get 'family_pictures/:family_id', to: 'items#family_pictures', on: :collection, as: :family_pictures
     end
     resources :tags do
       patch :bulk_assign, on: :collection
     end
-    resources :tag_types
+    resources :tag_types, except: [:show]
+    resources :families, except: [:show] do
+      patch :assign_tags, on: :member
+    end
     resource :registration, only: [:new, :create]
     resource :session
     resources :passwords, param: :token

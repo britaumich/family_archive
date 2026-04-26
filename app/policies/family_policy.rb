@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class TagTypePolicy < ApplicationPolicy
+class FamilyPolicy < ApplicationPolicy
   attr_reader :user, :record
 
   def index?
@@ -24,6 +24,10 @@ class TagTypePolicy < ApplicationPolicy
   end
 
   def destroy?
+    admin_user?
+  end
+
+  def assign_tags?
     admin_user?
   end
 

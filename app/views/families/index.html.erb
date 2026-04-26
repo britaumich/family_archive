@@ -1,0 +1,15 @@
+<div class="container-fluid">
+  
+  <h1><%= t('page_titles.family_list') %></h1>
+
+  <% if policy(Family).create? %>
+    <div>
+      <%= turbo_frame_tag 'new_family' do %>  
+        <%= render "form", family: @family %>
+      <% end %>
+    </div>
+  <% end %>
+  <div class="mt-2">
+    <%= render "listing" %>
+  </div>
+</div>

@@ -1,0 +1,67 @@
+<div class="mt-4">
+  <h3><%= t('families.edit.assign_tags_title') %></h3>
+  
+  <!-- Currently assigned tags display -->
+  <%= turbo_frame_tag 'assigned_tags' do %>
+    <%= render 'assigned_tags', family: @family %>
+  <% end %>
+
+  <!-- Tags assignment form -->
+  <%= turbo_frame_tag 'family_tags_list' do %>  
+    <div data-controller="tag-filter">
+      <% if @tags.empty? %>
+        <p class="text-muted"><%= t('forms.messages.no_tags_found') %></p>
+      <% else %>
+        <%= form_tag assign_tags_family_path(@family), method: :patch, data: { turbo: true } do %>
+          <div class="mb-3 d-flex align-items-center gap-3">
+            <%= submit_tag t('forms.buttons.assign_selected_tags'), class: "btn btn-primary" %>
+          </div>
+          
+          <!-- Tag Type Selector -->
+          <div class="mb-3">
+            <%= label_tag :tag_type_filter, t('forms.labels.select_tag_type'), class: "form-label" %>
+            <%= select_tag :tag_type_filter, 
+                options_for_select([
+                  [t('forms.labels.select_tag_type'), ''],
+                  [t('forms.labels.no_tag_type'), 'none']
+                ] + @tag_types.map { |tt| [tt.translated_name, tt.id] }), 
+                class: "form-select", 
+                style: "width: 300px;",
+                data: { 
+                  action: "change->tag-filter#filterByType",
+                  tag_filter_target: "typeSelect"
+                } %>
+          </div>
+          
+          <!-- Group tags by tag type -->
+          <% @tags.group_by(&:tag_type).each do |tag_type, tags| %>
+            <div class="mb-4 tag-group" 
+                 data-tag-filter-target="tagGroup" 
+                 data-tag-type-id="<%= tag_type&.id || 'none' %>"
+                 style="display: none;">
+              
+              <div class="row">
+                <% tags.each do |tag| %>
+                  <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-2">
+                    <div class="form-check">
+                      <%= check_box_tag "tag_ids[]", tag.id, 
+                          tag.family_id == @family.id, 
+                          class: "form-check-input", 
+                          id: "tag_#{tag.id}" %>
+                      <%= label_tag "tag_#{tag.id}", tag.translated_name, class: "form-check-label" %>
+                      <% if tag.family_id && tag.family_id != @family.id %>
+                        <small class="text-muted d-block">
+                          <%= t('families.edit.currently_in_family', family: tag.family.translated_name) %>
+                        </small>
+                      <% end %>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

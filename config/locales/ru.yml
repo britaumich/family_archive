@@ -39,6 +39,7 @@ ru:
     upload_files: "Загрузить файлы"
     pictures: "Фотографии"
     select_pictures_by_tags: "Выбрать фотографии по тегам"
+    family_list: "Список семей"
   auth:
     sign_in: "Войти"
     sign_out: "Выйти"
@@ -56,13 +57,6 @@ ru:
       admin: "Администратор"
       editor: "Редактор"
   forms:
-    cancel: "Отмена"
-    buttons:
-      back: "Назад"
-      cancel: "Отмена"
-      assign_tags: "Назначить теги"
-      apply_filters: "Применить фильтры"
-      clear_filters: "Очистить фильтры"
     errors:
       header:
         one: "1 ошибка"
@@ -89,7 +83,7 @@ ru:
       select_tag_type: "Выберите тип тега"
       select_tag: "Выберите тег"
       no_tag_type: "Без типа"
-      assign_tag_type: "Назначить тип тега"
+      select_family: "Выберите семью"
       select: "Выберите"
       select_year: "Выберите год"
       search_tag_type: "Поиск типа тега по названию:"
@@ -99,6 +93,7 @@ ru:
       select_tags: "Выберите теги:"
       upload_instructions: "Добавьте инструкции"
       items_per_page: "Количество фотографий на странице"
+      assign_tag_type_to_selected_tags: "Назначить тип тега выбранным тегам"
       item_types:
         photo: "Фотография"
         video: "Видео"
@@ -106,6 +101,7 @@ ru:
         select_prompt: "Выберите тип элемента"    
     placeholders:
       name: "Название"
+      last_name: "Фамилия"
     buttons:
       edit: "Редактировать"
       submit: "Сохранить"
@@ -116,9 +112,11 @@ ru:
       upload: "Загрузить"
       create: "Создать"
       update: "Обновить"
-      assign: "Назначить"
+      assign_to_selected_tags: "Назначить выбранным тегам"
       select_all: "Выбрать все"
       unselect_all: "Отменить выбор"
+      back: "Назад"
+      assign_selected_tags: "Назначить выбранные теги"
       apply_filters: "Применить фильтры"
       clear_filters: "Обнулить фильтры"
       view_details: "Подробнее"
@@ -156,10 +154,17 @@ ru:
       admin_user_deleted: "Администратор успешно удален."
       admin_user_could_not_be_deleted: "Администратор не может быть удален."
       registered_successfully: "Регистрация прошла успешно."
+      tags_assigned_to_family: "Теги назначены семье."
+      family_created: "Семья создана."
+      family_updated: "Семья обновлена."
+      family_deleted: "Семья удалена."
+      cannot_delete_family_with_tags: "Невозможно удалить семью, поскольку к ней привязаны теги."
+      error_deleting_family: "Ошибка при удалении семьи: %{error_message}."
     messages:
       no_tags_found: "Теги не найдены."
       no_tag_types_found: "Типы тегов не найдены."
       prohibited this record from being saved: "- запись не может быть сохранена"
+      no_families_found: "Семьи не найдены."
     confirmation:
       are_you_sure: "Вы уверены?"
     tooltips:
@@ -171,6 +176,13 @@ ru:
   tag_types:
     edit:
       title: "Редактирование типа тега"
+  families:
+    edit:
+      title: "Редактирование семьи"
+      assign_tags_title: "Назначить теги семье"
+      currently_assigned_count: "Назначено: %{count} тег(ов)"
+      currently_in_family: "Сейчас в семье: %{family}"
+      all_tags_removed: "Все теги удалены из этой семьи"
   views:
     pagination:
       first: "&laquo; Первая"
@@ -237,17 +249,21 @@ ru:
       tags: "Теги"
       tag_types: "Типы тегов"
       items: "Фотографии"
+      all_items: "Все фотографии"
+      families: "Семьи"
       admin_users: "Администраторы"
       upload_files: "Загрузить файлы"
       bulk_assign_tags: "Редактирование тегов"
       sign_out: "Выйти"
       about: "О нас"
+      family_pictures: "Семейные фотографии"
   text:
     admin_users: "Администраторы"
     New: "Новый"
     Admin: "Администратор"
     "Editing Admin": "Редактирование администратора"
     "Are you sure?": "Вы уверены?"
+    'no_tags': "Нет тегов"
   language:
     en: "по-английски"
     ru: "по-русски"
@@ -271,6 +287,8 @@ ru:
           editor: "Редактор"
       user:
         email_address: "Адрес электронной почты"
+      family:
+        name: "Фамилия"
     errors:
       models:
         user:
@@ -292,6 +310,10 @@ ru:
             role:
               blank: "не может быть пустым."
           one_admin_user_must_exist: "Должен существовать хотя бы один администратор."
+        family:
+          attributes:
+            name:
+              cannot_delete_family_with_associated_tags: "не может быть удалена, потому что имеет связанные теги."
   helpers:
     page_entries_info:
       one_page:

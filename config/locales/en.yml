@@ -39,6 +39,7 @@ en:
     upload_files: "Upload Files"
     pictures: "Pictures"
     select_pictures_by_tags: "Select Pictures by Tags"
+    family_list: "Family List"
   auth:
     sign_in: "Sign in"
     sign_out: "Sign Out"
@@ -56,13 +57,6 @@ en:
       admin: "Administrator"
       editor: "Editor"
   forms:
-    cancel: "Cancel"
-    buttons:
-      back: "Back"
-      cancel: "Cancel"
-      assign_tags: "Assign Tags"
-      apply_filters: "Apply Filters"
-      clear_filters: "Clear Filters"
     errors:
       header:
         one: "1 error"
@@ -87,7 +81,7 @@ en:
       select_tag_type: "Select Tag Type"
       select_tag: "Select Tag"
       no_tag_type: "No Type"
-      assign_tag_type: "Assign Tag Type"
+      select_family: "Select Family"
       select: "Select"
       select_year: "Select Year"
       search_tag_type: "Search Tag Type by Name:"
@@ -97,6 +91,7 @@ en:
       select_tags: "Select Tags:"
       upload_instructions: "Add some instructions"
       items_per_page: "Items per Page"
+      assign_tag_type_to_selected_tags: "Assign Tag Type to Selected Tags"
       item_types:
         photo: "Photo"
         video: "Video"
@@ -104,6 +99,7 @@ en:
         select_prompt: "Select Item Type"
     placeholders:
       name: "Name"
+      last_name: "Last Name"
     buttons:
       edit: "Edit"
       submit: "Save"
@@ -114,9 +110,11 @@ en:
       upload: "Upload"
       create: "Create"
       update: "Update"
-      assign: "Assign"
+      assign_to_selected_tags: "Assign to Selected Tags"
       select_all: "Select All"
       unselect_all: "Unselect All"
+      back: "Back"
+      assign_selected_tags: "Assign Selected Tags"
       apply_filters: "Apply Filters"
       clear_filters: "Clear Filters"
       view_details: "Details"
@@ -154,10 +152,17 @@ en:
       admin_user_deleted: "Admin user was successfully deleted."
       admin_user_could_not_be_deleted: "Admin user could not be deleted."
       registered_successfully: "Registered successfully."
+      tags_assigned_to_family: "Tags successfully assigned to family."
+      family_created: "Family was successfully created."
+      family_updated: "Family was successfully updated."
+      family_deleted: "Family was successfully deleted."
+      cannot_delete_family_with_tags: "Cannot delete family because it has associated tags."
+      error_deleting_family: "Error deleting family: %{error_message}."
     messages:
       no_tags_found: "No Tags found"
       no_tag_types_found: "No Tag Types found"
       prohibited this record from being saved: "prohibited this record from being saved"
+      no_families_found: "No Families found"
     confirmation:
       are_you_sure: "Are you sure?"
     tooltips:
@@ -169,6 +174,13 @@ en:
   tag_types:
     edit:
       title: "Editing Tag Type"
+  families:
+    edit:
+      title: "Editing Family"
+      assign_tags_title: "Assign Tags to Family"
+      currently_assigned_count: "Currently assigned: %{count} tag(s)"
+      currently_in_family: "Currently in: %{family}"
+      all_tags_removed: "All tags have been removed from this family"
   views:
     items:
       no_items_yet: "No pictures yet"
@@ -232,16 +244,20 @@ en:
       tags: "Tags"
       tag_types: "Tag Types"
       items: "Pictures"
+      all_items: "All Pictures"
+      families: "Families"
       admin_users: "Admin Users"
       upload_files: "Upload Files"
       bulk_assign_tags: "Bulk Assign Tags"
       sign_out: "Sign Out"
       about: "About"
+      family_pictures: "Family Pictures"
   text:
     admin_users: "Admin Users"
     New: "New"
     "Editing Admin": "Editing Admin"
     "Are you sure?": "Are you sure?"
+    'no_tags': "No tags"
   language:
     en: "English"
     ru: "Russian"
@@ -263,6 +279,8 @@ en:
           editor: "Editor"
       user:
         email_address: "Email Address"
+      family:
+        name: "Family Name"
     errors:
       models:
         user:
@@ -284,3 +302,7 @@ en:
             role:
               blank: "can't be blank."
           one_admin_user_must_exist: "At least one admin user must exist."
+        family:
+          attributes:
+            name:
+              cannot_delete_family_with_associated_tags: "cannot be deleted because it has associated tags."

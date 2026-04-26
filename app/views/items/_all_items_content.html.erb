@@ -1,0 +1,15 @@
+<% if @items.any? %>
+  <%= render 'items_list' %>
+  <div class="d-flex justify-content-center mt-4">
+    <% if @form_action %>
+      <%= paginate @items, params: params.permit!, url: @form_action %>
+    <% else %>
+      <%= paginate @items %>
+    <% end %>
+  </div>
+<% else %>
+  <div class="text-center py-5">
+    <i class="bi bi-images fs-1 text-muted mb-3"></i>
+    <h3 class="text-muted"><%= t('views.items.no_items_yet') %></h3>
+  </div>
+<% end %>
