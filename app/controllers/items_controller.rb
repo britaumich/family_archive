@@ -179,17 +179,32 @@ class ItemsController < ApplicationController
 
   def upload_files
     if params[:files].present? && params[:tag_ids].present?
+      successful_uploads = 0
+      failed_uploads = []
+      
       params[:files].each do |file|
         @item = Item.new(item_type: params[:item_type])
         @item.file.attach(file)
-        next unless @item.save
+        
+        unless @item.save
+          error_message = "#{file.original_filename}: #{@item.errors.full_messages.join(', ')}"
+          Rails.logger.error "******************* Failed to save item for file #{error_message}"
+          failed_uploads << error_message
+          next
+        end
 
         params[:tag_ids].each do |tag_id|
           tag = Tag.find(tag_id)
           @item.tags << tag
         end
+        successful_uploads += 1
       end
-      flash[:notice] = t('forms.flash.files_uploaded')
+      
+      if failed_uploads.any?
+        flash[:alert] = "#{successful_uploads} files uploaded successfully. Errors: #{failed_uploads.join('; ')}"
+      else
+        flash[:notice] = "#{successful_uploads} #{t('forms.flash.files_uploaded')}"
+      end
       redirect_to upload_files_page_path
     else
       flash[:alert] = t('forms.flash.please_select_files_and_tags')
