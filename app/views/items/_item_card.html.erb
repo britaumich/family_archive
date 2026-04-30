@@ -29,7 +29,7 @@
             class="stretched-link"></a>
         </div>
       <% elsif item.file.content_type == 'application/pdf' %>
-        <%= link_to url_for(item.file), target: "_blank", class: "text-decoration-none" do %>
+        <%= link_to url_for(item.file), target: "_blank", rel: "noopener noreferrer", class: "text-decoration-none" do %>
           <div class="card-img-top d-flex flex-column align-items-center justify-content-center bg-light" style="height: 250px;">
             <i class="bi bi-file-earmark-pdf fs-1 text-danger"></i>
             <span class="text-muted mt-2">PDF Document</span>
@@ -41,7 +41,7 @@
                 'application/msword',
                 'application/vnd.oasis.opendocument.text',
                 'application/rtf'].include?(item.file.content_type) %>
-        <%= link_to url_for(item.file), target: "_blank", class: "text-decoration-none" do %>
+        <%= link_to url_for(item.file), target: "_blank", rel: "noopener noreferrer", class: "text-decoration-none" do %>
           <div class="card-img-top d-flex flex-column align-items-center justify-content-center bg-light" style="height: 250px;">
             <% if item.file.content_type.start_with?('text/') %>
               <i class="bi bi-file-earmark-text fs-1 text-primary"></i>
