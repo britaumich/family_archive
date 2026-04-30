@@ -16,7 +16,7 @@
                     multipart: true do %>
           <div>
             <%= label_tag 'file_', t('forms.labels.choose_files'), class: "body-bold-text" %>
-            <%= file_field_tag 'files[]', accept: ".jpg,.jpeg,.png", multiple: true %>
+            <%= file_field_tag 'files[]', accept: ".jpg,.jpeg,.png,.mp4,.mov,.avi,.mkv,.webm,.m4v", multiple: true %>
           </div>
           <div class="mt-3">
             <%= label_tag 'item_type', t('forms.labels.select_item_type'), class: "body-bold-text" %>
