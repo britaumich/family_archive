@@ -181,7 +181,7 @@ class ItemsController < ApplicationController
     authorize Item
     if params[:files].present? && params[:tag_ids].present?
       successful_uploads = 0
-      failed_uploads = []
+      failed_uploads = 0
       
       params[:files].each do |file|
         @item = Item.new(item_type: params[:item_type])
@@ -190,7 +190,7 @@ class ItemsController < ApplicationController
         unless @item.save
           error_message = "#{file.original_filename}: #{@item.errors.full_messages.join(', ')}"
           Rails.logger.error "******************* Failed to save item for file #{error_message}"
-          failed_uploads << error_message
+          failed_uploads += 1
           next
         end
 
@@ -201,8 +201,8 @@ class ItemsController < ApplicationController
         successful_uploads += 1
       end
       
-      if failed_uploads.any?
-        flash[:alert] = "#{successful_uploads} files uploaded successfully. Errors: #{failed_uploads.join('; ')}"
+      if failed_uploads > 0
+        flash[:alert] = "#{successful_uploads} files uploaded successfully. #{failed_uploads} files failed to upload. See logs for details."
       else
         flash[:notice] = "#{successful_uploads} #{t('forms.flash.files_uploaded')}"
       end
