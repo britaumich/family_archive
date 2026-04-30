@@ -5,7 +5,7 @@ export default class extends Controller {
   
   static fileExtensions = {
     photo: '.jpg,.jpeg,.png,.gif,.bmp,.webp',
-    video: '.mp4,.mov,.avi,.mkv,.webm,.m4v',
+    video: '.mp4,.mov,.webm,.m4v',
     document: '.pdf,.txt,.doc,.docx,.odt,.rtf'
   }
 
