@@ -178,6 +178,7 @@ class ItemsController < ApplicationController
   end
 
   def upload_files
+    authorize Item
     if params[:files].present? && params[:tag_ids].present?
       successful_uploads = 0
       failed_uploads = []

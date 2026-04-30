@@ -35,6 +35,10 @@ class ItemPolicy  < ApplicationPolicy
     admin_user?
   end
 
+  def upload_files?
+    admin_user?
+  end
+
   def bulk_assign_tags?
     admin_user?
   end
