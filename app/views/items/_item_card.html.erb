@@ -13,7 +13,11 @@
         </a>
       <% elsif item.file.content_type.start_with?('video/') %>
         <div class="position-relative">
-          <video class="card-img-top lightbox-image" style="height: 250px; object-fit: cover;" muted>
+          <video class="card-img-top" 
+                 style="height: 250px; object-fit: cover; width: 100%;" 
+                 controls 
+                 preload="metadata"
+                 <% if item.thumb_medium %>poster="<%= url_for(item.thumb_medium) %>"<% end %>>
             <%= content_tag :source, "", src: url_for(item.file), type: item.file.content_type %>
             Your browser does not support the video tag.
           </video>
