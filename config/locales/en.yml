@@ -136,6 +136,7 @@ en:
       item_updated: "Item was successfully updated."
       item_deleted: "Item was successfully deleted."
       files_uploaded: "Files uploaded successfully."
+      files_upload_with_errors: "%{successful} files uploaded successfully. %{failed} files failed to upload. See logs for details."
       tags_assigned_to_items: "Tags successfully assigned"
       tags_already_assigned: "All selected tags were already assigned to the selected items"
       tags_assigned_to_item: "Tags successfully assigned to item"

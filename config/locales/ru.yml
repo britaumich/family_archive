@@ -138,6 +138,7 @@ ru:
       item_updated: "Файл успешно обновлен."
       item_deleted: "Файл успешно удален."
       files_uploaded: "Файлы успешно загружены."
+      files_upload_with_errors: "%{successful} файлов загружены успешно. %{failed} файлов не удалось загрузить. Проверьте логи для получения подробной информации."
       tags_assigned_to_items: "Тэги добавлены"
       tags_already_assigned: "Все выбранные теги уже назначены выбранным файлам"
       tags_assigned_to_item: "Теги назначены"

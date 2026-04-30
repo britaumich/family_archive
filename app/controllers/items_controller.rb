@@ -202,7 +202,9 @@ class ItemsController < ApplicationController
       end
       
       if failed_uploads > 0
-        flash[:alert] = "#{successful_uploads} files uploaded successfully. #{failed_uploads} files failed to upload. See logs for details."
+        flash[:alert] = t('forms.flash.files_upload_with_errors', 
+                         successful: successful_uploads, 
+                         failed: failed_uploads)
       else
         flash[:notice] = "#{successful_uploads} #{t('forms.flash.files_uploaded')}"
       end
