@@ -3,6 +3,14 @@ class ItemsController < ApplicationController
 
   def index
     @selected_tags = []
+    
+    # Start with base query
+    base_items = Item.all
+    
+    # Filter by item_type if specified
+    if params[:item_type].present?
+      base_items = base_items.where(item_type: params[:item_type])
+    end
 
     # Filter by multiple tags if specified
     if params[:tags].present?
@@ -13,42 +21,42 @@ class ItemsController < ApplicationController
         # AND logic: items must have ALL selected tags
         if params[:filter_type] == 'all'
           # Use subquery to find items with all required tags
-          item_ids = Item.joins(:tags)
+          item_ids = base_items.joins(:tags)
                          .where(tags: { id: tag_ids })
                          .group('items.id')
                          .having('COUNT(DISTINCT tags.id) = ?', tag_ids.length)
                          .pluck('items.id')
-          items = Item.includes(:tags)
+          items = base_items.includes(:tags)
                        .where(id: item_ids)
                        .left_joins(tags: :tag_type)
                        .group('items.id')
                        .order(Arel.sql("MAX(CASE WHEN tag_types.name = 'year' THEN tags.name END) DESC NULLS LAST, items.created_at DESC"))
         else
           # OR logic (default): items must have ANY of the selected tags
-          item_ids = Item.joins(:tags)
+          item_ids = base_items.joins(:tags)
                       .where(tags: { id: tag_ids })
                       .distinct
                       .pluck(:id)
-          items = Item.includes(:tags)
+          items = base_items.includes(:tags)
                        .where(id: item_ids)
                        .left_joins(tags: :tag_type)
                        .group('items.id')
                        .order(Arel.sql("MAX(CASE WHEN tag_types.name = 'year' THEN tags.name END) DESC NULLS LAST, items.created_at DESC"))
         end
       else
-        items = Item.includes(:tags)
+        items = base_items.includes(:tags)
                      .left_joins(tags: :tag_type)
                      .group('items.id')
                      .order(Arel.sql("MAX(CASE WHEN tag_types.name = 'year' THEN tags.name END) DESC NULLS LAST, items.created_at DESC"))
       end
     else
-      items = Item.includes(:tags)
+      items = base_items.includes(:tags)
                    .left_joins(tags: :tag_type)
                    .group('items.id')
                    .order(Arel.sql("MAX(CASE WHEN tag_types.name = 'year' THEN tags.name END) DESC NULLS LAST, items.created_at DESC"))
     end
     @items = items.includes(file_attachment: :blob).page(params[:page]).per(params[:per].presence || Kaminari.config.default_per_page)
-    @tags_by_type_filters = set_tags_by_type(nil, only_used: true)
+    @tags_by_type_filters = set_tags_by_type(nil, only_used: true, item_type: params[:item_type])
 
     authorize @items
   end
@@ -580,7 +588,7 @@ class ItemsController < ApplicationController
     @tags_without_type = Tag.where(tag_type: nil)
   end
 
-  def set_tags_by_type(tag_ids = nil, only_used: false)
+  def set_tags_by_type(tag_ids = nil, only_used: false, item_type: nil)
     query = Tag.left_outer_joins(:tag_type, :items)
                .includes(:tag_type)
                .group('tags.id, tag_types.id')
@@ -589,6 +597,11 @@ class ItemsController < ApplicationController
     # Filter by specific tag IDs if provided
     if tag_ids.present?
       query = query.where(id: tag_ids)
+    end
+    
+    # Filter by item_type if provided
+    if item_type.present?
+      query = query.where(items: { item_type: item_type })
     end
     
     # Only show tags that are actually used (for filtering contexts)
