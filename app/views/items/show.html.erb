@@ -14,22 +14,16 @@
               </video>
             <% elsif @item.item_type_document? %>
               <% if @item.file.content_type == 'application/pdf' %>
-                <div class="text-center mb-3">
-                  <h6>PDF Document</h6>
-                  <p class="text-muted small">
+                <div class="d-flex flex-column align-items-center justify-content-center p-5">
+                  <i class="bi bi-file-earmark-pdf fs-1 text-danger mb-3"></i>
+                  <h5 class="mb-2">PDF Document</h5>
+                  <p class="text-muted mb-3">
                     <%= @item.file.filename %> (<%= number_to_human_size(@item.file.byte_size) %>)
                   </p>
-                </div>
-                <iframe src="<%= url_for(@item.file) %>" 
-                        style="width: 100%; height: 600px; border: 1px solid #dee2e6; border-radius: 0.375rem;"
-                        type="application/pdf">
-                  <p>Your browser does not support PDFs. 
-                    <%= link_to "Download the PDF", @item.file, class: "btn btn-primary btn-sm" %>.
-                  </p>
-                </iframe>
-                <div class="text-center mt-2">
-                  <%= link_to t('views.items.show.download'), @item.file, class: "btn btn-outline-primary btn-sm", download: true %>
-                  <%= link_to "Open in new tab", url_for(@item.file), class: "btn btn-outline-secondary btn-sm", target: "_blank", rel: "noopener noreferrer" %>
+                  <div class="d-flex gap-2">
+                    <%= link_to t('views.items.show.download'), @item.file, class: "btn btn-primary", download: true %>
+                    <%= link_to "Open in new tab", url_for(@item.file), class: "btn btn-outline-secondary", target: "_blank", rel: "noopener noreferrer" %>
+                  </div>
                 </div>
               <% else %>
                 <div class="text-center p-4">
