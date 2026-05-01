@@ -25,7 +25,6 @@
           <div>
             <%= label_tag 'file_', t('forms.labels.choose_files'), class: "body-bold-text" %>
             <%= file_field_tag 'files[]', 
-                accept: ".jpg,.jpeg,.png,.gif,.bmp,.webp", 
                 multiple: true, 
                 data: { file_upload_target: 'fileInput' } %>
           </div>
