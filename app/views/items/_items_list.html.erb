@@ -1,6 +1,14 @@
 <% if @items.any? %>
   <div class="mb-3 d-flex align-items-center justify-content-between">
-    <h2><%= t('views.items.index.pictures') %></h2>
+    <h2>
+      <% if params[:item_type] == 'video' %>
+        <%= t('menu.navbar.videos') %>
+      <% elsif params[:item_type] == 'document' %>
+        <%= t('menu.navbar.documents') %>
+      <% else %>
+        <%= t('views.items.index.pictures') %>
+      <% end %>
+    </h2>
   </div>
   <div class="my-2">
     <%= page_entries_info @items %>
