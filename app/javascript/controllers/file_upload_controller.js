@@ -4,7 +4,7 @@ export default class extends Controller {
   static targets = ["itemType", "fileInput"]
   
   static fileExtensions = {
-    photo: '.jpg,.jpeg,.png,.gif,.bmp,.webp',
+    photo: '.jpg,.jpeg,.png',
     video: '.mp4,.mov,.webm,.m4v',
     document: '.pdf,.txt,.doc,.docx,.odt,.rtf'
   }
