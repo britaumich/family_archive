@@ -8,19 +8,53 @@
             <% if @item.item_type_photo? %>
               <%= image_tag @item.file, class: "img-fluid rounded", alt: "Item image", style: "max-height: 600px; width: auto;" %>
             <% elsif @item.item_type_video? %>
-              <video controls class="img-fluid rounded" style="max-height: 600px; width: auto;">
+              <video controls 
+                     controlslist="nodownload"
+                     class="img-fluid rounded" 
+                     style="max-height: 600px; width: auto;"
+                     preload="metadata"
+                     playsinline>
                 <source src="<%= url_for(@item.file) %>" type="<%= @item.file.content_type %>">
-                <%= t('views.items.show.video_not_supported') %>
+                <!-- Fallback for browsers that don't support the primary format -->
+                <% if @item.file.content_type == 'video/quicktime' %>
+                  <source src="<%= url_for(@item.file) %>" type="video/mp4">
+                <% end %>
+                <p><%= t('views.items.show.video_not_supported') %></p>
+                <p>
+                  <a href="<%= url_for(@item.file) %>" download="<%= @item.file.filename %>">
+                    <%= t('views.items.show.download_video') %>
+                  </a>
+                </p>
               </video>
             <% elsif @item.item_type_document? %>
-              <div class="text-center p-4">
-                <h5><%= t('views.items.show.document') %></h5>
-                <p class="text-muted">
-                  <%= @item.file.filename %>
-                  (<%= number_to_human_size(@item.file.byte_size) %>)
-                </p>
-                <%= link_to t('views.items.show.download'), @item.file, class: "btn btn-primary", download: true %>
-              </div>
+              <% if @item.file.content_type == 'application/pdf' %>
+                <div class="d-flex flex-column align-items-center justify-content-center p-5">
+                  <i class="bi bi-file-earmark-pdf fs-1 text-danger mb-3"></i>
+                  <h5 class="mb-2"><%= t('views.items.file_types.pdf_document') %></h5>
+                  <p class="text-muted mb-3">
+                    <%= @item.file.filename %> (<%= number_to_human_size(@item.file.byte_size) %>)
+                  </p>
+                  <div class="d-flex gap-2">
+                    <%= link_to t('views.items.show.download'), @item.file, class: "btn btn-primary", download: true %>
+                    <%= link_to t('views.items.show.open_in_new_tab'), url_for(@item.file), class: "btn btn-outline-secondary", target: "_blank", rel: "noopener noreferrer" %>
+                  </div>
+                </div>
+              <% else %>
+                <div class="text-center p-4">
+                  <% if @item.file.content_type.start_with?('text/') %>
+                    <i class="bi bi-file-earmark-text fs-1 text-primary mb-3"></i>
+                    <h5><%= t('views.items.file_types.text_document') %></h5>
+                  <% else %>
+                    <i class="bi bi-file-earmark-word fs-1 text-info mb-3"></i>
+                    <h5><%= t('views.items.file_types.word_document') %></h5>
+                  <% end %>
+                  <p class="text-muted">
+                    <%= @item.file.filename %>
+                    (<%= number_to_human_size(@item.file.byte_size) %>)
+                  </p>
+                  <%= link_to t('views.items.show.download'), @item.file, class: "btn btn-primary", download: true %>
+                </div>
+              <% end %>
             <% end %>
           <% else %>
             <div class="text-center p-5">

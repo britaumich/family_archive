@@ -138,6 +138,7 @@ ru:
       item_updated: "Файл успешно обновлен."
       item_deleted: "Файл успешно удален."
       files_uploaded: "Файлы успешно загружены."
+      files_upload_with_errors: "%{successful} файлов загружены успешно. %{failed} файлов не удалось загрузить. Проверьте логи для получения подробной информации."
       tags_assigned_to_items: "Тэги добавлены"
       tags_already_assigned: "Все выбранные теги уже назначены выбранным файлам"
       tags_assigned_to_item: "Теги назначены"
@@ -229,6 +230,8 @@ ru:
         delete_confirmation: "Вы уверены, что хотите удалить этот файл? Это действие нельзя отменить."
         no_file_attached: "Файл не прикреплен"
         download: "Скачать"
+        download_video: "Скачать видео файл"
+        open_in_new_tab: "Открыть в новой вкладке"
         document: "Документ"
         video_not_supported: "Ваш браузер не поддерживает видео."
         assign_tags: "Назначить теги"
@@ -238,6 +241,10 @@ ru:
         select_tags_to_remove: "Выберите теги для удаления"
         remove_selected_tags: "Удалить выбранные теги"
         no_tags_to_remove_message: "Нет тегов для удаления."
+      file_types:
+        pdf_document: "PDF документ"
+        text_document: "Текстовый документ"
+        word_document: "Word документ"
   pages:
     about:
       description: "Что-то о приложении"
@@ -250,6 +257,8 @@ ru:
       tag_types: "Типы тегов"
       items: "Фотографии"
       all_items: "Все фотографии"
+      videos: "Видео"
+      documents: "Документы"
       families: "Семьи"
       admin_users: "Администраторы"
       upload_files: "Загрузить файлы"

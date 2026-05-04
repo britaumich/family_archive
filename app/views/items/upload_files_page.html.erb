@@ -1,4 +1,4 @@
-<div class="w-100" data-controller='autosubmit'>
+<div class="w-100" data-controller='autosubmit file-upload'>
   <div class="d-md-flex justify-content-between align-items-center text-nowrap pb-4">
     <h1><%= t('page_titles.upload_files') %></h1>
   </div>
@@ -14,13 +14,20 @@
                     method: :post, 
                     data: { turbo: false },
                     multipart: true do %>
-          <div>
-            <%= label_tag 'file_', t('forms.labels.choose_files'), class: "body-bold-text" %>
-            <%= file_field_tag 'files[]', accept: ".jpg,.jpeg,.png", multiple: true %>
-          </div>
           <div class="mt-3">
             <%= label_tag 'item_type', t('forms.labels.select_item_type'), class: "body-bold-text" %>
-            <%= select_tag 'item_type', options_for_select([[t('forms.labels.item_types.photo'), 'photo'], [t('forms.labels.item_types.video'), 'video'], [t('forms.labels.item_types.document'), 'document']], 'photo'), prompt: t('forms.labels.item_types.select_prompt'), class: 'form-select' %>
+            <%= select_tag 'item_type', 
+                options_for_select([[t('forms.labels.item_types.photo'), 'photo'], [t('forms.labels.item_types.video'), 'video'], [t('forms.labels.item_types.document'), 'document']], 'photo'), 
+                prompt: t('forms.labels.item_types.select_prompt'), 
+                class: 'form-select', 
+                data: { file_upload_target: 'itemType', action: 'change->file-upload#updateFileAccept' } %>
+          </div>
+          <div>
+            <%= label_tag 'file_', t('forms.labels.choose_files'), class: "body-bold-text" %>
+            <%= file_field_tag 'files[]', 
+                multiple: true,
+                accept: '.pdf,.doc,.docx,.txt,.rtf,.odt,.jpg,.jpeg,.png,.mp4,.mov,.webm,.m4v',
+                data: { file_upload_target: 'fileInput' } %>
           </div>
           <div class="body-bold-text mt-3">
             <%= t('forms.labels.select_tags') %>

@@ -33,4 +33,8 @@ module ApplicationHelper
   def all_families
     @all_families ||= Family.order(:name)
   end
+
+  def item_type_keys
+    Item.item_types.keys
+  end
 end

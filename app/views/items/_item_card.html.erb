@@ -13,20 +13,63 @@
         </a>
       <% elsif item.file.content_type.start_with?('video/') %>
         <div class="position-relative">
-          <video class="card-img-top lightbox-image" style="height: 250px; object-fit: cover;" muted>
+          <video class="card-img-top" 
+                 style="height: 250px; object-fit: cover; width: 100%;" 
+                 controls 
+                 controlslist="nodownload"
+                 preload="metadata"
+                 playsinline
+                 <% if item.thumb_medium %>poster="<%= url_for(item.thumb_medium) %>"<% end %>>
             <%= content_tag :source, "", src: url_for(item.file), type: item.file.content_type %>
+            <!-- Fallback for browsers that don't support the primary format -->
+            <% if item.file.content_type == 'video/quicktime' %>
+              <%= content_tag :source, "", src: url_for(item.file), type: "video/mp4" %>
+            <% end %>
             Your browser does not support the video tag.
           </video>
+          <!-- Lightbox button positioned over video but not blocking controls -->
           <a href="<%= url_for(item.file) %>" 
             data-lightbox="gallery" 
             data-gallery="items-gallery"
             data-title="<%= item.caption.present? ? strip_tags(item.caption) : "" %>"
-            class="stretched-link"></a>
+            data-type="video"
+            class="btn btn-outline-light btn-sm position-absolute"
+            style="top: 8px; right: 8px; z-index: 10;"
+            title="Open in lightbox">
+            <i class="bi bi-arrows-fullscreen"></i>
+          </a>
         </div>
+      <% elsif item.file.content_type == 'application/pdf' %>
+        <%= link_to url_for(item.file), target: "_blank", rel: "noopener noreferrer", class: "text-decoration-none" do %>
+          <div class="card-img-top d-flex flex-column align-items-center justify-content-center bg-light" style="height: 250px;">
+            <i class="bi bi-file-earmark-pdf fs-1 text-danger"></i>
+            <span class="text-muted mt-2"><%= t('views.items.file_types.pdf_document') %></span>
+            <small class="text-muted"><%= number_to_human_size(item.file.blob.byte_size) %></small>
+          </div>
+        <% end %>
+      <% elsif item.file.content_type.start_with?('text/') || 
+               ['application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'application/msword',
+                'application/vnd.oasis.opendocument.text',
+                'application/rtf'].include?(item.file.content_type) %>
+        <%= link_to url_for(item.file), target: "_blank", rel: "noopener noreferrer", class: "text-decoration-none" do %>
+          <div class="card-img-top d-flex flex-column align-items-center justify-content-center bg-light" style="height: 250px;">
+            <% if item.file.content_type.start_with?('text/') %>
+              <i class="bi bi-file-earmark-text fs-1 text-primary"></i>
+              <span class="text-muted mt-2"><%= t('views.items.file_types.text_document') %></span>
+            <% else %>
+              <i class="bi bi-file-earmark-word fs-1 text-info"></i>
+              <span class="text-muted mt-2"><%= t('views.items.file_types.word_document') %></span>
+            <% end %>
+            <small class="text-muted"><%= number_to_human_size(item.file.blob.byte_size) %></small>
+          </div>
+        <% end %>
       <% else %>
         <%= link_to item_path(item), class: "text-decoration-none" do %>
-          <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 250px;">
+          <div class="card-img-top d-flex flex-column align-items-center justify-content-center bg-light" style="height: 250px;">
             <i class="bi bi-file-text fs-1 text-muted"></i>
+            <span class="text-muted mt-2">Unknown File</span>
+            <small class="text-muted"><%= number_to_human_size(item.file.blob.byte_size) %></small>
           </div>
         <% end %>
       <% end %>
