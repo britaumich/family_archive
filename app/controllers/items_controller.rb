@@ -8,7 +8,7 @@ class ItemsController < ApplicationController
     base_items = Item.all
     
     # Filter by item_type if specified
-    if params[:item_type].present?
+    if params[:item_type].present? && item_type_keys.include?(params[:item_type])
       base_items = base_items.where(item_type: params[:item_type])
     end
 
@@ -607,7 +607,7 @@ class ItemsController < ApplicationController
     end
     
     # Filter by item_type if provided
-    if item_type.present?
+    if item_type.present? && item_type_keys.include?(item_type)
       query = query.where(items: { item_type: item_type })
     end
     
