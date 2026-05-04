@@ -16,17 +16,28 @@
           <video class="card-img-top" 
                  style="height: 250px; object-fit: cover; width: 100%;" 
                  controls 
+                 controlslist="nodownload"
                  preload="metadata"
+                 playsinline
                  <% if item.thumb_medium %>poster="<%= url_for(item.thumb_medium) %>"<% end %>>
             <%= content_tag :source, "", src: url_for(item.file), type: item.file.content_type %>
+            <!-- Fallback for browsers that don't support the primary format -->
+            <% if item.file.content_type == 'video/quicktime' %>
+              <%= content_tag :source, "", src: url_for(item.file), type: "video/mp4" %>
+            <% end %>
             Your browser does not support the video tag.
           </video>
+          <!-- Lightbox button positioned over video but not blocking controls -->
           <a href="<%= url_for(item.file) %>" 
             data-lightbox="gallery" 
             data-gallery="items-gallery"
             data-title="<%= item.caption.present? ? strip_tags(item.caption) : "" %>"
             data-type="video"
-            class="stretched-link"></a>
+            class="btn btn-outline-light btn-sm position-absolute"
+            style="top: 8px; right: 8px; z-index: 10;"
+            title="Open in lightbox">
+            <i class="bi bi-arrows-fullscreen"></i>
+          </a>
         </div>
       <% elsif item.file.content_type == 'application/pdf' %>
         <%= link_to url_for(item.file), target: "_blank", rel: "noopener noreferrer", class: "text-decoration-none" do %>
