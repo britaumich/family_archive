@@ -43,7 +43,7 @@
         <%= link_to url_for(item.file), target: "_blank", rel: "noopener noreferrer", class: "text-decoration-none" do %>
           <div class="card-img-top d-flex flex-column align-items-center justify-content-center bg-light" style="height: 250px;">
             <i class="bi bi-file-earmark-pdf fs-1 text-danger"></i>
-            <span class="text-muted mt-2">PDF Document</span>
+            <span class="text-muted mt-2"><%= t('views.items.file_types.pdf_document') %></span>
             <small class="text-muted"><%= number_to_human_size(item.file.blob.byte_size) %></small>
           </div>
         <% end %>
@@ -56,10 +56,10 @@
           <div class="card-img-top d-flex flex-column align-items-center justify-content-center bg-light" style="height: 250px;">
             <% if item.file.content_type.start_with?('text/') %>
               <i class="bi bi-file-earmark-text fs-1 text-primary"></i>
-              <span class="text-muted mt-2">Text Document</span>
+              <span class="text-muted mt-2"><%= t('views.items.file_types.text_document') %></span>
             <% else %>
               <i class="bi bi-file-earmark-word fs-1 text-info"></i>
-              <span class="text-muted mt-2">Word Document</span>
+              <span class="text-muted mt-2"><%= t('views.items.file_types.word_document') %></span>
             <% end %>
             <small class="text-muted"><%= number_to_human_size(item.file.blob.byte_size) %></small>
           </div>
