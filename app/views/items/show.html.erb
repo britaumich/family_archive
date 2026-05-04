@@ -8,9 +8,23 @@
             <% if @item.item_type_photo? %>
               <%= image_tag @item.file, class: "img-fluid rounded", alt: "Item image", style: "max-height: 600px; width: auto;" %>
             <% elsif @item.item_type_video? %>
-              <video controls class="img-fluid rounded" style="max-height: 600px; width: auto;">
+              <video controls 
+                     controlslist="nodownload"
+                     class="img-fluid rounded" 
+                     style="max-height: 600px; width: auto;"
+                     preload="metadata"
+                     playsinline>
                 <source src="<%= url_for(@item.file) %>" type="<%= @item.file.content_type %>">
-                <%= t('views.items.show.video_not_supported') %>
+                <!-- Fallback for browsers that don't support the primary format -->
+                <% if @item.file.content_type == 'video/quicktime' %>
+                  <source src="<%= url_for(@item.file) %>" type="video/mp4">
+                <% end %>
+                <p><%= t('views.items.show.video_not_supported') %></p>
+                <p>
+                  <a href="<%= url_for(@item.file) %>" download="<%= @item.file.filename %>">
+                    Download video file
+                  </a>
+                </p>
               </video>
             <% elsif @item.item_type_document? %>
               <% if @item.file.content_type == 'application/pdf' %>
