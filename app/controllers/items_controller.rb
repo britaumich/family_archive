@@ -200,8 +200,14 @@ class ItemsController < ApplicationController
         Rails.logger.warn "Some tag IDs were invalid: requested #{tag_ids}, found #{tags.pluck(:id)}"
       end
       
+      item_type = params[:item_type]
+      unless item_type_keys.include?(item_type)
+        Rails.logger.warn "********************** Invalid item_type provided: #{item_type}"
+        item_type = nil
+      end
+
       params[:files].each do |file|
-        @item = Item.new(item_type: params[:item_type])
+        @item = Item.new(item_type: item_type)
         @item.file.attach(file)
         
         unless @item.save
