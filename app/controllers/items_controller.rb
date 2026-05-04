@@ -191,6 +191,15 @@ class ItemsController < ApplicationController
       successful_uploads = 0
       failed_uploads = 0
       
+      # Preload and validate tags once to avoid N+1 queries and exceptions
+      tag_ids = params[:tag_ids].reject(&:blank?)
+      tags = Tag.where(id: tag_ids)
+      
+      # Optional: warn if some tag IDs were invalid
+      if tags.count != tag_ids.count
+        Rails.logger.warn "Some tag IDs were invalid: requested #{tag_ids}, found #{tags.pluck(:id)}"
+      end
+      
       params[:files].each do |file|
         @item = Item.new(item_type: params[:item_type])
         @item.file.attach(file)
@@ -202,10 +211,8 @@ class ItemsController < ApplicationController
           next
         end
 
-        params[:tag_ids].each do |tag_id|
-          tag = Tag.find(tag_id)
-          @item.tags << tag
-        end
+        # Assign preloaded tags in bulk
+        @item.tags = tags
         successful_uploads += 1
       end
       
