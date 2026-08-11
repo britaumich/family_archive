@@ -171,6 +171,8 @@ en:
     tooltips:
       add_to_best_of: "Add to Best Of"
       remove_from_best_of: "Remove from Best Of"
+      add_needtag: "Need tag"
+      remove_needtag: "No tags needed"
   tags:
     edit:
       title: "Editing Tag"

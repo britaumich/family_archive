@@ -116,7 +116,7 @@
                         method: :patch,
                         data: { turbo: true },
                         class: "btn btn-sm #{has_needtag ? 'btn-info' : 'btn-outline-info'}",
-                        title: (has_needtag ? 'Remove needtag' : 'Add needtag') do %>
+                        title: (has_needtag ? t('forms.tooltips.remove_needtag') : t('forms.tooltips.add_needtag')) do %>
             ?
           <% end %>
 
