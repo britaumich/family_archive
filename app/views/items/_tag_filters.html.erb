@@ -83,7 +83,7 @@
           <% if show_no_tags_filter %>
             <hr>
             <div class="form-check">
-              <%= form.check_box :no_tags_only, { checked: params[:no_tags_only] == '1', class: "form-check-input" }, '1', '0' %>
+              <%= form.check_box :no_tags_only, { checked: ActiveModel::Type::Boolean.new.cast(params[:no_tags_only]), class: "form-check-input" }, '1', '0' %>
               <%= form.label :no_tags_only, t('text.no_tags'), class: "form-check-label" %>
             </div>
           <% end %>
