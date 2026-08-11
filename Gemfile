@@ -63,7 +63,8 @@ group :development, :test do
   gem 'rspec-rails', '~> 8.0.0'
   gem 'rubocop-rails-omakase', require: false
   gem 'webdrivers', '= 5.3.0'
-  gem 'bullet', '~> 8.1'
+  gem 'prosopite', '~> 1.4'
+  gem "pg_query", "~> 6.2"
 end
 
 group :development do
