@@ -148,7 +148,7 @@
         <% end %>
 
         <% if policy(@item).destroy? %>
-          <%= link_to item_path(@item), 
+          <%= link_to item_path(@item, @nav_params), 
               class: "btn btn-danger", 
               data: { 
                 turbo_confirm: t('views.items.show.delete_confirmation'),
