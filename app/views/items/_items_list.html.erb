@@ -13,11 +13,13 @@
   <div class="my-2">
     <%= page_entries_info @items %>
   </div>
+  <% navigation_item_ids = @items.map(&:id).join(',') %>
+  <% navigation_return_path = request.fullpath %>
     <!-- Items Grid -->
   <div class="row g-4" data-controller="lightbox">
     <% @items.each do |item| %>
       <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-        <%= render partial: "items/item_card", locals: { item: item } %>
+        <%= render partial: "items/item_card", locals: { item: item, navigation_item_ids: navigation_item_ids, navigation_return_path: navigation_return_path } %>
       </div>
     <% end %>
   </div>

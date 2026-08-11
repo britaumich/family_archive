@@ -156,11 +156,27 @@ class ItemsController < ApplicationController
   def show
     # Prepare tags organized by type for assignment
     @tags_by_type = set_tags_by_type(nil, only_used: false)
+    @nav_params = nav_context_params
+    @return_path = @nav_params['return_path']
+    @return_path = nil unless @return_path&.start_with?('/')
+    @navigation_item_ids = @nav_params['item_ids'].to_s.split(',').map(&:to_i).uniq
+
+    if @navigation_item_ids.any?
+      current_index = @navigation_item_ids.index(@item.id)
+      if current_index
+        @previous_item_id = @navigation_item_ids[current_index - 1] if current_index.positive?
+        @next_item_id = @navigation_item_ids[current_index + 1] if current_index < (@navigation_item_ids.length - 1)
+      end
+    end
     authorize @item
   end
 
   def edit
     @tags_by_type = set_tags_by_type(nil, only_used: false)
+    @nav_params = nav_context_params
+    if @nav_params['return_path'].present? && !@nav_params['return_path'].start_with?('/')
+      @nav_params = @nav_params.except('return_path')
+    end
     authorize @item
   end
 
@@ -175,7 +191,7 @@ class ItemsController < ApplicationController
           @item.tags << tag if tag
         end
       end
-      redirect_to @item, notice: t('forms.flash.item_updated')
+      redirect_to item_path(@item, nav_context_params), notice: t('forms.flash.item_updated')
     else
       @tags_by_type = set_tags_by_type(nil, only_used: false)
       render :edit
@@ -456,7 +472,7 @@ class ItemsController < ApplicationController
     authorize @item
     
     if params[:tag_ids].blank?
-      redirect_to @item, alert: t('forms.flash.no_tags_selected')
+      redirect_to item_path(@item, nav_context_params), alert: t('forms.flash.no_tags_selected')
       return
     end
     
@@ -466,7 +482,7 @@ class ItemsController < ApplicationController
     valid_tag_ids = Tag.where(id: tag_ids).pluck(:id)
     
     if valid_tag_ids.empty?
-      redirect_to @item, alert: t('forms.flash.invalid_tags_selected')
+      redirect_to item_path(@item, nav_context_params), alert: t('forms.flash.invalid_tags_selected')
       return
     end
     
@@ -477,9 +493,9 @@ class ItemsController < ApplicationController
       # Only load and assign the new tags
       new_tags = Tag.where(id: new_tag_ids)
       @item.tags << new_tags
-      redirect_to @item, notice: t('forms.flash.tags_assigned_to_item')
+      redirect_to item_path(@item, nav_context_params), notice: t('forms.flash.tags_assigned_to_item')
     else
-      redirect_to @item, notice: t('forms.flash.tags_already_assigned')
+      redirect_to item_path(@item, nav_context_params), notice: t('forms.flash.tags_already_assigned')
     end
   end
 
@@ -487,7 +503,7 @@ class ItemsController < ApplicationController
     authorize @item
     
     if params[:tag_ids].blank?
-      redirect_to @item, alert: t('forms.flash.no_tags_selected')
+      redirect_to item_path(@item, nav_context_params), alert: t('forms.flash.no_tags_selected')
       return
     end
     
@@ -497,7 +513,7 @@ class ItemsController < ApplicationController
     valid_tag_ids = Tag.where(id: tag_ids).pluck(:id)
     
     if valid_tag_ids.empty?
-      redirect_to @item, alert: t('forms.flash.invalid_tags_selected')
+      redirect_to item_path(@item, nav_context_params), alert: t('forms.flash.invalid_tags_selected')
       return
     end
     
@@ -508,9 +524,9 @@ class ItemsController < ApplicationController
       # Only load and remove the existing tags
       existing_tags = Tag.where(id: existing_tag_ids)
       @item.tags.delete(existing_tags)
-      redirect_to @item, notice: t('forms.flash.tags_removed_from_item')
+      redirect_to item_path(@item, nav_context_params), notice: t('forms.flash.tags_removed_from_item')
     else
-      redirect_to @item, notice: t('forms.flash.no_tags_to_remove')
+      redirect_to item_path(@item, nav_context_params), notice: t('forms.flash.no_tags_to_remove')
     end
   end
 
@@ -641,5 +657,9 @@ class ItemsController < ApplicationController
 
   def item_params
     params.expect(item: [:item_type, :file, :caption])
+  end
+
+  def nav_context_params
+    params.permit(:return_path, :item_ids).to_h.compact_blank
   end
 end

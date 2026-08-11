@@ -119,6 +119,8 @@ en:
       clear_filters: "Clear Filters"
       view_details: "Details"
       back_to_items: "Back to Items"
+      previous: "Previous"
+      next: "Next"
     flash:
       tag_created: "Tag was successfully created."
       tag_updated: "Tag was successfully updated."

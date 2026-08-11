@@ -136,7 +136,18 @@
     <div class="col-lg-4">
       <!-- Action Buttons -->
       <div class="d-grid gap-2 mb-4">
-        <%= link_to t('forms.buttons.edit'), edit_item_path(@item), class: "btn btn-warning" if policy(@item).edit? %>
+        <% if @previous_item_id || @next_item_id %>
+          <div class="d-flex gap-2">
+            <% if @previous_item_id %>
+              <%= link_to t('forms.buttons.previous'), item_path(@previous_item_id, @nav_params), class: "btn btn-outline-primary flex-fill" %>
+            <% end %>
+            <% if @next_item_id %>
+              <%= link_to t('forms.buttons.next'), item_path(@next_item_id, @nav_params), class: "btn btn-outline-primary flex-fill" %>
+            <% end %>
+          </div>
+        <% end %>
+
+        <%= link_to t('forms.buttons.edit'), edit_item_path(@item, @nav_params), class: "btn btn-warning" if policy(@item).edit? %>
         <% if policy(@item).destroy? %>
           <%= link_to item_path(@item), 
               class: "btn btn-danger", 
@@ -148,7 +159,7 @@
           <% end %>
         <% end %>
         
-        <%= link_to items_path, class: "btn btn-secondary" do %>
+        <%= link_to(@return_path.presence || items_path, class: "btn btn-secondary") do %>
           <%= t('forms.buttons.back_to_items') %>
         <% end %>
       </div>
@@ -162,6 +173,8 @@
         </div>
         <div class="card-body">
           <%= form_tag assign_tags_item_path(@item), method: :patch do %>
+            <%= hidden_field_tag :return_path, @return_path if @return_path.present? %>
+            <%= hidden_field_tag :item_ids, @nav_params['item_ids'] if @nav_params['item_ids'].present? %>
             <% if @tags_by_type.any? %>
               <% @tags_by_type.each do |tag_type, tags| %>
                 <div class="mb-3">
@@ -206,6 +219,8 @@
         <div class="card-body">
           <% if @item.tags.any? %>
             <%= form_tag remove_tags_item_path(@item), method: :patch do %>
+              <%= hidden_field_tag :return_path, @return_path if @return_path.present? %>
+              <%= hidden_field_tag :item_ids, @nav_params['item_ids'] if @nav_params['item_ids'].present? %>
               <div class="mb-3">
                 <h6 class="text-muted"><%= t('views.items.show.current_tags') %></h6>
                 <div class="tag-checkboxes" style="max-height: 150px; overflow-y: auto;">

@@ -1,4 +1,8 @@
 <%= turbo_frame_tag "picture_#{item.id}" do %>
+  <% item_navigation_params = {} %>
+  <% item_navigation_params[:return_path] = navigation_return_path if local_assigns[:navigation_return_path].present? %>
+  <% item_navigation_params[:item_ids] = navigation_item_ids if local_assigns[:navigation_item_ids].present? %>
+  <% item_show_path = item_path(item, item_navigation_params) %>
   <div class="card h-100 shadow-sm">
     <% if item.file.attached? %>
       <% if item.file.content_type.start_with?('image/') %>
@@ -65,7 +69,7 @@
           </div>
         <% end %>
       <% else %>
-        <%= link_to item_path(item), class: "text-decoration-none" do %>
+        <%= link_to item_show_path, class: "text-decoration-none" do %>
           <div class="card-img-top d-flex flex-column align-items-center justify-content-center bg-light" style="height: 250px;">
             <i class="bi bi-file-text fs-1 text-muted"></i>
             <span class="text-muted mt-2">Unknown File</span>
@@ -74,7 +78,7 @@
         <% end %>
       <% end %>
     <% else %>
-      <%= link_to item_path(item), class: "text-decoration-none" do %>
+      <%= link_to item_show_path, class: "text-decoration-none" do %>
         <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 250px;">
           <i class="bi bi-image fs-1 text-muted"></i>
           <span class="text-muted"><%= t('forms.labels.no_file_attached') %></span>
@@ -105,7 +109,7 @@
       <% end %>
       
       <div class="mt-auto d-flex justify-content-between align-items-center">
-        <%= link_to t('forms.buttons.view_details'), item_path(item), data: { turbo_frame: "_top" }, class: "btn btn-primary btn-sm" %>
+        <%= link_to t('forms.buttons.view_details'), item_show_path, data: { turbo_frame: "_top" }, class: "btn btn-primary btn-sm" %>
         <% has_bestof = item.tags.any? { |t| t.name == 'bestof' } %>
         <%= button_to add_bestof_item_path(item),
                       method: :patch,

@@ -9,6 +9,8 @@
         </div>
         <div class="card-body">
           <%= form_with model: @item, local: true, html: { class: "needs-validation", novalidate: true } do |form| %>
+            <%= hidden_field_tag :return_path, @nav_params['return_path'] if @nav_params&.dig('return_path').present? %>
+            <%= hidden_field_tag :item_ids, @nav_params['item_ids'] if @nav_params&.dig('item_ids').present? %>
             
             <!-- Error Messages -->
             <% if @item.errors.any? %>
@@ -140,7 +142,7 @@
                 <% end %>
               </div>
               <div>
-                <%= link_to @item, class: "btn btn-secondary" do %>
+                <%= link_to item_path(@item, @nav_params || {}), class: "btn btn-secondary" do %>
                   <i class="fas fa-times me-2"></i>Cancel
                 <% end %>
               </div>
