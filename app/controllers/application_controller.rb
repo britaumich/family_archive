@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   around_action :switch_locale
-
+  around_action :prosopite_scan, if: -> { Rails.env.development? && defined?(Prosopite) }
   helper_method :current_user
 
   def current_user
@@ -29,6 +29,17 @@ class ApplicationController < ActionController::Base
 
   def default_url_options
     { locale: I18n.locale }
+  end
+
+  def prosopite_scan
+    Prosopite.scan
+    yield
+  ensure
+    begin
+      Prosopite.finish
+    rescue LoadError => e
+      Rails.logger.warn("[Prosopite] #{e.class}: #{e.message}")
+    end
   end
 
 end

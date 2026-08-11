@@ -1,4 +1,4 @@
-<% selected_tags_for_type = @selected_tags.select { |tag| tag.tag_type == tag_type } %>
+<% selected_tags_for_type = @selected_tags.select { |tag| tag.tag_type_id == tag_type&.id } %>
 <% if selected_tags_for_type.any? %>
   <div class="mt-2">
     <% selected_tags_for_type.each do |tag| %>
