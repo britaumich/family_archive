@@ -21,7 +21,9 @@
   },
   "resolutions": {
     "**/anymatch/picomatch": "2.3.2",
-    "**/readdirp/picomatch": "2.3.2"
+    "**/readdirp/picomatch": "2.3.2",
+    "**/@parcel/watcher/picomatch": "4.0.5",
+    "**/tinyglobby/picomatch": "4.0.5"
   },
   "browserslist": [
     "defaults"
