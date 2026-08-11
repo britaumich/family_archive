@@ -172,12 +172,8 @@ class ItemsController < ApplicationController
   end
 
   def edit
-    @tags_by_type = set_tags_by_type(nil, only_used: false)
-    @nav_params = nav_context_params
-    if @nav_params['return_path'].present? && !@nav_params['return_path'].start_with?('/')
-      @nav_params = @nav_params.except('return_path')
-    end
     authorize @item
+    redirect_to item_path(@item, nav_context_params)
   end
 
   def update
