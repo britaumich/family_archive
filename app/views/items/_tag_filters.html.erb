@@ -4,6 +4,7 @@
   clear_url = local_assigns.fetch(:clear_url, items_path)
   card_wrapper = local_assigns.fetch(:card_wrapper, false)
   use_turbo_frames = local_assigns.fetch(:use_turbo_frames, false)
+  show_no_tags_filter = local_assigns.fetch(:show_no_tags_filter, false)
 %>
 
 <% if card_wrapper %>
@@ -79,6 +80,13 @@
             <%= form.radio_button :filter_type, "all", checked: params[:filter_type] != "any", class: "form-check-input" %>
             <%= form.label :filter_type_all, t('forms.labels.filter_type_all'), class: "form-check-label" %>
           </div>
+          <% if show_no_tags_filter %>
+            <hr>
+            <div class="form-check">
+              <%= form.check_box :no_tags_only, { checked: params[:no_tags_only] == '1', class: "form-check-input" }, '1', '0' %>
+              <%= form.label :no_tags_only, t('text.no_tags'), class: "form-check-label" %>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>

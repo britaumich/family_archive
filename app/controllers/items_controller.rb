@@ -3,6 +3,7 @@ class ItemsController < ApplicationController
 
   def index
     @selected_tags = []
+    no_tags_only = ActiveModel::Type::Boolean.new.cast(params[:no_tags_only])
     
     # Start with base query
     base_items = Item.all
@@ -12,8 +13,15 @@ class ItemsController < ApplicationController
       base_items = base_items.where(item_type: params[:item_type])
     end
 
+    # Special case: show only items without any tags
+    if no_tags_only
+      items = base_items.includes(:tags)
+                       .left_joins(tags: :tag_type)
+                       .where(tags: { id: nil })
+                       .group('items.id')
+                       .order(Arel.sql("MAX(CASE WHEN tag_types.name = 'year' THEN tags.name END) DESC NULLS LAST, items.created_at DESC"))
     # Filter by multiple tags if specified
-    if params[:tags].present?
+    elsif params[:tags].present?
       tag_ids = params[:tags].reject(&:blank?).map(&:to_i)
       @selected_tags = Tag.includes(:tag_type, :items).where(id: tag_ids)
 
