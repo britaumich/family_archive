@@ -3,7 +3,10 @@
   
 
   <% if @tags_by_type_filters.any? %>
-    <%= render 'tag_filters', form_url: @form_action || items_path, clear_url: @form_action || items_path %>
+    <%= render 'tag_filters',
+               form_url: @form_action || items_path,
+               clear_url: @form_action || items_path,
+               show_no_tags_filter: @form_action.blank? %>
   <% end %>
   <%= form_with url: @form_action || items_path, method: :get, turbo: true,
     data: { controller: "autosubmit",

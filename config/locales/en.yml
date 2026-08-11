@@ -119,6 +119,8 @@ en:
       clear_filters: "Clear Filters"
       view_details: "Details"
       back_to_items: "Back to Items"
+      previous: "Previous"
+      next: "Next"
     flash:
       tag_created: "Tag was successfully created."
       tag_updated: "Tag was successfully updated."
@@ -169,6 +171,8 @@ en:
     tooltips:
       add_to_best_of: "Add to Best Of"
       remove_from_best_of: "Remove from Best Of"
+      add_needtag: "Need tag"
+      remove_needtag: "No tags needed"
   tags:
     edit:
       title: "Editing Tag"
