@@ -110,15 +110,26 @@
       
       <div class="mt-auto d-flex justify-content-between align-items-center">
         <%= link_to t('forms.buttons.view_details'), item_show_path, data: { turbo_frame: "_top" }, class: "btn btn-primary btn-sm" %>
-        <% has_bestof = item.tags.any? { |t| t.name == 'bestof' } %>
-        <%= button_to add_bestof_item_path(item),
-                      method: :patch,
-                      data: { turbo: true },
-                      class: "btn btn-sm #{has_bestof ? 'btn-warning' : 'btn-outline-warning'} d-flex align-items-center gap-1",
-                      title: (has_bestof ? t('forms.tooltips.remove_from_best_of') : t('forms.tooltips.add_to_best_of')) do %>
-          <i class="bi bi-<%= has_bestof ? 'star-fill' : 'star' %>"></i>
-          <%= t('forms.labels.best_of') %>
-        <% end %>
+        <div class="d-flex gap-1 align-items-center">
+          <% has_needtag = item.tags.any? { |t| t.name == 'needtag' } %>
+          <%= button_to add_needtag_item_path(item),
+                        method: :patch,
+                        data: { turbo: true },
+                        class: "btn btn-sm #{has_needtag ? 'btn-info' : 'btn-outline-info'}",
+                        title: (has_needtag ? 'Remove needtag' : 'Add needtag') do %>
+            ?
+          <% end %>
+
+          <% has_bestof = item.tags.any? { |t| t.name == 'bestof' } %>
+          <%= button_to add_bestof_item_path(item),
+                        method: :patch,
+                        data: { turbo: true },
+                        class: "btn btn-sm #{has_bestof ? 'btn-warning' : 'btn-outline-warning'} d-flex align-items-center gap-1",
+                        title: (has_bestof ? t('forms.tooltips.remove_from_best_of') : t('forms.tooltips.add_to_best_of')) do %>
+            <i class="bi bi-<%= has_bestof ? 'star-fill' : 'star' %>"></i>
+            <%= t('forms.labels.best_of') %>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>

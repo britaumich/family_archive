@@ -63,6 +63,10 @@ class ItemPolicy  < ApplicationPolicy
     true
   end
 
+  def add_needtag?
+    true
+  end
+
   def family_pictures?
     authenticated?
   end
