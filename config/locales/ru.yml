@@ -175,6 +175,8 @@ ru:
       remove_from_best_of: "Удалить из лучшей подборки"
       add_needtag: "Нужен тэг"
       remove_needtag: "Не нужен тэг"
+      mark_to_delete: "Отметить к удалению"
+      unmark_to_delete: "Снять отметку удаления"
   tags:
     edit:
       title: "Редактирование тега"

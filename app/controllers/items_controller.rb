@@ -1,5 +1,5 @@
 class ItemsController < ApplicationController
-  before_action :set_item, only: %i[show edit update destroy assign_tags remove_tags add_bestof add_needtag]
+  before_action :set_item, only: %i[show edit update destroy assign_tags remove_tags add_bestof add_needtag mark_to_delete]
 
   def index
     @selected_tags = []
@@ -602,6 +602,30 @@ class ItemsController < ApplicationController
       @item.tags.delete(needtag)
     else
       @item.tags << needtag if needtag
+    end
+
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace(
+          "picture_#{@item.id}",
+          partial: "items/item_card",
+          locals: { item: @item }
+        )
+      end
+      format.html do
+        redirect_to @item
+      end
+    end
+  end
+
+  def mark_to_delete
+    authorize @item
+    to_delete_tag = Tag.find_by(name: 'to_delete')
+
+    if @item.tags.exists?(name: 'to_delete')
+      @item.tags.delete(to_delete_tag)
+    else
+      @item.tags << to_delete_tag if to_delete_tag
     end
 
     respond_to do |format|

@@ -173,6 +173,8 @@ en:
       remove_from_best_of: "Remove from Best Of"
       add_needtag: "Need tag"
       remove_needtag: "No tags needed"
+      mark_to_delete: "Mark for deletion"
+      unmark_to_delete: "Unmark for deletion"
   tags:
     edit:
       title: "Editing Tag"
