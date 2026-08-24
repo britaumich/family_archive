@@ -9,6 +9,7 @@
         <a href="<%= url_for(item.file) %>" 
           data-lightbox="gallery" 
           data-gallery="items-gallery"
+          class="js-lightbox-item"
           data-title="<%= [strip_tags(item.caption), item.tags.map(&:translated_name).join(', ')].reject(&:blank?).join(' - ') %>">
           <%= image_tag item.thumb_medium || item.file, 
               class: "card-img-top lightbox-image", 
@@ -35,9 +36,9 @@
           <a href="<%= url_for(item.file) %>" 
             data-lightbox="gallery" 
             data-gallery="items-gallery"
+            class="js-lightbox-item btn btn-outline-light btn-sm position-absolute"
             data-title="<%= [strip_tags(item.caption), item.tags.map(&:translated_name).join(', ')].reject(&:blank?).join(' - ') %>"
             data-type="video"
-            class="btn btn-outline-light btn-sm position-absolute"
             style="top: 8px; right: 8px; z-index: 10;"
             title="Open in lightbox">
             <i class="bi bi-arrows-fullscreen"></i>
