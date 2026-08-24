@@ -248,7 +248,15 @@ en:
         word_document: "Word Document"
   pages:
     about:
-      description: "Something about the app"
+      description: "Sign In or Register by invitation only"
+      instructions:
+        go_to_pictures: "Go to the Pictures menu to view the content of the Archive."
+        select_tags: "Select the tags to filter the pictures."
+        open_details: "On a picture card, click Details to view the picture information and assigned tags."
+        mark_to_delete: "Click the X icon if you want to delete the picture later after reviewing it."
+        add_needtag: "Click the ? icon to add needtag to the picture."
+        mark_bestof: "Click the Best Of button to mark the picture as one of the best."
+        filter_by_special_tags: "Later you can filter pictures by %{to_delete}, %{needtag}, or %{bestof} tags."
   menu:
     new: "New"
     navbar:
