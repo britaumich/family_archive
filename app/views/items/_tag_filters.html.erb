@@ -5,6 +5,7 @@
   card_wrapper = local_assigns.fetch(:card_wrapper, false)
   use_turbo_frames = local_assigns.fetch(:use_turbo_frames, false)
   show_no_tags_filter = local_assigns.fetch(:show_no_tags_filter, false)
+  selected_tag_ids = @selected_tags.map(&:id)
 %>
 
 <% if card_wrapper %>
@@ -44,7 +45,7 @@
                   <% tags.each do |tag| %>
                     <div class="form-check">
                       <%= form.check_box :tags, 
-                          { multiple: true, checked: @selected_tags.include?(tag), id: "tag_#{tag.id}" }, 
+                          { multiple: true, checked: selected_tag_ids.include?(tag.id), id: "tag_#{tag.id}" }, 
                           tag.id, "" %>
                       <%= form.label "tag_#{tag.id}", tag.translated_name, 
                           class: "form-check-label" %>
