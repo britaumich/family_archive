@@ -117,7 +117,8 @@
                         method: :patch,
                         data: { turbo: true },
                         class: "btn btn-sm #{has_to_delete ? 'btn-danger' : 'btn-outline-danger'}",
-                        title: (has_to_delete ? t('forms.tooltips.unmark_to_delete') : t('forms.tooltips.mark_to_delete')) do %>
+                        title: (has_to_delete ? t('forms.tooltips.unmark_to_delete') : t('forms.tooltips.mark_to_delete')),
+                        aria: { label: (has_to_delete ? t('forms.tooltips.unmark_to_delete') : t('forms.tooltips.mark_to_delete')) } do %>
             X
           <% end %>
 
@@ -126,7 +127,8 @@
                         method: :patch,
                         data: { turbo: true },
                         class: "btn btn-sm #{has_needtag ? 'btn-info' : 'btn-outline-info'}",
-                        title: (has_needtag ? t('forms.tooltips.remove_needtag') : t('forms.tooltips.add_needtag')) do %>
+                        title: (has_needtag ? t('forms.tooltips.remove_needtag') : t('forms.tooltips.add_needtag')),
+                        aria: { label: (has_needtag ? t('forms.tooltips.remove_needtag') : t('forms.tooltips.add_needtag')) } do %>
             ?
           <% end %>
 
@@ -135,7 +137,8 @@
                         method: :patch,
                         data: { turbo: true },
                         class: "btn btn-sm #{has_bestof ? 'btn-warning' : 'btn-outline-warning'} d-flex align-items-center gap-1",
-                        title: (has_bestof ? t('forms.tooltips.remove_from_best_of') : t('forms.tooltips.add_to_best_of')) do %>
+                        title: (has_bestof ? t('forms.tooltips.remove_from_best_of') : t('forms.tooltips.add_to_best_of')),
+                        aria: { label: (has_bestof ? t('forms.tooltips.remove_from_best_of') : t('forms.tooltips.add_to_best_of')) } do %>
             <i class="bi bi-<%= has_bestof ? 'star-fill' : 'star' %>"></i>
             <%= t('forms.labels.best_of') %>
           <% end %>
