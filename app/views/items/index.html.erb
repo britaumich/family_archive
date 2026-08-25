@@ -5,7 +5,7 @@
   <% if @tags_by_type_filters.any? %>
     <%= render 'tag_filters',
                form_url: @form_action || items_path,
-               clear_url: @form_action || items_path,
+               clear_url: @form_action || (params[:item_type].present? ? items_path(item_type: params[:item_type]) : items_path),
                show_no_tags_filter: @form_action.blank? %>
   <% end %>
   <%= form_with url: @form_action || items_path, method: :get, turbo: true,
@@ -13,6 +13,19 @@
             autosubmit_target: "form",
             turbo_frame: "all_items"
             } do %>
+    <% if params[:item_type].present? %>
+      <%= hidden_field_tag :item_type, params[:item_type] %>
+    <% end %>
+    <% Array(params[:tags]).reject(&:blank?).each do |tag_id| %>
+      <%= hidden_field_tag 'tags[]', tag_id %>
+    <% end %>
+    <% if params[:filter_type].present? %>
+      <%= hidden_field_tag :filter_type, params[:filter_type] %>
+    <% end %>
+    <% if params.key?(:no_tags_only) %>
+      <%= hidden_field_tag :no_tags_only, params[:no_tags_only] %>
+    <% end %>
+
     <div class="d-flex align-items-center gap-2 mb-3">
       <label for="per" class="form-label"><%= t('forms.labels.items_per_page') %>:</label>
       <%= select_tag :per, options_for_select([25, 50, 100, 150, 200], params[:per] ? params[:per] : 100), "data-action": "autosubmit#submitForm", class: "form-select" %>
