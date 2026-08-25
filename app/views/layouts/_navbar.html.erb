@@ -20,7 +20,7 @@
           </a>
           <ul class="dropdown-menu bg-primary rounded-0 navbar_dropdown_item">
             <li>
-              <%= link_to t('menu.navbar.all_items'), items_path, class: 'dropdown-item navbar_dropdown_item' %>
+              <%= link_to t('menu.navbar.all_items'), items_path(item_type: 'photo'), class: 'dropdown-item navbar_dropdown_item' %>
             </li>
             <li>
               <%= link_to t('menu.navbar.videos'), items_path(item_type: 'video'), class: 'dropdown-item navbar_dropdown_item' %>

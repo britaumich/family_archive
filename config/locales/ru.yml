@@ -39,6 +39,8 @@ ru:
     upload_files: "Загрузить файлы"
     pictures: "Фотографии"
     select_pictures_by_tags: "Выбрать фотографии по тегам"
+    select_videos_by_tags: "Выбрать видео по тегам"
+    select_documents_by_tags: "Выбрать документы по тегам"
     family_list: "Список семей"
   auth:
     sign_in: "Войти"
@@ -175,6 +177,8 @@ ru:
       remove_from_best_of: "Удалить из лучшей подборки"
       add_needtag: "Нужен тэг"
       remove_needtag: "Не нужен тэг"
+      mark_to_delete: "Отметить к удалению"
+      unmark_to_delete: "Снять отметку удаления"
   tags:
     edit:
       title: "Редактирование тега"
@@ -251,7 +255,15 @@ ru:
         word_document: "Word документ"
   pages:
     about:
-      description: "Что-то о приложении"
+      description: "Вход или регистрация только по приглашению"
+      instructions:
+        go_to_pictures: "Откройте меню Фотографии, чтобы просматривать содержимое архива."
+        select_tags: "Выберите теги, чтобы отфильтровать фотографии."
+        open_details: "На карточке фотографии нажмите Подробнее, чтобы открыть информацию и назначенные теги."
+        mark_to_delete: "Нажмите иконку X, если хотите удалить фотографию позже после проверки."
+        add_needtag: "Нажмите иконку ?, чтобы добавить тег needtag к фотографии."
+        mark_bestof: "Нажмите кнопку Лучшая, чтобы отметить фотографию как одну из лучших."
+        filter_by_special_tags: "Позже можно фильтровать фотографии по тегам '%{to_delete}', '%{needtag}' или '%{bestof}'."
   menu:
     new: "Добавить"
     navbar:

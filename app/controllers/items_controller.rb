@@ -1,5 +1,5 @@
 class ItemsController < ApplicationController
-  before_action :set_item, only: %i[show edit update destroy assign_tags remove_tags add_bestof add_needtag]
+  before_action :set_item, only: %i[show edit update destroy assign_tags remove_tags add_bestof add_needtag mark_to_delete]
 
   def index
     @selected_tags = []
@@ -565,30 +565,23 @@ class ItemsController < ApplicationController
 
   def add_bestof
     authorize @item
-    bestof_tag = Tag.find_by(name: 'bestof')
-    # unless bestof_tag.present?
-    #   redirect_to @item, alert: t('forms.flash.bestof_tag_not_found')
-    #   return
-    # end
-    
-    if @item.tags.exists?(name: 'bestof')
-      # Remove the bestof tag if it exists
-      @item.tags.delete(bestof_tag)
-    else
-      # Add the bestof tag if it doesn't exist
-      @item.tags << bestof_tag if bestof_tag
-    end
+    nav_params = nav_context_params
+    toggle_item_tag!('bestof')
     
     respond_to do |format|
       format.turbo_stream do
         render turbo_stream: turbo_stream.replace(
           "picture_#{@item.id}",
           partial: "items/item_card",
-          locals: { item: @item }
+          locals: {
+            item: @item,
+            navigation_return_path: nav_params['return_path'],
+            navigation_item_ids: nav_params['item_ids']
+          }
         )
       end
       format.html do
-        redirect_to @item
+        redirect_to item_path(@item, nav_params)
       end
     end
   
@@ -596,24 +589,46 @@ class ItemsController < ApplicationController
 
   def add_needtag
     authorize @item
-    needtag = Tag.find_by(name: 'needtag')
-
-    if @item.tags.exists?(name: 'needtag')
-      @item.tags.delete(needtag)
-    else
-      @item.tags << needtag if needtag
-    end
+    nav_params = nav_context_params
+    toggle_item_tag!('needtag')
 
     respond_to do |format|
       format.turbo_stream do
         render turbo_stream: turbo_stream.replace(
           "picture_#{@item.id}",
           partial: "items/item_card",
-          locals: { item: @item }
+          locals: {
+            item: @item,
+            navigation_return_path: nav_params['return_path'],
+            navigation_item_ids: nav_params['item_ids']
+          }
         )
       end
       format.html do
-        redirect_to @item
+        redirect_to item_path(@item, nav_params)
+      end
+    end
+  end
+
+  def mark_to_delete
+    authorize @item
+    nav_params = nav_context_params
+    toggle_item_tag!('to_delete')
+
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace(
+          "picture_#{@item.id}",
+          partial: "items/item_card",
+          locals: {
+            item: @item,
+            navigation_return_path: nav_params['return_path'],
+            navigation_item_ids: nav_params['item_ids']
+          }
+        )
+      end
+      format.html do
+        redirect_to item_path(@item, nav_params)
       end
     end
   end
@@ -695,6 +710,30 @@ class ItemsController < ApplicationController
     
     query.group_by(&:tag_type)
          .sort_by { |tag_type, _| tag_type&.translated_name || '' }
+  end
+
+  def toggle_item_tag!(tag_name)
+    @item.with_lock do
+      tag = begin
+        Tag.find_or_create_by!(name: tag_name)
+      rescue ActiveRecord::RecordNotUnique
+        Tag.find_by!(name: tag_name)
+      end
+
+      removed = @item.tagables.where(tag_id: tag.id).delete_all
+      if removed.positive?
+         @item.association(:tags).reset
+         return
+      end
+
+      begin
+        @item.tagables.create!(tag_id: tag.id)
+      rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid
+        # Another request created the same join row after our delete check.
+      end
+      @item.association(:tags).reset
+    end
+    
   end
 
   def set_item
