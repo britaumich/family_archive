@@ -565,19 +565,7 @@ class ItemsController < ApplicationController
 
   def add_bestof
     authorize @item
-    bestof_tag = Tag.find_by(name: 'bestof')
-    # unless bestof_tag.present?
-    #   redirect_to @item, alert: t('forms.flash.bestof_tag_not_found')
-    #   return
-    # end
-    
-    if @item.tags.exists?(name: 'bestof')
-      # Remove the bestof tag if it exists
-      @item.tags.delete(bestof_tag)
-    else
-      # Add the bestof tag if it doesn't exist
-      @item.tags << bestof_tag if bestof_tag
-    end
+    toggle_item_tag!('bestof')
     
     respond_to do |format|
       format.turbo_stream do
@@ -596,13 +584,7 @@ class ItemsController < ApplicationController
 
   def add_needtag
     authorize @item
-    needtag = Tag.find_by(name: 'needtag')
-
-    if @item.tags.exists?(name: 'needtag')
-      @item.tags.delete(needtag)
-    else
-      @item.tags << needtag if needtag
-    end
+    toggle_item_tag!('needtag')
 
     respond_to do |format|
       format.turbo_stream do
@@ -620,13 +602,7 @@ class ItemsController < ApplicationController
 
   def mark_to_delete
     authorize @item
-    to_delete_tag = Tag.find_by(name: 'to_delete')
-
-    if @item.tags.exists?(name: 'to_delete')
-      @item.tags.delete(to_delete_tag)
-    else
-      @item.tags << to_delete_tag if to_delete_tag
-    end
+    toggle_item_tag!('to_delete')
 
     respond_to do |format|
       format.turbo_stream do
@@ -719,6 +695,21 @@ class ItemsController < ApplicationController
     
     query.group_by(&:tag_type)
          .sort_by { |tag_type, _| tag_type&.translated_name || '' }
+  end
+
+  def toggle_item_tag!(tag_name)
+    tag = Tag.find_or_create_by!(name: tag_name)
+
+    @item.with_lock do
+      removed = @item.tagables.where(tag_id: tag.id).delete_all
+      return if removed.positive?
+
+      begin
+        @item.tagables.create!(tag_id: tag.id)
+      rescue ActiveRecord::RecordNotUnique
+        # Another request created the same join row after our delete check.
+      end
+    end
   end
 
   def set_item
