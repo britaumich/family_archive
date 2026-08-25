@@ -39,6 +39,8 @@ en:
     upload_files: "Upload Files"
     pictures: "Pictures"
     select_pictures_by_tags: "Select Pictures by Tags"
+    select_videos_by_tags: "Select Videos by Tags"
+    select_documents_by_tags: "Select Documents by Tags"
     family_list: "Family List"
   auth:
     sign_in: "Sign in"

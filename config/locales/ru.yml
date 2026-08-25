@@ -39,6 +39,8 @@ ru:
     upload_files: "Загрузить файлы"
     pictures: "Фотографии"
     select_pictures_by_tags: "Выбрать фотографии по тегам"
+    select_videos_by_tags: "Выбрать видео по тегам"
+    select_documents_by_tags: "Выбрать документы по тегам"
     family_list: "Список семей"
   auth:
     sign_in: "Войти"

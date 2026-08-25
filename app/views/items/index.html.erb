@@ -1,5 +1,14 @@
 <div class="container-fluid">
-  <h1><%= t('page_titles.select_pictures_by_tags') %></h1>
+  <h1>
+    <%= case params[:item_type]
+        when 'video'
+          t('page_titles.select_videos_by_tags')
+        when 'document'
+          t('page_titles.select_documents_by_tags')
+        else
+          t('page_titles.select_pictures_by_tags')
+        end %>
+  </h1>
   
 
   <% if @tags_by_type_filters.any? %>
