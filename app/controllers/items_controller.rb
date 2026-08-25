@@ -721,14 +721,19 @@ class ItemsController < ApplicationController
       end
 
       removed = @item.tagables.where(tag_id: tag.id).delete_all
-      return if removed.positive?
+      if removed.positive?
+         @item.association(:tags).reset
+         return
+      end
 
       begin
         @item.tagables.create!(tag_id: tag.id)
-      rescue ActiveRecord::RecordNotUnique
+      rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid
         # Another request created the same join row after our delete check.
       end
+      @item.association(:tags).reset
     end
+    
   end
 
   def set_item
