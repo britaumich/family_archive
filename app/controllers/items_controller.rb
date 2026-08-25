@@ -698,9 +698,13 @@ class ItemsController < ApplicationController
   end
 
   def toggle_item_tag!(tag_name)
-    tag = Tag.find_or_create_by!(name: tag_name)
-
     @item.with_lock do
+      tag = begin
+        Tag.find_or_create_by!(name: tag_name)
+      rescue ActiveRecord::RecordNotUnique
+        Tag.find_by!(name: tag_name)
+      end
+
       removed = @item.tagables.where(tag_id: tag.id).delete_all
       return if removed.positive?
 
