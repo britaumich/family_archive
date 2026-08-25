@@ -2,17 +2,15 @@
 <div class="d-grid w-100 mt-4 mb-8">
   <% if authenticated? %>
     <% special_tags = translated_special_tags('to_delete', 'needtag', 'bestof') %>
-    <p>
-      <ul>
-        <li><%= t('pages.about.instructions.go_to_pictures') %></li>
-        <li><%= t('pages.about.instructions.select_tags') %></li>
-        <li><%= t('pages.about.instructions.open_details') %></li>
-        <li><%= t('pages.about.instructions.mark_to_delete') %></li>
-        <li><%= t('pages.about.instructions.add_needtag') %></li>
-        <li><%= t('pages.about.instructions.mark_bestof') %></li>
-        <li><%= t('pages.about.instructions.filter_by_special_tags', to_delete: special_tags['to_delete'], needtag: special_tags['needtag'], bestof: special_tags['bestof']) %></li>
-      </ul>
-    </p>
+    <ul>
+      <li><%= t('pages.about.instructions.go_to_pictures') %></li>
+      <li><%= t('pages.about.instructions.select_tags') %></li>
+      <li><%= t('pages.about.instructions.open_details') %></li>
+      <li><%= t('pages.about.instructions.mark_to_delete') %></li>
+      <li><%= t('pages.about.instructions.add_needtag') %></li>
+      <li><%= t('pages.about.instructions.mark_bestof') %></li>
+      <li><%= t('pages.about.instructions.filter_by_special_tags', to_delete: special_tags['to_delete'], needtag: special_tags['needtag'], bestof: special_tags['bestof']) %></li>
+    </ul>
     <div>
       <%= link_to t('auth.sign_out'), session_path, 
         method: :delete, 
