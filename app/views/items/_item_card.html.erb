@@ -113,7 +113,7 @@
         <%= link_to t('forms.buttons.view_details'), item_show_path, data: { turbo_frame: "_top" }, class: "btn btn-primary btn-sm flex-shrink-0" %>
         <div class="d-flex gap-1 align-items-center flex-wrap justify-content-end ms-auto">
           <% has_to_delete = item.tags.any? { |t| t.name == 'to_delete' } %>
-          <%= button_to mark_to_delete_item_path(item),
+          <%= button_to mark_to_delete_item_path(item, item_navigation_params),
                         method: :patch,
                         data: { turbo: true },
                         class: "btn btn-sm #{has_to_delete ? 'btn-danger' : 'btn-outline-danger'}",
@@ -123,7 +123,7 @@
           <% end %>
 
           <% has_needtag = item.tags.any? { |t| t.name == 'needtag' } %>
-          <%= button_to add_needtag_item_path(item),
+          <%= button_to add_needtag_item_path(item, item_navigation_params),
                         method: :patch,
                         data: { turbo: true },
                         class: "btn btn-sm #{has_needtag ? 'btn-info' : 'btn-outline-info'}",
@@ -133,7 +133,7 @@
           <% end %>
 
           <% has_bestof = item.tags.any? { |t| t.name == 'bestof' } %>
-          <%= button_to add_bestof_item_path(item),
+          <%= button_to add_bestof_item_path(item, item_navigation_params),
                         method: :patch,
                         data: { turbo: true },
                         class: "btn btn-sm #{has_bestof ? 'btn-warning' : 'btn-outline-warning'} d-flex align-items-center gap-1",

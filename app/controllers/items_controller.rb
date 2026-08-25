@@ -565,6 +565,7 @@ class ItemsController < ApplicationController
 
   def add_bestof
     authorize @item
+    nav_params = nav_context_params
     toggle_item_tag!('bestof')
     
     respond_to do |format|
@@ -572,11 +573,15 @@ class ItemsController < ApplicationController
         render turbo_stream: turbo_stream.replace(
           "picture_#{@item.id}",
           partial: "items/item_card",
-          locals: { item: @item }
+          locals: {
+            item: @item,
+            navigation_return_path: nav_params['return_path'],
+            navigation_item_ids: nav_params['item_ids']
+          }
         )
       end
       format.html do
-        redirect_to @item
+        redirect_to item_path(@item, nav_params)
       end
     end
   
@@ -584,6 +589,7 @@ class ItemsController < ApplicationController
 
   def add_needtag
     authorize @item
+    nav_params = nav_context_params
     toggle_item_tag!('needtag')
 
     respond_to do |format|
@@ -591,17 +597,22 @@ class ItemsController < ApplicationController
         render turbo_stream: turbo_stream.replace(
           "picture_#{@item.id}",
           partial: "items/item_card",
-          locals: { item: @item }
+          locals: {
+            item: @item,
+            navigation_return_path: nav_params['return_path'],
+            navigation_item_ids: nav_params['item_ids']
+          }
         )
       end
       format.html do
-        redirect_to @item
+        redirect_to item_path(@item, nav_params)
       end
     end
   end
 
   def mark_to_delete
     authorize @item
+    nav_params = nav_context_params
     toggle_item_tag!('to_delete')
 
     respond_to do |format|
@@ -609,11 +620,15 @@ class ItemsController < ApplicationController
         render turbo_stream: turbo_stream.replace(
           "picture_#{@item.id}",
           partial: "items/item_card",
-          locals: { item: @item }
+          locals: {
+            item: @item,
+            navigation_return_path: nav_params['return_path'],
+            navigation_item_ids: nav_params['item_ids']
+          }
         )
       end
       format.html do
-        redirect_to @item
+        redirect_to item_path(@item, nav_params)
       end
     end
   end
