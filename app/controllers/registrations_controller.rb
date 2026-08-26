@@ -8,8 +8,8 @@ class RegistrationsController < ApplicationController
   def create
     @user = User.new(user_params)
 
-    unless admin_user_for_email(@user.email_address)
-      @user.errors.add(:email_address, t('auth.registration_not_allowed'))
+    if @user.valid? && admin_user_for_email(@user.email_address).nil?
+       @user.errors.add(:base, t('auth.registration_not_allowed'))
       render :new, status: :unprocessable_entity
       return
     end
