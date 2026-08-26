@@ -76,8 +76,13 @@
           <% 
             other_locale = I18n.locale == :en ? :ru : :en
             locale_name = other_locale == :en ? 'English' : 'Русский'
+            locale_switch_path = if controller_name == 'registrations' && action_name == 'create'
+              new_registration_path(locale: other_locale)
+            else
+              url_for(request.query_parameters.merge(locale: other_locale))
+            end
           %>
-          <%= link_to locale_name, url_for(request.query_parameters.merge(locale: other_locale)), class: 'nav-link fs-5 focus-ring border-0 rounded-2 text-decoration-none', style: "--bs-focus-ring-color:#E5E5E5;" %>
+          <%= link_to locale_name, locale_switch_path, class: 'nav-link fs-5 focus-ring border-0 rounded-2 text-decoration-none', style: "--bs-focus-ring-color:#E5E5E5;" %>
         </div>
       </div>
 
