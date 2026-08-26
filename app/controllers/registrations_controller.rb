@@ -19,7 +19,7 @@ class RegistrationsController < ApplicationController
         redirect_to root_url, notice: t('forms.flash.registered_successfully')
       else
         terminate_session
-        @user.errors.add(:base, t('auth.login_not_allowed'))
+        @user.errors.add(:base, t('auth.registration_not_allowed'))
         render :new, status: :unprocessable_entity
       end
     else

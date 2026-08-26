@@ -55,7 +55,6 @@ en:
     not_authorized: "You are not authorized to access this page."
     invalid_credentials: "Invalid email or password."
     registration_not_allowed: "This email is not allowed to register. Please contact an administrator."
-    login_not_allowed: "You are not allowed to sign in with this account."
     rate_limit_exceeded: "Too many login attempts. Please try again later."
     role:
       admin: "Administrator"

@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
         redirect_to after_authentication_url
       else
         terminate_session
-        redirect_to new_session_path, alert: t('auth.login_not_allowed')
+        redirect_to new_session_path, alert: t('auth.invalid_credentials')
       end
     else
       redirect_to new_session_path, alert: t("auth.invalid_credentials")
