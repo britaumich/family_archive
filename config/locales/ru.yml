@@ -54,6 +54,7 @@ ru:
     confirm_password_placeholder: "Подтвердите пароль"
     not_authorized: "У вас нет прав для доступа к этой странице."
     invalid_credentials: "Неверный адрес электронной почты или пароль."
+    registration_not_allowed: "Этот email не имеет права на регистрацию. Обратитесь к администратору."
     rate_limit_exceeded: "Слишком много попыток входа. Пожалуйста, попробуйте позже."
     role:
       admin: "Администратор"
