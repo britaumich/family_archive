@@ -10,6 +10,7 @@ class SessionsController < ApplicationController
       if start_new_session_for(user)
         redirect_to after_authentication_url
       else
+        terminate_session
         redirect_to new_session_path, alert: t('auth.login_not_allowed')
       end
     else
