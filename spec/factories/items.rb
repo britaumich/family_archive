@@ -10,7 +10,7 @@
 #
 FactoryBot.define do
   factory :item do
-    item_type { 1 }
+    item_type { :photo }
 
     after(:build) do |item|
       item.file.attach(
