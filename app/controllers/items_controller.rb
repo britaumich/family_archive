@@ -23,9 +23,10 @@ class ItemsController < ApplicationController
     # Filter by multiple tags if specified
     elsif params[:tags].present?
       tag_ids = params[:tags].reject(&:blank?).map(&:to_i)
-      @selected_tags = Tag.includes(:tag_type, :items).where(id: tag_ids).to_a
+      @selected_tags = []
 
       if tag_ids.any?
+        @selected_tags = Tag.includes(:tag_type, :items).where(id: tag_ids).to_a
         # AND logic: items must have ALL selected tags
         if params[:filter_type] == 'all'
           # Use subquery to find items with all required tags
