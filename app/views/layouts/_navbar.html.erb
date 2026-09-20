@@ -105,6 +105,99 @@
   </div>
   <!-- this is the hamburger menu-->
   <div class="collapse navbar-collapse d-md-none" id="navbarBurgerMenu">
-    <%= link_to t('menu.navbar.about'), about_path, class: 'dropdown-item navbar_dropdown_item font-weight: bold' %>
+    <% 
+      mobile_locale_name = locale_name
+      mobile_locale_switch_path = locale_switch_path
+    %>
+
+    <ul class="navbar-nav flex-column w-100">
+      <li class="nav-item">
+        <%= link_to t('menu.navbar.about'), about_path, class: 'nav-link navbar_dropdown_item fw-bold px-3' %>
+      </li>
+
+      <% if authenticated? %>
+        <li class="nav-item px-3 pt-2 pb-1">
+          <span class="text-uppercase small fw-semibold text-white-50"><%= t('menu.navbar.items') %></span>
+        </li>
+
+        <li class="nav-item">
+          <%= link_to t('menu.navbar.all_items'), items_path(item_type: 'photo'), class: 'nav-link navbar_dropdown_item ps-4 pe-3' %>
+        </li>
+        <li class="nav-item">
+          <%= link_to t('menu.navbar.videos'), items_path(item_type: 'video'), class: 'nav-link navbar_dropdown_item ps-4 pe-3' %>
+        </li>
+        <li class="nav-item">
+          <%= link_to t('menu.navbar.documents'), items_path(item_type: 'document'), class: 'nav-link navbar_dropdown_item ps-4 pe-3' %>
+        </li>
+
+        <li class="nav-item">
+            <button class="nav-link navbar_dropdown_item ps-4 pe-3 w-100 text-start bg-transparent border-0 d-flex align-items-center"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#mobileFamilyPicturesMenu"
+                  aria-expanded="false"
+                  aria-controls="mobileFamilyPicturesMenu">
+            <span><%= t('menu.navbar.family_pictures') %></span>
+            <i class="bi bi-chevron-down small ms-1" aria-hidden="true"></i>
+          </button>
+          <div class="collapse" id="mobileFamilyPicturesMenu" data-bs-parent="#navbarBurgerMenu">
+            <ul class="navbar-nav flex-column w-100 ps-3">
+              <% all_families.each do |family| %>
+                <li class="nav-item">
+                  <%= link_to family.translated_name, family_pictures_items_path(family), class: 'nav-link navbar_dropdown_item ps-5 pe-3' %>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </li>
+
+        <% if policy(AdminUser).index? %>
+          <li class="nav-item px-3 pt-3 pb-1">
+            <span class="text-uppercase small fw-semibold text-white-50"><%= t('menu.navbar.admin') %></span>
+          </li>
+
+          <li class="nav-item">
+            <%= link_to t('menu.navbar.upload_files'), upload_files_page_path, class: 'nav-link navbar_dropdown_item ps-4 pe-3' %>
+          </li>
+          <li class="nav-item">
+            <%= link_to t('menu.navbar.bulk_assign_tags'), editing_tags_page_items_path, class: 'nav-link navbar_dropdown_item ps-4 pe-3' %>
+          </li>
+          <li class="nav-item">
+            <%= link_to t('menu.navbar.admin_users'), admin_users_path, class: 'nav-link navbar_dropdown_item ps-4 pe-3' %>
+          </li>
+          <li class="nav-item">
+            <%= link_to t('menu.navbar.tags'), tags_path, class: 'nav-link navbar_dropdown_item ps-4 pe-3' %>
+          </li>
+          <li class="nav-item">
+            <%= link_to t('menu.navbar.tag_types'), tag_types_path, class: 'nav-link navbar_dropdown_item ps-4 pe-3' %>
+          </li>
+          <li class="nav-item">
+            <%= link_to t('menu.navbar.families'), families_path, class: 'nav-link navbar_dropdown_item ps-4 pe-3' %>
+          </li>
+        <% end %>
+      <% end %>
+
+      <li class="nav-item">
+        <%= link_to mobile_locale_name, mobile_locale_switch_path, class: 'nav-link navbar_dropdown_item px-3' %>
+      </li>
+
+      <% if authenticated? %>
+        <li class="nav-item px-3 pt-3 pb-1">
+          <span class="small fw-semibold text-white-50"><%= display_user_with_role(current_user) %></span>
+        </li>
+        <li class="nav-item px-3 pb-2">
+          <div class="d-flex justify-content-start">
+            <%= link_to t('menu.navbar.sign_out'), session_path,
+                method: :delete,
+                data: { turbo_method: :delete, turbo_confirm: t('forms.confirmation.are_you_sure') },
+                class: 'btn btn-sign' %>
+          </div>
+        </li>
+      <% else %>
+        <li class="nav-item">
+          <%= link_to t('auth.sign_in'), new_session_path, class: 'nav-link navbar_dropdown_item px-3' %>
+        </li>
+      <% end %>
+    </ul>
   </div>
 </nav>
