@@ -27,6 +27,10 @@ class TagPolicy  < ApplicationPolicy
     admin_user?
   end
 
+  def bulk_assign?
+    admin_user?
+  end
+
   class Scope
     def initialize(user, scope)
       @user = user

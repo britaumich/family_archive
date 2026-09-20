@@ -11,6 +11,6 @@
 #
 FactoryBot.define do
   factory :family do
-    name { "MyString" }
+    sequence(:name) { |n| "Family#{n}" }
   end
 end

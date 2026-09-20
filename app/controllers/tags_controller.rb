@@ -72,6 +72,7 @@ class TagsController < ApplicationController
 
   # PATCH /tags/bulk_assign
   def bulk_assign
+    authorize Tag, :bulk_assign?
     tag_ids = params[:tag_ids]&.reject(&:blank?)
     tag_type_id = params[:tag_type_id].presence
 
@@ -93,6 +94,7 @@ class TagsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_tag
     @tag = Tag.find(params.expect(:id))
+    authorize @tag
   end
 
   # Only allow a list of trusted parameters through.
