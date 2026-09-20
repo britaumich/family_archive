@@ -11,6 +11,6 @@
 #
 FactoryBot.define do
   factory :tag_type do
-    name { "MyString" }
+    sequence(:name) { |n| "TagType#{n}" }
   end
 end

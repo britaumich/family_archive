@@ -11,5 +11,13 @@
 FactoryBot.define do
   factory :item do
     item_type { 1 }
+
+    after(:build) do |item|
+      item.file.attach(
+        io: StringIO.new('test file content'),
+        filename: 'test.jpg',
+        content_type: 'image/jpeg'
+      ) unless item.file.attached?
+    end
   end
 end
