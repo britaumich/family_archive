@@ -51,14 +51,21 @@ module Authentication
     end
 
     def start_new_session_for(user)
+      admin_user = admin_user_for_email(user.email_address)
+      return nil unless admin_user
+
       user.sessions.create!(user_agent: request.user_agent, ip_address: request.remote_ip).tap do |user_session|
         Current.session = user_session
         cookies.signed.permanent[:session_id] = { value: user_session.id, httponly: true, same_site: :lax }
-        # Set role based on admin_user table
-        admin_user = AdminUser.find_by(email: user.email_address)
-        session[:role] = admin_user&.role || 'viewer'
-        # role changes require re-authentication.
+        session[:role] = admin_user.role
       end
+    end
+
+    def admin_user_for_email(email_address)
+      normalized_email = email_address.to_s.strip.downcase
+      return nil if normalized_email.blank?
+
+      AdminUser.find_by(email: normalized_email)
     end
 
     def terminate_session

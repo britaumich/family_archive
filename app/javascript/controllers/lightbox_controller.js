@@ -2,32 +2,55 @@ import { Controller } from "@hotwired/stimulus"
 import GLightbox from "glightbox"
 
 export default class extends Controller {
-  
   connect() {
-    this.initializeLightbox()
+    this.openFromClick = this.openFromClick.bind(this)
+    this.element.addEventListener("click", this.openFromClick)
   }
-  
-  initializeLightbox() {
-    // Initialize GLightbox for all images in the gallery
+
+  openFromClick(event) {
+    const trigger = event.target.closest(".js-lightbox-item")
+    if (!trigger || !this.element.contains(trigger)) return
+
+    event.preventDefault()
+
+    const links = Array.from(this.element.querySelectorAll(".js-lightbox-item"))
+    const elements = links.map((link) => ({
+      href: link.getAttribute("href"),
+      title: link.dataset.title || "",
+      type: link.dataset.type || "image"
+    }))
+
+    const startIndex = links.indexOf(trigger)
+    if (startIndex < 0 || elements.length === 0) return
+
+    if (this.lightbox) {
+      this.lightbox.destroy()
+      this.lightbox = null
+    }
+
     this.lightbox = GLightbox({
-      selector: '[data-lightbox]',
+      elements,
       touchNavigation: true,
       loop: true,
       autoplayVideos: true,
       closeButton: true,
       closeOnOutsideClick: true,
-      openEffect: 'zoom',
-      closeEffect: 'zoom',
-      slideEffect: 'slide',
-      moreText: 'View details',
-      moreLength: 60,
-      lightboxHTML: '<div id="glightbox-body" class="glightbox-container"><div class="gloader visible"></div><div class="goverlay"></div><div class="gcontainer"><div id="glightbox-slider" class="gslider"></div><button class="gnext gbtn" tabindex="0" aria-label="Next" data-customattribute="example">{nextSVG}</button><button class="gprev gbtn" tabindex="1" aria-label="Previous">{prevSVG}</button><button class="gclose gbtn" tabindex="2" aria-label="Close">{closeSVG}</button></div></div>'
+      openEffect: "zoom",
+      closeEffect: "zoom",
+      slideEffect: "slide",
+      moreText: "View details",
+      moreLength: 60
     })
+
+    this.lightbox.openAt(startIndex)
   }
-  
+
   disconnect() {
+    this.element.removeEventListener("click", this.openFromClick)
+
     if (this.lightbox) {
       this.lightbox.destroy()
+      this.lightbox = null
     }
   }
 }

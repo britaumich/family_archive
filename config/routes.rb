@@ -16,6 +16,8 @@ Rails.application.routes.draw do
       patch :assign_tags, on: :member
       patch :remove_tags, on: :member
       patch :add_bestof, on: :member
+      patch :add_needtag, on: :member
+      patch :mark_to_delete, on: :member
       get 'family_pictures/:family_id', to: 'items#family_pictures', on: :collection, as: :family_pictures
     end
     resources :tags do
@@ -31,6 +33,6 @@ Rails.application.routes.draw do
     resources :admin_users, except: [:show]
 
     # Defines the root path route ("/")
-    root 'items#index'
+    root to: 'home#about'
   end
 end

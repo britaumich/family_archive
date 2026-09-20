@@ -1,8 +1,9 @@
 class ItemsController < ApplicationController
-  before_action :set_item, only: %i[show edit update destroy assign_tags remove_tags add_bestof]
+  before_action :set_item, only: %i[show edit update destroy assign_tags remove_tags add_bestof add_needtag mark_to_delete]
 
   def index
     @selected_tags = []
+    no_tags_only = ActiveModel::Type::Boolean.new.cast(params[:no_tags_only])
     
     # Start with base query
     base_items = Item.all
@@ -12,8 +13,15 @@ class ItemsController < ApplicationController
       base_items = base_items.where(item_type: params[:item_type])
     end
 
+    # Special case: show only items without any tags
+    if no_tags_only
+      items = base_items.includes(:tags)
+                       .left_joins(tags: :tag_type)
+                       .where(tags: { id: nil })
+                       .group('items.id')
+                       .order(Arel.sql("MAX(CASE WHEN tag_types.name = 'year' THEN tags.name END) DESC NULLS LAST, items.created_at DESC"))
     # Filter by multiple tags if specified
-    if params[:tags].present?
+    elsif params[:tags].present?
       tag_ids = params[:tags].reject(&:blank?).map(&:to_i)
       @selected_tags = Tag.includes(:tag_type, :items).where(id: tag_ids).to_a
 
@@ -148,12 +156,24 @@ class ItemsController < ApplicationController
   def show
     # Prepare tags organized by type for assignment
     @tags_by_type = set_tags_by_type(nil, only_used: false)
+    @nav_params = nav_context_params
+    @return_path = @nav_params['return_path']
+    @return_path = nil unless @return_path&.match?(/\A\/(?!\/)/)
+    @navigation_item_ids = @nav_params['item_ids'].to_s.split(',').map { |id| Integer(id, exception: false) }.compact.select(&:positive?).uniq
+
+    if @navigation_item_ids.any?
+      current_index = @navigation_item_ids.index(@item.id)
+      if current_index
+        @previous_item_id = @navigation_item_ids[current_index - 1] if current_index.positive?
+        @next_item_id = @navigation_item_ids[current_index + 1] if current_index < (@navigation_item_ids.length - 1)
+      end
+    end
     authorize @item
   end
 
   def edit
-    @tags_by_type = set_tags_by_type(nil, only_used: false)
     authorize @item
+    redirect_to item_path(@item, nav_context_params)
   end
 
   def update
@@ -167,7 +187,7 @@ class ItemsController < ApplicationController
           @item.tags << tag if tag
         end
       end
-      redirect_to @item, notice: t('forms.flash.item_updated')
+      redirect_to item_path(@item, nav_context_params), notice: t('forms.flash.item_updated')
     else
       @tags_by_type = set_tags_by_type(nil, only_used: false)
       render :edit
@@ -176,8 +196,34 @@ class ItemsController < ApplicationController
 
   def destroy
     authorize @item
+    nav_params = nav_context_params
+    return_path = nav_params['return_path']
+    return_path = nil unless return_path&.match?(/\A\/(?!\/)/)
+
+    navigation_item_ids = nav_params['item_ids'].to_s
+                                            .split(',')
+                                            .map { |id| Integer(id, exception: false) }
+                                            .compact
+                                            .select(&:positive?)
+                                            .uniq
+
+    redirect_target = return_path.presence || items_path
+
+    if navigation_item_ids.any?
+      current_index = navigation_item_ids.index(@item.id)
+      if current_index
+        candidate_id = navigation_item_ids[current_index + 1]
+        candidate_id ||= navigation_item_ids[current_index - 1] if current_index.positive?
+
+        if candidate_id.present? && Item.exists?(candidate_id)
+          updated_item_ids = navigation_item_ids.reject { |id| id == @item.id }
+          redirect_target = item_path(candidate_id, nav_params.merge('item_ids' => updated_item_ids.join(',')))
+        end
+      end
+    end
+
     @item.destroy
-    redirect_to items_path, notice: t('forms.flash.item_deleted')
+    redirect_to redirect_target, notice: t('forms.flash.item_deleted')
   end
 
   def upload_files_page
@@ -448,7 +494,7 @@ class ItemsController < ApplicationController
     authorize @item
     
     if params[:tag_ids].blank?
-      redirect_to @item, alert: t('forms.flash.no_tags_selected')
+      redirect_to item_path(@item, nav_context_params), alert: t('forms.flash.no_tags_selected')
       return
     end
     
@@ -458,7 +504,7 @@ class ItemsController < ApplicationController
     valid_tag_ids = Tag.where(id: tag_ids).pluck(:id)
     
     if valid_tag_ids.empty?
-      redirect_to @item, alert: t('forms.flash.invalid_tags_selected')
+      redirect_to item_path(@item, nav_context_params), alert: t('forms.flash.invalid_tags_selected')
       return
     end
     
@@ -469,9 +515,9 @@ class ItemsController < ApplicationController
       # Only load and assign the new tags
       new_tags = Tag.where(id: new_tag_ids)
       @item.tags << new_tags
-      redirect_to @item, notice: t('forms.flash.tags_assigned_to_item')
+      redirect_to item_path(@item, nav_context_params), notice: t('forms.flash.tags_assigned_to_item')
     else
-      redirect_to @item, notice: t('forms.flash.tags_already_assigned')
+      redirect_to item_path(@item, nav_context_params), notice: t('forms.flash.tags_already_assigned')
     end
   end
 
@@ -479,7 +525,7 @@ class ItemsController < ApplicationController
     authorize @item
     
     if params[:tag_ids].blank?
-      redirect_to @item, alert: t('forms.flash.no_tags_selected')
+      redirect_to item_path(@item, nav_context_params), alert: t('forms.flash.no_tags_selected')
       return
     end
     
@@ -489,7 +535,7 @@ class ItemsController < ApplicationController
     valid_tag_ids = Tag.where(id: tag_ids).pluck(:id)
     
     if valid_tag_ids.empty?
-      redirect_to @item, alert: t('forms.flash.invalid_tags_selected')
+      redirect_to item_path(@item, nav_context_params), alert: t('forms.flash.invalid_tags_selected')
       return
     end
     
@@ -500,9 +546,9 @@ class ItemsController < ApplicationController
       # Only load and remove the existing tags
       existing_tags = Tag.where(id: existing_tag_ids)
       @item.tags.delete(existing_tags)
-      redirect_to @item, notice: t('forms.flash.tags_removed_from_item')
+      redirect_to item_path(@item, nav_context_params), notice: t('forms.flash.tags_removed_from_item')
     else
-      redirect_to @item, notice: t('forms.flash.no_tags_to_remove')
+      redirect_to item_path(@item, nav_context_params), notice: t('forms.flash.no_tags_to_remove')
     end
   end
 
@@ -519,33 +565,72 @@ class ItemsController < ApplicationController
 
   def add_bestof
     authorize @item
-    bestof_tag = Tag.find_by(name: 'bestof')
-    # unless bestof_tag.present?
-    #   redirect_to @item, alert: t('forms.flash.bestof_tag_not_found')
-    #   return
-    # end
-    
-    if @item.tags.exists?(name: 'bestof')
-      # Remove the bestof tag if it exists
-      @item.tags.delete(bestof_tag)
-    else
-      # Add the bestof tag if it doesn't exist
-      @item.tags << bestof_tag if bestof_tag
-    end
+    nav_params = nav_context_params
+    toggle_item_tag!('bestof')
     
     respond_to do |format|
       format.turbo_stream do
         render turbo_stream: turbo_stream.replace(
           "picture_#{@item.id}",
           partial: "items/item_card",
-          locals: { item: @item }
+          locals: {
+            item: @item,
+            navigation_return_path: nav_params['return_path'],
+            navigation_item_ids: nav_params['item_ids']
+          }
         )
       end
       format.html do
-        redirect_to @item
+        redirect_to item_path(@item, nav_params)
       end
     end
   
+  end
+
+  def add_needtag
+    authorize @item
+    nav_params = nav_context_params
+    toggle_item_tag!('needtag')
+
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace(
+          "picture_#{@item.id}",
+          partial: "items/item_card",
+          locals: {
+            item: @item,
+            navigation_return_path: nav_params['return_path'],
+            navigation_item_ids: nav_params['item_ids']
+          }
+        )
+      end
+      format.html do
+        redirect_to item_path(@item, nav_params)
+      end
+    end
+  end
+
+  def mark_to_delete
+    authorize @item
+    nav_params = nav_context_params
+    toggle_item_tag!('to_delete')
+
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace(
+          "picture_#{@item.id}",
+          partial: "items/item_card",
+          locals: {
+            item: @item,
+            navigation_return_path: nav_params['return_path'],
+            navigation_item_ids: nav_params['item_ids']
+          }
+        )
+      end
+      format.html do
+        redirect_to item_path(@item, nav_params)
+      end
+    end
   end
 
   private
@@ -627,11 +712,39 @@ class ItemsController < ApplicationController
          .sort_by { |tag_type, _| tag_type&.translated_name || '' }
   end
 
+  def toggle_item_tag!(tag_name)
+    @item.with_lock do
+      tag = begin
+        Tag.find_or_create_by!(name: tag_name)
+      rescue ActiveRecord::RecordNotUnique
+        Tag.find_by!(name: tag_name)
+      end
+
+      removed = @item.tagables.where(tag_id: tag.id).delete_all
+      if removed.positive?
+         @item.association(:tags).reset
+         return
+      end
+
+      begin
+        @item.tagables.create!(tag_id: tag.id)
+      rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid
+        # Another request created the same join row after our delete check.
+      end
+      @item.association(:tags).reset
+    end
+    
+  end
+
   def set_item
     @item = Item.includes(tags: :tag_type, file_attachment: :blob).find(params.expect(:id))
   end
 
   def item_params
     params.expect(item: [:item_type, :file, :caption])
+  end
+
+  def nav_context_params
+    params.permit(:return_path, :item_ids).to_h.compact_blank
   end
 end

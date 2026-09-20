@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_21_190402) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_25_000002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -86,6 +86,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_21_190402) do
     t.bigint "item_id", null: false
     t.bigint "tag_id", null: false
     t.datetime "updated_at", null: false
+    t.index ["item_id", "tag_id"], name: "index_tagables_on_item_id_and_tag_id", unique: true
     t.index ["item_id"], name: "index_tagables_on_item_id"
     t.index ["tag_id"], name: "index_tagables_on_tag_id"
   end
@@ -98,6 +99,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_21_190402) do
     t.bigint "tag_type_id"
     t.datetime "updated_at", null: false
     t.index ["family_id"], name: "index_tags_on_family_id"
+    t.index ["name"], name: "index_tags_on_name", unique: true
     t.index ["tag_type_id"], name: "index_tags_on_tag_type_id"
   end
 

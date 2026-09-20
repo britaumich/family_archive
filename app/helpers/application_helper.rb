@@ -37,4 +37,13 @@ module ApplicationHelper
   def item_type_keys
     Item.item_types.keys
   end
+
+  def translated_special_tags(*names)
+    tags_by_name = Tag.where(name: names).index_by(&:name)
+
+    names.index_with do |name|
+      tags_by_name[name]&.translated_name || name
+    end
+  end
+  
 end
