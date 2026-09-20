@@ -82,6 +82,7 @@ class TagTypesController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_tag_type
     @tag_type = TagType.find(params.expect(:id))
+    authorize @tag_type
   end
 
   # Only allow a list of trusted parameters through.

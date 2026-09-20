@@ -15,14 +15,7 @@ class FamiliesController < ApplicationController
 
   # GET /families/1/edit
   def edit
-    @tags = if params[:search].present?
-              search_term = "%#{params[:search]}%"
-              search_clause = "(tags.name_translations->>'en' ILIKE ? OR tags.name_translations->>'ru' ILIKE ? OR tags.name ILIKE ?)"
-              ordered_tags.where(search_clause, search_term, search_term, search_term)
-            else
-              ordered_tags
-            end
-    @tag_types = ordered_tag_types
+    load_tags_for_edit
   end
 
   # POST /families or /families.json
@@ -53,6 +46,7 @@ class FamiliesController < ApplicationController
         format.html { redirect_to families_path, notice: t('forms.flash.family_updated'), status: :see_other }
         format.json { render :show, status: :ok, location: @family }
       else
+        load_tags_for_edit
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @family.errors, status: :unprocessable_entity }
       end
@@ -137,6 +131,18 @@ class FamiliesController < ApplicationController
     def set_family
       @family = Family.find(params.expect(:id))
       authorize @family
+    end
+
+    # Shared between the edit form and re-rendering it after a failed update.
+    def load_tags_for_edit
+      @tags = if params[:search].present?
+                search_term = "%#{params[:search]}%"
+                search_clause = "(tags.name_translations->>'en' ILIKE ? OR tags.name_translations->>'ru' ILIKE ? OR tags.name ILIKE ?)"
+                ordered_tags.where(search_clause, search_term, search_term, search_term)
+              else
+                ordered_tags
+              end
+      @tag_types = ordered_tag_types
     end
 
     # Only allow a list of trusted parameters through.
