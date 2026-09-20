@@ -1,13 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe "TagTypes", type: :request do
-  def sign_in_as(role: :admin)
-    user = create(:user, email_address: "#{role}_#{SecureRandom.hex(4)}@example.com", password: 'password')
-    create(:admin_user, email: user.email_address, role: role)
-    post session_path, params: { email_address: user.email_address, password: 'password' }
-    user
-  end
-
   describe "GET /tag_types" do
     context "when not authenticated" do
       it "redirects to the sign in page" do
