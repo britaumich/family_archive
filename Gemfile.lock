@@ -456,7 +456,7 @@ DEPENDENCIES
   webdrivers (= 5.3.0)
 
 RUBY VERSION
-   ruby 4.0.1p0
+   ruby 4.0.10p0
 
 BUNDLED WITH
    2.5.3
